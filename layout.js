@@ -1,6 +1,10 @@
 // layout.js - Sidebar Drawer Responsif HP + Toggle Desktop & Animasi Modern
 document.addEventListener("DOMContentLoaded", () => {
-  const currentPath = window.location.pathname.split("/").pop() || "index.html";
+  // Ambil nama file halaman saat ini dengan bersih
+  let currentPath = window.location.pathname.split("/").filter(Boolean).pop() || "index.html";
+  if (!currentPath.includes(".html")) {
+    currentPath = "index.html";
+  }
 
   // Sisipkan CSS Keyframes & styling khusus sekali saja
   if (!document.getElementById("kimi-layout-styles")) {
@@ -17,6 +21,8 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
     document.head.appendChild(styleEl);
   }
+
+  const isActive = (target) => currentPath.toLowerCase().includes(target.toLowerCase());
 
   // 1. Sidebar HTML (Drawer di HP, Toggleable di Desktop)
   const sidebarHTML = `
@@ -48,19 +54,15 @@ document.addEventListener("DOMContentLoaded", () => {
       <nav class="p-3.5 space-y-1.5">
         <!-- Dashboard -->
         <a href="./index.html" class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl ${
-          currentPath === "index.html"
+          isActive("index")
             ? "bg-emerald-50 text-emerald-800 font-semibold shadow-sm shadow-emerald-500/10 border border-emerald-200/50"
             : "text-slate-600 hover:text-emerald-700 hover:bg-slate-50 font-medium hover:translate-x-1"
         } text-xs transition-all duration-200">
           <div class="flex items-center gap-3">
-            <iconify-icon icon="heroicons:home" class="text-base ${currentPath === "index.html" ? "text-emerald-600" : "text-slate-400 group-hover:text-emerald-600"}"></iconify-icon>
+            <iconify-icon icon="heroicons:home" class="text-base ${isActive("index") ? "text-emerald-600" : "text-slate-400 group-hover:text-emerald-600"}"></iconify-icon>
             <span>Dashboard</span>
           </div>
-          ${
-            currentPath === "index.html"
-              ? '<span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>'
-              : ""
-          }
+          ${isActive("index") ? '<span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>' : ""}
         </a>
 
         <!-- Section Divider -->
@@ -71,70 +73,54 @@ document.addEventListener("DOMContentLoaded", () => {
 
         <!-- Bagi Job -->
         <a href="./bagi-job.html" class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl ${
-          currentPath.includes("bagi-job")
+          isActive("bagi-job")
             ? "bg-emerald-50 text-emerald-800 font-semibold shadow-sm shadow-emerald-500/10 border border-emerald-200/50"
             : "text-slate-600 hover:text-emerald-700 hover:bg-slate-50 font-medium hover:translate-x-1"
         } text-xs transition-all duration-200">
           <div class="flex items-center gap-3">
-            <iconify-icon icon="heroicons:clipboard-document-list" class="text-base ${currentPath.includes("bagi-job") ? "text-emerald-600" : "text-slate-400 group-hover:text-emerald-600"}"></iconify-icon>
+            <iconify-icon icon="heroicons:clipboard-document-list" class="text-base ${isActive("bagi-job") ? "text-emerald-600" : "text-slate-400 group-hover:text-emerald-600"}"></iconify-icon>
             <span>Bagi Job & Drive</span>
           </div>
-          ${
-            currentPath.includes("bagi-job")
-              ? '<span class="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-md font-bold">Aktif</span>'
-              : ""
-          }
+          ${isActive("bagi-job") ? '<span class="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-md font-bold">Aktif</span>' : ""}
         </a>
 
         <!-- Brief Splitter -->
         <a href="./brief-parser.html" class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl ${
-          currentPath.includes("brief-parser")
+          isActive("brief-parser")
             ? "bg-emerald-50 text-emerald-800 font-semibold shadow-sm shadow-emerald-500/10 border border-emerald-200/50"
             : "text-slate-600 hover:text-emerald-700 hover:bg-slate-50 font-medium hover:translate-x-1"
         } text-xs transition-all duration-200">
           <div class="flex items-center gap-3">
-            <iconify-icon icon="heroicons:scissors" class="text-base ${currentPath.includes("brief-parser") ? "text-emerald-600" : "text-slate-400 group-hover:text-emerald-600"}"></iconify-icon>
+            <iconify-icon icon="heroicons:scissors" class="text-base ${isActive("brief-parser") ? "text-emerald-600" : "text-slate-400 group-hover:text-emerald-600"}"></iconify-icon>
             <span>Brief Splitter</span>
           </div>
-          ${
-            currentPath.includes("brief-parser")
-              ? '<span class="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-md font-bold">Aktif</span>'
-              : ""
-          }
+          ${isActive("brief-parser") ? '<span class="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-md font-bold">Aktif</span>' : ""}
         </a>
 
-        <!-- Duplicate & OCR -->
+        <!-- Duplicate -->
         <a href="./duplicate.html" class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl ${
-          currentPath.includes("duplicate")
+          isActive("duplicate")
             ? "bg-emerald-50 text-emerald-800 font-semibold shadow-sm shadow-emerald-500/10 border border-emerald-200/50"
             : "text-slate-600 hover:text-emerald-700 hover:bg-slate-50 font-medium hover:translate-x-1"
         } text-xs transition-all duration-200">
           <div class="flex items-center gap-3">
-            <iconify-icon icon="heroicons:document-duplicate" class="text-base ${currentPath.includes("duplicate") ? "text-emerald-600" : "text-slate-400 group-hover:text-emerald-600"}"></iconify-icon>
-            <span>Duplicate & OCR</span>
+            <iconify-icon icon="heroicons:document-duplicate" class="text-base ${isActive("duplicate") ? "text-emerald-600" : "text-slate-400 group-hover:text-emerald-600"}"></iconify-icon>
+            <span>Duplicate File</span>
           </div>
-          ${
-            currentPath.includes("duplicate")
-              ? '<span class="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-md font-bold">Aktif</span>'
-              : ""
-          }
+          ${isActive("duplicate") ? '<span class="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-md font-bold">Aktif</span>' : ""}
         </a>
 
-        <!-- Upload Drive -->
-        <a href="./upload-drive.html" class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl ${
-          currentPath.includes("upload-drive")
+        <!-- Drive Link (Disesuaikan dengan file drive-link.html) -->
+        <a href="./drive-link.html" class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl ${
+          isActive("drive-link")
             ? "bg-emerald-50 text-emerald-800 font-semibold shadow-sm shadow-emerald-500/10 border border-emerald-200/50"
             : "text-slate-600 hover:text-emerald-700 hover:bg-slate-50 font-medium hover:translate-x-1"
         } text-xs transition-all duration-200">
           <div class="flex items-center gap-3">
-            <iconify-icon icon="heroicons:cloud-arrow-up" class="text-base ${currentPath.includes("upload-drive") ? "text-emerald-600" : "text-slate-400 group-hover:text-emerald-600"}"></iconify-icon>
-            <span>Upload Drive</span>
+            <iconify-icon icon="heroicons:cloud-arrow-up" class="text-base ${isActive("drive-link") ? "text-emerald-600" : "text-slate-400 group-hover:text-emerald-600"}"></iconify-icon>
+            <span>Drive Link & Upload</span>
           </div>
-          ${
-            currentPath.includes("upload-drive")
-              ? '<span class="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-md font-bold">Aktif</span>'
-              : ""
-          }
+          ${isActive("drive-link") ? '<span class="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-md font-bold">Aktif</span>' : ""}
         </a>
       </nav>
     </div>
@@ -163,19 +149,16 @@ document.addEventListener("DOMContentLoaded", () => {
   const navbarHTML = `
   <header class="h-16 bg-white/80 backdrop-blur-md border-b border-slate-200/80 px-4 sm:px-6 flex items-center justify-between sticky top-0 z-30 transition-all">
     <div class="flex items-center gap-3">
-      <!-- Tombol Hamburger (HP & Desktop) -->
       <button onclick="toggleSidebar()" class="group text-slate-600 hover:text-emerald-700 p-2 rounded-xl border border-slate-200/80 hover:border-emerald-200 hover:bg-emerald-50/50 flex items-center justify-center transition-all active:scale-95 shadow-sm" title="Toggle Sidebar">
         <iconify-icon icon="heroicons:bars-3-bottom-left-20-solid" class="text-xl transition-transform group-hover:scale-110"></iconify-icon>
       </button>
 
-      <!-- Input Search Visual -->
       <div class="hidden sm:flex items-center gap-2 text-slate-400 bg-slate-50 border border-slate-200/80 px-3 py-1.5 rounded-xl w-64 focus-within:w-72 focus-within:border-emerald-500 focus-within:bg-white focus-within:ring-2 focus-within:ring-emerald-500/10 transition-all">
         <iconify-icon icon="heroicons:magnifying-glass-20-solid" class="text-slate-400 text-sm"></iconify-icon>
         <input type="text" placeholder="Cari modul atau menu..." class="w-full text-xs bg-transparent text-slate-700 placeholder-slate-400 focus:outline-none" />
       </div>
     </div>
 
-    <!-- Info & Profile Status -->
     <div class="flex items-center gap-3">
       <div class="hidden md:flex items-center gap-2 bg-slate-50 border border-slate-200/70 px-3 py-1 rounded-xl text-xs font-semibold text-slate-600">
         <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -214,7 +197,6 @@ window.toggleSidebar = function () {
   const isMobile = window.innerWidth < 768;
 
   if (isMobile) {
-    // Mode HP (Drawer Overlay)
     const isClosed = sidebar.classList.contains("-translate-x-full");
     if (isClosed) {
       sidebar.classList.remove("-translate-x-full");
@@ -226,7 +208,6 @@ window.toggleSidebar = function () {
       setTimeout(() => backdrop.classList.add("hidden"), 300);
     }
   } else {
-    // Mode Desktop (Collapse / Hide-Show Sidebar)
     const isHiddenDesktop = sidebar.classList.contains("md:hidden");
     if (isHiddenDesktop) {
       sidebar.classList.remove("md:hidden");
