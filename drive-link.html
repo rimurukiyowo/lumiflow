@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>SORA WINTER - Drive Link Extractor</title>
+
+  <!-- Favicon & PWA Config -->
+  <link rel="icon" type="image/png" href="./logo.png">
+  <link rel="apple-touch-icon" href="./logo.png">
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#c2410c">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    #snowCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Gradient Orange Gelap / Burnt Orange */
+    body {
+      margin: 0;
+      background: linear-gradient(135deg, #431407, #7c2d12, #9a3412, #c2410c);
+      background-size: 300% 300%;
+      animation: gradientMove 12s ease infinite;
+      font-family: sans-serif;
+    }
+
+    @keyframes gradientMove {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    .glass-card-dark-orange {
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+  </style>
+</head>
+
+<body class="min-h-screen p-3 sm:p-5 text-orange-950 flex flex-col justify-between relative overflow-x-hidden">
+
+  <!-- Canvas Animasi Salju -->
+  <canvas id="snowCanvas"></canvas>
+
+  <textarea id="hiddenClipboard" class="sr-only" aria-hidden="true"></textarea>
+
+  <!-- Container Utama -->
+  <div class="max-w-md mx-auto w-full my-auto space-y-3 relative z-10">
+
+    <!-- Tombol Navigasi Kembali Ke Menu Utama -->
+    <div class="flex items-center justify-between px-1">
+      <a href="./index"
+        class="inline-flex items-center gap-2 text-xs font-bold text-orange-200 hover:text-white bg-white/10 hover:bg-white/20 px-3.5 py-2 rounded-xl backdrop-blur-md border border-white/20 transition duration-300 shadow-md group">
+        <span class="group-hover:-translate-x-1 transition-transform duration-200">←</span>
+        <span>Kembali ke Menu Utama</span>
+      </a>
+      <span
+        class="text-[11px] font-semibold text-orange-200 bg-orange-950/60 px-2.5 py-1 rounded-lg border border-orange-400/30">
+        🔗 Sora Winter
+      </span>
+    </div>
+
+    <!-- Card Panel Utama -->
+    <div class="glass-card-dark-orange rounded-3xl p-4 sm:p-5 shadow-2xl border border-orange-200/50 space-y-4">
+
+      <!-- Header Section -->
+      <div class="text-center space-y-1">
+        <h1 class="text-xl font-extrabold tracking-wide text-orange-950 drop-shadow-sm">SORA WINTER</h1>
+        <p class="text-xs text-orange-700 font-medium">💞💞</p>
+
+        <!-- Syarat Penggunaan -->
+        <div
+          class="mt-3 p-3 rounded-xl bg-orange-50/80 text-left text-xs leading-relaxed text-orange-950 border border-orange-200 space-y-1 shadow-inner">
+          <strong class="block text-orange-900 font-bold">📢 Syarat Penggunaan:</strong>
+          <p>• Link ini hanya untuk penggunaan pribadi.</p>
+          <p>• Dilarang membagikan link kepada siapa pun.</p>
+          <p>• Dilarang membantu orang lain mengakses atau mengisi Drive tanpa izin.</p>
+          <p>• Jika syarat dilanggar, link akan dihapus sehingga semua pengguna kehilangan akses.</p>
+        </div>
+      </div>
+
+      <!-- Input Folder (API Key Otomatis) -->
+      <div class="space-y-2">
+        <input id="userApiKey" type="hidden" value="AIzaSyD71nWVbtMxWK4T05Ty4qMuIRTP4ij2i48" />
+
+        <div class="flex gap-2">
+          <input id="folderInput" type="text"
+            class="flex-1 p-3 text-xs rounded-xl border border-orange-200 focus:outline-none focus:ring-2 focus:ring-orange-600 bg-orange-50/40 text-orange-950 placeholder-orange-400 shadow-sm"
+            placeholder="Paste link / ID folder Google Drive..." />
+          <button onclick="fetchFiles()" id="btnFetch"
+            class="bg-orange-800 hover:bg-orange-900 active:bg-black text-white text-xs px-4 rounded-xl font-bold transition shadow-md active:scale-95">
+            Ambil
+          </button>
+        </div>
+      </div>
+
+      <!-- Error Box -->
+      <div id="driveError"
+        class="text-xs font-bold text-rose-900 bg-rose-100 p-2.5 rounded-xl border border-rose-200 hidden"></div>
+
+      <!-- Action Buttons & Result List -->
+      <div id="driveResultContainer" class="hidden space-y-3">
+        <div class="grid grid-cols-3 gap-2">
+          <button onclick="copyNames()"
+            class="bg-orange-700 hover:bg-orange-800 active:bg-orange-900 text-white text-xs py-2 rounded-xl font-bold transition shadow-sm active:scale-95">
+            Nama
+          </button>
+          <button onclick="copyAll()"
+            class="bg-orange-900 hover:bg-black active:bg-orange-950 text-white text-xs py-2 rounded-xl font-bold transition shadow-sm active:scale-95">
+            Semua
+          </button>
+          <button onclick="copyLinks()"
+            class="bg-orange-700 hover:bg-orange-800 active:bg-orange-900 text-white text-xs py-2 rounded-xl font-bold transition shadow-sm active:scale-95">
+            Link
+          </button>
+        </div>
+
+        <div class="text-xs font-bold text-orange-950">
+          Total: <span id="driveTotal" class="text-orange-700 font-extrabold">0</span>
+        </div>
+
+        <!-- Scrollable List File -->
+        <div id="driveFileList" class="max-h-60 overflow-y-auto space-y-2 pr-1"></div>
+      </div>
+
+      <!-- Watermark @kimii_team -->
+      <div class="pt-2 flex items-center justify-between text-xs text-orange-800 border-t border-orange-100">
+        <div
+          class="flex items-center gap-2 bg-gradient-to-r from-orange-100 to-orange-50 border border-orange-200 px-3 py-1 rounded-full shadow-sm">
+          <span class="w-2 h-2 rounded-full bg-orange-700 animate-ping"></span>
+          <span class="font-bold tracking-wide text-orange-950">@kimii_team</span>
+        </div>
+        <span class="text-[11px] font-medium text-orange-400">Parsed & Verified ✨</span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer class="mt-6 text-center text-[11px] text-orange-200 pb-2 relative z-10">
+    Sora Winter v2.0 | Dioptimalkan untuk Kimi Team | © 2026
+  </footer>
+
+  <script>
+    // --- ANIMASI SALJU ---
+    const canvas = document.getElementById("snowCanvas");
+    const ctx = canvas.getContext("2d");
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+
+    window.addEventListener("resize", () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    });
+
+    const flakes = [];
+    for (let i = 0; i < 60; i++) {
+      flakes.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        radius: Math.random() * 3 + 1,
+        speedY: Math.random() * 1 + 0.5,
+        speedX: Math.random() * 0.5 - 0.25,
+        opacity: Math.random() * 0.7 + 0.3
+      });
+    }
+
+    function renderSnow() {
+      ctx.clearRect(0, 0, width, height);
+      for (let i = 0; i < flakes.length; i++) {
+        const flake = flakes[i];
+        ctx.beginPath();
+        ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${flake.opacity})`;
+        ctx.fill();
+        flake.y += flake.speedY;
+        flake.x += flake.speedX;
+        if (flake.y > height) {
+          flake.y = -5;
+          flake.x = Math.random() * width;
+        }
+      }
+      requestAnimationFrame(renderSnow);
+    }
+    renderSnow();
+
+    // --- UNIVERSAL COPY FUNCTION ---
+    function copyTextToClipboard(text, msg) {
+      if (!text || !text.trim()) return alert("Tidak ada data untuk disalin!");
+
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text)
+          .then(() => alert(msg))
+          .catch(() => fallbackCopy(text, msg));
+      } else {
+        fallbackCopy(text, msg);
+      }
+    }
+
+    function fallbackCopy(text, msg) {
+      const hiddenArea = document.getElementById('hiddenClipboard');
+      hiddenArea.value = text;
+      hiddenArea.select();
+      hiddenArea.setSelectionRange(0, 99999);
+      try {
+        document.execCommand('copy');
+        alert(msg);
+      } catch (err) {
+        alert("Gagal menyalin otomatis. Silakan salin manual.");
+      }
+    }
+
+    // --- LOGIKA UTAMA SORA WINTER ---
+    let files = [];
+    const DEFAULT_API_KEY = "AIzaSyD71nWV";
+
+    const extractFolderId = (input) => {
+      const match = input.match(/[-\w]{25,}/);
+      return match ? match[0] : "";
+    };
+
+    async function fetchFiles() {
+      const folderInput = document.getElementById("folderInput").value.trim();
+      const userKey = document.getElementById("userApiKey").value.trim();
+      const apiKey = userKey || DEFAULT_API_KEY;
+
+      const folderId = extractFolderId(folderInput);
+      const errEl = document.getElementById("driveError");
+      const resContainer = document.getElementById("driveResultContainer");
+      const btnFetch = document.getElementById("btnFetch");
+
+      if (!folderId) {
+        errEl.innerText = "Masukkan link Google Drive yang valid!";
+        errEl.classList.remove("hidden");
+        resContainer.classList.add("hidden");
+        return;
+      }
+
+      errEl.classList.add("hidden");
+      btnFetch.innerText = "...";
+      btnFetch.disabled = true;
+
+      try {
+        const query = encodeURIComponent(`'${folderId}' in parents`);
+        const url = `https://www.googleapis.com/drive/v3/files?q=${query}&fields=files(id,name)&key=${apiKey}`;
+
+        const res = await fetch(url);
+        const data = await res.json();
+
+        if (!res.ok || data.error) {
+          throw new Error(data?.error?.message || "Gagal mengambil data.");
+        }
+
+        files = (data.files || [])
+          .map((f) => ({
+            id: f.id,
+            name: f.name,
+            link: `https://drive.google.com/file/d/${f.id}/view?utm_source=sorasora&utm_medium=web_usp=drivesdk`,
+          }))
+          .sort((a, b) =>
+            a.name.localeCompare(b.name, undefined, {
+              numeric: true,
+              sensitivity: "base",
+            })
+          );
+
+        document.getElementById("driveTotal").innerText = files.length;
+        const listEl = document.getElementById("driveFileList");
+        listEl.innerHTML = "";
+
+        files.forEach((f, i) => {
+          listEl.innerHTML += `
+            <div class="p-2.5 bg-orange-50/60 rounded-xl text-xs flex justify-between items-center border border-orange-100 shadow-sm">
+              <span class="font-bold text-orange-950 truncate max-w-[210px]">#${i + 1} ${f.name}</span>
+              <a href="${f.link}" target="_blank" rel="noreferrer" class="text-white font-bold underline bg-orange-700 px-2 py-1 rounded-lg text-[11px] hover:bg-orange-800 transition">
+                Buka File
+              </a>
+            </div>`;
+        });
+
+        resContainer.classList.remove("hidden");
+      } catch (err) {
+        errEl.innerText = err.message || "Terjadi kesalahan.";
+        errEl.classList.remove("hidden");
+        resContainer.classList.add("hidden");
+      } finally {
+        btnFetch.innerText = "Ambil";
+        btnFetch.disabled = false;
+      }
+    }
+
+    function copyNames() {
+      if (!files.length) return alert("Tidak ada data!");
+      copyTextToClipboard(files.map((f) => f.name).join("\n"), "Nama disalin!");
+    }
+
+    function copyLinks() {
+      if (!files.length) return alert("Tidak ada data!");
+      copyTextToClipboard(files.map((f) => f.link).join("\n"), "Link disalin!");
+    }
+
+    function copyAll() {
+      if (!files.length) return alert("Tidak ada data!");
+      copyTextToClipboard(files.map((f) => `${f.name} ${f.link}`).join("\n"), "Semua disalin!");
+    }
+
+    // --- PWA INTEGRATION SCRIPT ---
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js');
+    }
+  </script>
+</body>
+
+</html>

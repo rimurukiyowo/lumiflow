@@ -1,0 +1,23 @@
+{
+  "name": "kimi-team",
+  "version": "3.0.0",
+  "description": "Kimi Team",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve ."
+  },
+  "keywords": [
+    "pwa",
+    "kimi-team",
+    "tools"
+  ],
+  "author": "Kimi Team",
+  "license": "ISC",
+  "dependencies": {
+    "formidable": "^3.5.1",
+    "googleapis": "^140.0.0"
+  },
+  "devDependencies": {
+    "serve": "^14.2.0"
+  }
+}

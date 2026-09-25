@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+  <title>Brief List Parser - Kimi Team</title>
+
+  <!-- Favicon & PWA Config -->
+  <link rel="icon" type="image/png" href="./logo.png">
+  <link rel="apple-touch-icon" href="./logo.png">
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#2d6a4f">
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <!-- Tailwind CSS & Iconify -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://code.iconify.design/iconify-icon/1.0.8/iconify-icon.min.js"></script>
+
+  <!-- Template Layout Otomatis (Sidebar, Navbar, Footer) -->
+  <script src="./layout.js"></script>
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #f4f7f5;
+    }
+
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #c7d8ce;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+
+<body class="text-slate-700 antialiased min-h-screen flex overflow-x-hidden">
+
+  <!-- SIDEBAR OTOMATIS (DIPASANG OLEH LAYOUT.JS) -->
+  <div id="app-sidebar"></div>
+
+  <!-- MAIN WRAPPER -->
+  <div class="flex-1 flex flex-col min-w-0">
+
+    <!-- NAVBAR ATAS OTOMATIS (DIPASANG OLEH LAYOUT.JS) -->
+    <div id="app-navbar"></div>
+
+    <!-- CONTENT BODY -->
+    <main class="p-6 max-w-5xl w-full mx-auto space-y-6">
+
+      <!-- HEADER INFO -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div>
+          <h1 class="text-xl font-bold text-slate-900 tracking-tight">Brief List Parser</h1>
+          <p class="text-xs text-slate-500 mt-0.5">Konversi teks brief mentah pesanan WhatsApp ke format tabel rekap</p>
+        </div>
+        <span
+          class="inline-flex items-center gap-1.5 text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200 px-3 py-1.5 rounded-full w-fit">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+          Modul Format Brief
+        </span>
+      </div>
+
+      <!-- MAIN CARD WORKSPACE -->
+      <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5 sm:p-6 space-y-5">
+
+        <!-- Input Brief Section -->
+        <div class="space-y-1.5">
+          <label for="inputBrief" class="block text-xs font-bold text-slate-700">
+            Tempel Brief di sini:
+          </label>
+          <textarea id="inputBrief" rows="6"
+            class="w-full p-3 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-slate-50/50 text-slate-800 font-mono transition resize-y"
+            placeholder="Salin & tempel brief dari WhatsApp di sini (memuat ID, Orderan, Target, dsb)..."></textarea>
+        </div>
+
+        <!-- Tombol Aksi -->
+        <div class="grid grid-cols-3 gap-2.5 pt-1">
+          <button onclick="parseBrief()"
+            class="flex items-center justify-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-semibold py-2.5 px-3 rounded-xl text-xs shadow-sm transition duration-200">
+            <iconify-icon icon="heroicons:cog-6-tooth-solid" class="text-sm"></iconify-icon>
+            <span>Generate</span>
+          </button>
+          <button onclick="copyResult()"
+            class="flex items-center justify-center gap-1.5 bg-slate-800 hover:bg-slate-900 active:scale-95 text-white font-semibold py-2.5 px-3 rounded-xl text-xs shadow-sm transition duration-200">
+            <iconify-icon icon="heroicons:clipboard-document-solid" class="text-sm"></iconify-icon>
+            <span>Salin Tabel</span>
+          </button>
+          <button onclick="clearAll()"
+            class="flex items-center justify-center gap-1.5 bg-slate-100 hover:bg-rose-50 hover:text-rose-600 text-slate-600 active:scale-95 font-semibold py-2.5 px-3 rounded-xl text-xs border border-slate-200 transition duration-200">
+            <iconify-icon icon="heroicons:trash-solid" class="text-sm"></iconify-icon>
+            <span>Reset</span>
+          </button>
+        </div>
+
+        <!-- Status Notifikasi Copy -->
+        <div id="copyStatus"
+          class="text-xs font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-3 py-2 rounded-xl text-center hidden transition">
+          ✅ Berhasil disalin ke clipboard! Siap ditempel ke Google Sheets / Excel.
+        </div>
+
+        <!-- Hasil Tabel Preview -->
+        <div class="space-y-2 pt-2 border-t border-slate-100">
+          <div class="flex items-center justify-between">
+            <label class="block text-xs font-bold text-slate-700">Hasil Rekap Tabel:</label>
+            <span class="text-[11px] text-slate-400">Otomatis deteksi platform & ID pesanan</span>
+          </div>
+
+          <div class="overflow-x-auto border border-slate-200/80 rounded-xl bg-white shadow-inner max-h-[360px]">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr
+                  class="bg-slate-50 text-slate-600 sticky top-0 z-10 border-b border-slate-200 text-[11px] uppercase tracking-wider">
+                  <th class="p-3 font-bold">Nama</th>
+                  <th class="p-3 font-bold text-center">Jumlah</th>
+                  <th class="p-3 font-bold">ID</th>
+                  <th class="p-3 font-bold">Orderan</th>
+                </tr>
+              </thead>
+              <tbody id="tableBody" class="divide-y divide-slate-100">
+                <tr>
+                  <td colspan="4" class="p-8 text-center text-slate-400 italic">
+                    Belum ada data. Tempel brief WhatsApp di atas lalu klik "Generate".
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- FOOTER OTOMATIS (DIPASANG OLEH LAYOUT.JS) -->
+      <div id="app-footer"></div>
+    </main>
+  </div>
+
+  <textarea id="hiddenClipboard" class="sr-only" aria-hidden="true"></textarea>
+
+  <!-- LOGIKA PARSER LENGKAP -->
+  <script>
+    let rawTextResult = '';
+
+    function detectPlatform(url) {
+      const u = url.toLowerCase();
+      if (u.includes('tiktok.com') || u.includes('vt.tiktok')) return 'TIKTOK';
+      if (u.includes('instagram.com') || u.includes('instagr.am')) return 'INSTAGRAM';
+      if (u.includes('threads.net') || u.includes('threads.com')) return 'THREADS';
+      if (u.includes('facebook.com') || u.includes('fb.com') || u.includes('fb.watch')) return 'FACEBOOK';
+      if (u.includes('youtube.com') || u.includes('youtu.be')) return 'YOUTUBE';
+      if (u.includes('pages') || u.includes('page')) return 'PAGES';
+      if (u.includes('shopee.co.id') || u.includes('shopee.com') || u.includes('shp.ee')) return 'SHOPEE';
+      if (u.includes('twitter.com')) return 'TWITTER';
+      if (u.includes('x.com')) return 'X';
+      return '';
+    }
+
+    function parseBrief() {
+      const input = document.getElementById('inputBrief').value;
+      if (!input.trim()) {
+        alert('Silakan masukkan text brief terlebih dahulu.');
+        return;
+      }
+
+      const blocks = input.split(/(?=ID\s*:\s*\d+)/i);
+      let structuredGroups = [];
+
+      blocks.forEach(block => {
+        const idMatch = block.match(/ID\s*:\s*(\d+)/i);
+        if (!idMatch) return;
+        const id = idMatch[1];
+
+        const orderMatch = block.match(/Orderan\s*:\s*([^\n]+)/i);
+        let orderan = orderMatch ? orderMatch[1].trim() : '';
+
+        const targetMatch = block.match(/Target\s*:\s*([^\n]+)/i);
+        const targetUrl = targetMatch ? targetMatch[1].trim() : '';
+
+        const platform = detectPlatform(targetUrl);
+
+        let orderString = orderan.toUpperCase();
+        if (platform && !orderString.includes(platform)) {
+          orderString += ` ${platform}`;
+        }
+
+        const lineRegex = /^\s*\d+\.\s+([A-Za-z0-9_\s]+?)(?:\s+(\d+))?\s*$/gm;
+        let match;
+        let groupItems = [];
+
+        while ((match = lineRegex.exec(block)) !== null) {
+          const name = match[1].trim();
+          const count = match[2] ? match[2].trim() : '1';
+
+          groupItems.push({
+            name,
+            count,
+            id: `ID : ${id}`,
+            order: orderString
+          });
+        }
+
+        if (groupItems.length > 0) {
+          structuredGroups.push(groupItems);
+        }
+      });
+
+      if (structuredGroups.length === 0) {
+        alert('Format brief tidak terdeteksi. Pastikan ada tulisan "ID : angka" dan daftar nama.');
+        return;
+      }
+
+      const tbody = document.getElementById('tableBody');
+      tbody.innerHTML = '';
+
+      let rawLines = [];
+
+      structuredGroups.forEach((group, groupIndex) => {
+        // Spasi 8 baris antar ID jika terdapat beberapa grup ID berbeda
+        if (groupIndex > 0) {
+          for (let i = 0; i < 8; i++) {
+            rawLines.push('');
+
+            const spacerTr = document.createElement('tr');
+            spacerTr.className = 'h-2 bg-emerald-50/40';
+            spacerTr.innerHTML = `<td colspan="4" class="border-none"></td>`;
+            tbody.appendChild(spacerTr);
+          }
+        }
+
+        group.forEach(item => {
+          rawLines.push(`${item.name}\t${item.count}\t${item.id}\t${item.order}`);
+
+          const tr = document.createElement('tr');
+          tr.className = 'hover:bg-slate-50 transition text-slate-700 bg-white';
+          tr.innerHTML = `
+            <td class="p-3 border-b border-slate-100 font-semibold text-slate-800">${item.name}</td>
+            <td class="p-3 border-b border-slate-100 font-bold text-emerald-700 text-center">${item.count}</td>
+            <td class="p-3 border-b border-slate-100 text-slate-500 font-mono whitespace-nowrap text-xs">${item.id}</td>
+            <td class="p-3 border-b border-slate-100 text-slate-600">${item.order}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      });
+
+      rawTextResult = rawLines.join('\n');
+    }
+
+    function copyResult() {
+      if (!rawTextResult.trim()) {
+        alert('Tidak ada data untuk disalin. Klik "Generate" terlebih dahulu.');
+        return;
+      }
+
+      const showSuccessStatus = () => {
+        const status = document.getElementById('copyStatus');
+        status.classList.remove('hidden');
+        setTimeout(() => status.classList.add('hidden'), 2500);
+      };
+
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(rawTextResult)
+          .then(showSuccessStatus)
+          .catch(() => fallbackCopy(rawTextResult, showSuccessStatus));
+      } else {
+        fallbackCopy(rawTextResult, showSuccessStatus);
+      }
+    }
+
+    function fallbackCopy(text, callback) {
+      const hiddenTextarea = document.getElementById('hiddenClipboard');
+      hiddenTextarea.value = text;
+      hiddenTextarea.select();
+      hiddenTextarea.setSelectionRange(0, 99999);
+
+      try {
+        document.execCommand('copy');
+        callback();
+      } catch (err) {
+        alert('Gagal menyalin otomatis. Silakan salin manual.');
+      }
+    }
+
+    function clearAll() {
+      document.getElementById('inputBrief').value = '';
+      document.getElementById('tableBody').innerHTML = `
+        <tr>
+          <td colspan="4" class="p-8 text-center text-slate-400 italic">
+            Belum ada data. Tempel brief WhatsApp di atas lalu klik "Generate".
+          </td>
+        </tr>
+      `;
+      rawTextResult = '';
+    }
+
+    // PWA Service Worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js');
+    }
+  </script>
+</body>
+
+</html>

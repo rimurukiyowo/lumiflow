@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+
+  <title>Kimi Team Tools - Dashboard Suite</title>
+
+  <!-- Favicon & PWA Config -->
+  <link rel="icon" type="image/png" href="./logo.png">
+  <link rel="apple-touch-icon" href="./logo.png">
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#2d6a4f">
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <!-- Tailwind CSS & Iconify -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://code.iconify.design/iconify-icon/1.0.8/iconify-icon.min.js"></script>
+
+  <!-- Layout Otomatis (Sidebar, Navbar, Footer) -->
+  <script src="./layout.js"></script>
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #f4f7f5;
+    }
+
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #c7d8ce;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+
+<body class="text-slate-700 antialiased min-h-screen flex overflow-x-hidden">
+
+  <!-- SIDEBAR OTOMATIS -->
+  <div id="app-sidebar"></div>
+
+  <!-- MAIN WRAPPER -->
+  <div class="flex-1 flex flex-col min-w-0">
+
+    <!-- NAVBAR OTOMATIS -->
+    <div id="app-navbar"></div>
+
+    <!-- CONTENT BODY -->
+    <main class="p-6 max-w-6xl w-full mx-auto space-y-6">
+
+      <!-- HERO BANNER -->
+      <div
+        class="bg-white rounded-2xl border border-slate-200/80 p-6 flex flex-col md:flex-row items-center justify-between shadow-sm relative overflow-hidden">
+        <div class="space-y-2 z-10 max-w-lg">
+          <h2 class="text-xl font-bold text-emerald-950 flex items-center gap-2">
+            Selamat Datang di Kimi Tools! 🌿
+          </h2>
+          <p class="text-xs text-slate-500 leading-relaxed">
+            Pusat automasi kerja tim. Gunakan tool ekstraksi drive instan di bawah ini atau buka modul pembagian job dan
+            brief parser melalui menu navigasi.
+          </p>
+          <div class="pt-2 flex gap-2">
+            <a href="./bagi-job.html"
+              class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-semibold text-xs px-4 py-2 rounded-xl transition shadow-sm shadow-emerald-600/30">
+              <span>Bagi Job Tim</span>
+              <iconify-icon icon="heroicons:arrow-right-20-solid"></iconify-icon>
+            </a>
+            <a href="./brief-parser.html"
+              class="inline-flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs px-3.5 py-2 rounded-xl transition border border-slate-200">
+              <span>Brief Parser</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="mt-4 md:mt-0 flex justify-center shrink-0">
+          <div
+            class="w-32 h-32 rounded-full bg-emerald-50 flex items-center justify-center border-4 border-emerald-100 shadow-inner">
+            <iconify-icon icon="fluent-emoji:technologist-light" class="text-6xl"></iconify-icon>
+          </div>
+        </div>
+      </div>
+
+      <!-- WIDGET UTAMA: DRIVE LINK EXTRACTOR (LANGSUNG DI DASHBOARD) -->
+      <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5 sm:p-6 space-y-4">
+
+        <!-- Header Widget -->
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+          <div class="flex items-center gap-2.5">
+            <div
+              class="w-9 h-9 rounded-xl bg-teal-50 border border-teal-200/60 text-teal-700 flex items-center justify-center text-lg">
+              <iconify-icon icon="heroicons:link-solid"></iconify-icon>
+            </div>
+            <div>
+              <h3 class="text-sm font-bold text-slate-900">Google Drive Link Extractor</h3>
+              <p class="text-[11px] text-slate-400">Ekstraksi berkas Google Drive langsung dari dashboard</p>
+            </div>
+          </div>
+          <span class="text-[11px] font-bold bg-teal-50 text-teal-800 border border-teal-200 px-2.5 py-1 rounded-lg">
+            ⚡ Quick Tool
+          </span>
+        </div>
+
+        <!-- Input Drive Form -->
+        <div class="space-y-2">
+          <!-- API Key Tersembunyi bawaan -->
+          <input id="userApiKey" type="hidden" value="AIzaSyD71nWVbtMxWK4T05Ty4qMuIRTP4ij2i48" />
+
+          <div class="flex flex-col sm:flex-row gap-2">
+            <input id="folderInput" type="text"
+              class="flex-1 p-3 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500 bg-slate-50/50 text-slate-800 placeholder-slate-400 transition"
+              placeholder="Tempel link atau ID folder Google Drive di sini..." />
+            <button onclick="fetchFiles()" id="btnFetch"
+              class="bg-teal-700 hover:bg-teal-800 active:scale-95 text-white text-xs px-5 py-3 rounded-xl font-bold transition shadow-sm flex items-center justify-center gap-1.5">
+              <span>Ambil Berkas</span>
+              <iconify-icon icon="heroicons:arrow-down-tray-20-solid"></iconify-icon>
+            </button>
+          </div>
+        </div>
+
+        <!-- Error Banner -->
+        <div id="driveError"
+          class="text-xs font-semibold text-rose-800 bg-rose-50 p-3 rounded-xl border border-rose-200 hidden"></div>
+
+        <!-- Hasil Container -->
+        <div id="driveResultContainer" class="hidden space-y-3 pt-2 border-t border-slate-100">
+
+          <!-- Tombol Salin Cepat -->
+          <div class="grid grid-cols-3 gap-2">
+            <button onclick="copyNames()"
+              class="bg-slate-100 hover:bg-slate-200 active:scale-95 text-slate-700 text-xs py-2 rounded-xl font-semibold transition border border-slate-200">
+              📋 Salin Nama
+            </button>
+            <button onclick="copyLinks()"
+              class="bg-slate-100 hover:bg-slate-200 active:scale-95 text-slate-700 text-xs py-2 rounded-xl font-semibold transition border border-slate-200">
+              🔗 Salin Link
+            </button>
+            <button onclick="copyAll()"
+              class="bg-teal-700 hover:bg-teal-800 active:scale-95 text-white text-xs py-2 rounded-xl font-bold transition shadow-sm">
+              ✨ Salin Semua
+            </button>
+          </div>
+
+          <div class="text-xs font-semibold text-slate-500 flex justify-between items-center px-1">
+            <span>Daftar Berkas:</span>
+            <span>Total: <strong id="driveTotal" class="text-teal-700 font-bold">0</strong> File</span>
+          </div>
+
+          <!-- List File Terkumpul -->
+          <div id="driveFileList" class="max-h-60 overflow-y-auto space-y-1.5 pr-1"></div>
+        </div>
+
+      </div>
+
+      <!-- 4 KARTU STAT/RINGKASAN MODUL LAIN -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+
+        <a href="./bagi-job.html"
+          class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm hover:border-emerald-500/50 hover:shadow-md transition-all group block">
+          <div class="flex items-center justify-between">
+            <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-lg">
+              <iconify-icon icon="heroicons:user-group-solid"></iconify-icon>
+            </div>
+            <iconify-icon icon="heroicons:arrow-up-right-20-solid"
+              class="text-slate-400 group-hover:text-emerald-600 transition"></iconify-icon>
+          </div>
+          <div class="mt-4">
+            <span class="text-xs font-semibold text-slate-400">Modul #1</span>
+            <h3 class="text-base font-bold text-slate-800 group-hover:text-emerald-700 transition">Bagi Job</h3>
+            <p class="text-[11px] text-emerald-600 font-semibold mt-1">Pembagian task & folder</p>
+          </div>
+        </a>
+
+        <a href="./brief-parser.html"
+          class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm hover:border-lime-500/50 hover:shadow-md transition-all group block">
+          <div class="flex items-center justify-between">
+            <div class="w-10 h-10 rounded-xl bg-lime-100 text-lime-700 flex items-center justify-center text-lg">
+              <iconify-icon icon="heroicons:document-text-solid"></iconify-icon>
+            </div>
+            <iconify-icon icon="heroicons:arrow-up-right-20-solid"
+              class="text-slate-400 group-hover:text-lime-600 transition"></iconify-icon>
+          </div>
+          <div class="mt-4">
+            <span class="text-xs font-semibold text-slate-400">Modul #2</span>
+            <h3 class="text-base font-bold text-slate-800 group-hover:text-lime-700 transition">Brief Splitter</h3>
+            <p class="text-[11px] text-lime-600 font-semibold mt-1">Parser format WhatsApp</p>
+          </div>
+        </a>
+
+        <a href="./duplicate.html"
+          class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm hover:border-cyan-500/50 hover:shadow-md transition-all group block">
+          <div class="flex items-center justify-between">
+            <div class="w-10 h-10 rounded-xl bg-cyan-100 text-cyan-700 flex items-center justify-center text-lg">
+              <iconify-icon icon="heroicons:document-duplicate-solid"></iconify-icon>
+            </div>
+            <iconify-icon icon="heroicons:arrow-up-right-20-solid"
+              class="text-slate-400 group-hover:text-cyan-600 transition"></iconify-icon>
+          </div>
+          <div class="mt-4">
+            <span class="text-xs font-semibold text-slate-400">Modul #3</span>
+            <h3 class="text-base font-bold text-slate-800 group-hover:text-cyan-700 transition">Duplicate & OCR</h3>
+            <p class="text-[11px] text-cyan-600 font-semibold mt-1">Duplikasi & Scan SS</p>
+          </div>
+        </a>
+
+        <a href="https://drive.google.com" target="_blank"
+          class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm hover:border-teal-500/50 hover:shadow-md transition-all group block">
+          <div class="flex items-center justify-between">
+            <div class="w-10 h-10 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center text-lg">
+              <iconify-icon icon="heroicons:folder-open-solid"></iconify-icon>
+            </div>
+            <iconify-icon icon="heroicons:arrow-top-right-on-square-20-solid"
+              class="text-slate-400 group-hover:text-teal-600 transition"></iconify-icon>
+          </div>
+          <div class="mt-4">
+            <span class="text-xs font-semibold text-slate-400">Storage</span>
+            <h3 class="text-base font-bold text-slate-800 group-hover:text-teal-700 transition">Google Drive</h3>
+            <p class="text-[11px] text-teal-600 font-semibold mt-1">Buka cloud storage ↗</p>
+          </div>
+        </a>
+
+      </div>
+
+    </main>
+
+    <!-- FOOTER OTOMATIS -->
+    <div id="app-footer"></div>
+  </div>
+
+  <textarea id="hiddenClipboard" class="sr-only" aria-hidden="true"></textarea>
+
+  <!-- LOGIKA DRIVE LINK LANGSUNG JALAN -->
+  <script>
+    let files = [];
+    const DEFAULT_API_KEY = "AIzaSyD71nWVbtMxWK4T05Ty4qMuIRTP4ij2i48";
+
+    const extractFolderId = (input) => {
+      const match = input.match(/[-\w]{25,}/);
+      return match ? match[0] : "";
+    };
+
+    async function fetchFiles() {
+      const folderInput = document.getElementById("folderInput").value.trim();
+      const apiKey = document.getElementById("userApiKey").value.trim() || DEFAULT_API_KEY;
+      const folderId = extractFolderId(folderInput);
+      const errEl = document.getElementById("driveError");
+      const resContainer = document.getElementById("driveResultContainer");
+      const btnFetch = document.getElementById("btnFetch");
+
+      if (!folderId) {
+        errEl.innerText = "Masukkan link Google Drive yang valid!";
+        errEl.classList.remove("hidden");
+        resContainer.classList.add("hidden");
+        return;
+      }
+
+      errEl.classList.add("hidden");
+      btnFetch.innerText = "Memproses...";
+      btnFetch.disabled = true;
+
+      try {
+        const query = encodeURIComponent(`'${folderId}' in parents`);
+        const url = `https://www.googleapis.com/drive/v3/files?q=${query}&fields=files(id,name)&key=${apiKey}`;
+
+        const res = await fetch(url);
+        const data = await res.json();
+
+        if (!res.ok || data.error) {
+          throw new Error(data?.error?.message || "Gagal mengambil data dari Google Drive.");
+        }
+
+        files = (data.files || [])
+          .map((f) => ({
+            id: f.id,
+            name: f.name,
+            link: `https://drive.google.com/file/d/${f.id}/view?usp=sharing`,
+          }))
+          .sort((a, b) =>
+            a.name.localeCompare(b.name, undefined, {
+              numeric: true,
+              sensitivity: "base",
+            })
+          );
+
+        document.getElementById("driveTotal").innerText = files.length;
+        const listEl = document.getElementById("driveFileList");
+        listEl.innerHTML = "";
+
+        files.forEach((f, i) => {
+          listEl.innerHTML += `
+            <div class="p-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl text-xs flex justify-between items-center border border-slate-200 transition">
+              <span class="font-semibold text-slate-800 truncate max-w-[280px]">#${i + 1} ${f.name}</span>
+              <a href="${f.link}" target="_blank" rel="noreferrer" class="text-teal-700 bg-teal-50 hover:bg-teal-700 hover:text-white border border-teal-200 px-2.5 py-1 rounded-lg text-[11px] font-bold transition">
+                Buka ↗
+              </a>
+            </div>`;
+        });
+
+        resContainer.classList.remove("hidden");
+      } catch (err) {
+        errEl.innerText = err.message || "Terjadi kesalahan.";
+        errEl.classList.remove("hidden");
+        resContainer.classList.add("hidden");
+      } finally {
+        btnFetch.innerHTML = `<span>Ambil Berkas</span> <iconify-icon icon="heroicons:arrow-down-tray-20-solid"></iconify-icon>`;
+        btnFetch.disabled = false;
+      }
+    }
+
+    function copyText(text, msg) {
+      if (!text || !text.trim()) return alert("Tidak ada data untuk disalin!");
+      navigator.clipboard.writeText(text)
+        .then(() => alert(msg))
+        .catch(() => {
+          const hiddenArea = document.getElementById('hiddenClipboard');
+          hiddenArea.value = text;
+          hiddenArea.select();
+          document.execCommand('copy');
+          alert(msg);
+        });
+    }
+
+    function copyNames() {
+      if (!files.length) return alert("Tidak ada data!");
+      copyText(files.map((f) => f.name).join("\n"), "Daftar nama berhasil disalin!");
+    }
+
+    function copyLinks() {
+      if (!files.length) return alert("Tidak ada data!");
+      copyText(files.map((f) => f.link).join("\n"), "Daftar link berhasil disalin!");
+    }
+
+    function copyAll() {
+      if (!files.length) return alert("Tidak ada data!");
+      copyText(files.map((f) => `${f.name}\t${f.link}`).join("\n"), "Semua data berhasil disalin!");
+    }
+  </script>
+</body>
+
+</html>
