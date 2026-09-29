@@ -118,7 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
         } text-xs transition-all duration-200">
           <div class="flex items-center gap-3">
             <iconify-icon icon="heroicons:cloud-arrow-up" class="text-base ${isActive("drive-link") ? "text-emerald-600" : "text-slate-400 group-hover:text-emerald-600"}"></iconify-icon>
-            <span>Drive Link & Upload</span>
+            <span>Cek Drive</span>
           </div>
           ${isActive("drive-link") ? '<span class="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-md font-bold">Aktif</span>' : ""}
         </a>
