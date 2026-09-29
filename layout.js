@@ -111,8 +111,8 @@ document.addEventListener("DOMContentLoaded", () => {
         </a>
 
         <!-- Drive Link (Disesuaikan dengan file drive-link.html) -->
-        <a href="./drive-link" class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl ${
-          isActive("drive-link")
+        <a href="./upload-drive" class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl ${
+          isActive("upload-drive")
             ? "bg-emerald-50 text-emerald-800 font-semibold shadow-sm shadow-emerald-500/10 border border-emerald-200/50"
             : "text-slate-600 hover:text-emerald-700 hover:bg-slate-50 font-medium hover:translate-x-1"
         } text-xs transition-all duration-200">
@@ -120,7 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <iconify-icon icon="heroicons:cloud-arrow-up" class="text-base ${isActive("drive-link") ? "text-emerald-600" : "text-slate-400 group-hover:text-emerald-600"}"></iconify-icon>
             <span>Cek Drive</span>
           </div>
-          ${isActive("drive-link") ? '<span class="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-md font-bold">Aktif</span>' : ""}
+          ${isActive("upload-drive") ? '<span class="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-md font-bold">Aktif</span>' : ""}
         </a>
       </nav>
     </div>
