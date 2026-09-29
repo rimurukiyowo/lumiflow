@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
     <div>
       <!-- Brand Header -->
       <div class="h-16 flex items-center justify-between px-5 border-b border-slate-100/90">
-        <a href="./index.html" class="flex items-center gap-3 group">
+        <a href="./index" class="flex items-center gap-3 group">
           <div class="w-9 h-9 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center text-white shadow-md shadow-emerald-500/25 group-hover:scale-105 transition-transform duration-200">
             <iconify-icon icon="heroicons:sparkles-20-solid" class="text-lg"></iconify-icon>
           </div>
@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
       <!-- Navigation Links -->
       <nav class="p-3.5 space-y-1.5">
         <!-- Dashboard -->
-        <a href="./index.html" class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl ${
+        <a href="./index" class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl ${
           isActive("index")
             ? "bg-emerald-50 text-emerald-800 font-semibold shadow-sm shadow-emerald-500/10 border border-emerald-200/50"
             : "text-slate-600 hover:text-emerald-700 hover:bg-slate-50 font-medium hover:translate-x-1"
@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
         </a>
 
         <!-- Brief Splitter -->
-        <a href="./brief-parser.html" class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl ${
+        <a href="./brief-parser" class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl ${
           isActive("brief-parser")
             ? "bg-emerald-50 text-emerald-800 font-semibold shadow-sm shadow-emerald-500/10 border border-emerald-200/50"
             : "text-slate-600 hover:text-emerald-700 hover:bg-slate-50 font-medium hover:translate-x-1"
@@ -98,7 +98,7 @@ document.addEventListener("DOMContentLoaded", () => {
         </a>
 
         <!-- Duplicate -->
-        <a href="./duplicate.html" class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl ${
+        <a href="./duplicate" class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl ${
           isActive("duplicate")
             ? "bg-emerald-50 text-emerald-800 font-semibold shadow-sm shadow-emerald-500/10 border border-emerald-200/50"
             : "text-slate-600 hover:text-emerald-700 hover:bg-slate-50 font-medium hover:translate-x-1"
@@ -111,7 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
         </a>
 
         <!-- Drive Link (Disesuaikan dengan file drive-link.html) -->
-        <a href="./drive-link.html" class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl ${
+        <a href="./drive-link" class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl ${
           isActive("drive-link")
             ? "bg-emerald-50 text-emerald-800 font-semibold shadow-sm shadow-emerald-500/10 border border-emerald-200/50"
             : "text-slate-600 hover:text-emerald-700 hover:bg-slate-50 font-medium hover:translate-x-1"
