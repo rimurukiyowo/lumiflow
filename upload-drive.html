@@ -3,160 +3,289 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport"
-    content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-  <title>Subfolder Image Counter - Kimi Team</title>
-
-  <!-- Favicon & PWA Config -->
-  <link rel="icon" type="image/png" href="./logo.png">
-  <link rel="apple-touch-icon" href="./logo.png">
-  <link rel="manifest" href="./manifest.json">
-  <meta name="theme-color" content="#2d6a4f">
-
-  <!-- Google Fonts: Plus Jakarta Sans -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
-    rel="stylesheet">
-
-  <!-- Tailwind CSS & Iconify -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://code.iconify.design/iconify-icon/1.0.8/iconify-icon.min.js"></script>
-
-  <!-- Layout Otomatis (Sidebar, Navbar, Footer) -->
-  <script src="./layout.js"></script>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subfolder Image Counter</title>
   <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --primary: #3b82f6;
+      --border: #334155;
+      --image-color: #34d399;
+      --folder-color: #fbbf24;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
     body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      background-color: #f4f7f5;
+      background-color: var(--bg);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      padding: 40px 16px;
+      margin: 0;
     }
 
-    ::-webkit-scrollbar {
-      width: 5px;
-      height: 5px;
+    .container {
+      width: 100%;
+      max-width: 950px;
     }
 
-    ::-webkit-scrollbar-thumb {
-      background: #c7d8ce;
-      border-radius: 10px;
+    .header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .header h1 {
+      margin: 0 0 6px 0;
+      font-size: 24px;
+    }
+
+    .header p {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 12px 14px;
+      background: #0b1120;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 14px;
+      outline: none;
+    }
+
+    input[type="text"]:focus {
+      border-color: var(--primary);
+    }
+
+    .btn {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      font-size: 15px;
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .status {
+      font-size: 13px;
+      color: #fbbf24;
+      text-align: center;
+      margin-top: 12px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .stat-box {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+      text-align: center;
+    }
+
+    .stat-val {
+      font-size: 24px;
+      font-weight: 700;
+      color: #60a5fa;
+    }
+
+    .stat-val.highlight-image {
+      color: var(--image-color);
+    }
+
+    .stat-lbl {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    .table-tools {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .table-container {
+      max-height: 520px;
+      overflow-y: auto;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 13px;
+    }
+
+    th {
+      background: #0b1120;
+      color: var(--text-muted);
+      padding: 12px 14px;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      border-bottom: 1px solid var(--border);
+      user-select: none;
+      cursor: pointer;
+    }
+
+    th:hover {
+      color: #fff;
+    }
+
+    th.no-sort {
+      cursor: default;
+    }
+
+    td {
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    tr:hover {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .folder-title {
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge-count {
+      background: rgba(52, 211, 153, 0.15);
+      color: var(--image-color);
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+
+    .badge-empty {
+      background: rgba(148, 163, 184, 0.1);
+      color: var(--text-muted);
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+
+    .link-btn {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .link-btn:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
 
-<body class="text-slate-700 antialiased min-h-screen flex overflow-x-hidden">
+<body>
 
-  <!-- SIDEBAR OTOMATIS -->
-  <div id="app-sidebar"></div>
+  <div class="container">
+    <div class="header">
+      <h1>Deteksi Jumlah Gambar Per Subfolder</h1>
+      <p>Data langsung diurutkan otomatis berdasarkan nama folder (A-Z / 1-10)</p>
+    </div>
 
-  <!-- MAIN WRAPPER -->
-  <div class="flex-1 flex flex-col min-w-0">
+    <div class="card">
+      <div class="form-group">
+        <label for="folderInput">Link atau ID Folder Utama Google Drive</label>
+        <input type="text" id="folderInput" placeholder="Tempel link folder utama di sini...">
+      </div>
+      <button id="scanBtn" class="btn" onclick="startScan()">Hitung Gambar Tiap Subfolder</button>
+      <div id="status" class="status"></div>
+    </div>
 
-    <!-- NAVBAR ATAS OTOMATIS -->
-    <div id="app-navbar"></div>
-
-    <!-- CONTENT BODY -->
-    <main class="p-6 max-w-5xl w-full mx-auto space-y-6">
-
-      <!-- HEADER INFO -->
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-        <div>
-          <h1 class="text-xl font-bold text-slate-900 tracking-tight">Deteksi Jumlah Gambar Per Subfolder</h1>
-          <p class="text-xs text-slate-500 mt-0.5">Data langsung diurutkan otomatis berdasarkan nama folder (A-Z / 1-10)</p>
+    <div id="results" class="card" style="display: none;">
+      <div class="grid">
+        <div class="stat-box">
+          <div id="totalFoldersCount" class="stat-val">0</div>
+          <div class="stat-lbl">Total Subfolder</div>
         </div>
-        <span
-          class="inline-flex items-center gap-1.5 text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200 px-3 py-1.5 rounded-full w-fit">
-          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-          Drive Subfolder Scanner
-        </span>
+        <div class="stat-box">
+          <div id="totalImagesCount" class="stat-val highlight-image">0</div>
+          <div class="stat-lbl">Total Gambar</div>
+        </div>
+        <div class="stat-box">
+          <div id="totalSizeCount" class="stat-val">0 MB</div>
+          <div class="stat-lbl">Total Ukuran Gambar</div>
+        </div>
       </div>
 
-      <!-- MAIN CARD INPUT -->
-      <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5 sm:p-6 space-y-4">
-        <div>
-          <label for="folderInput" class="block text-xs font-bold text-slate-700 mb-1.5">
-            🔗 Link atau ID Folder Utama Google Drive: <span class="text-rose-500">*</span>
-          </label>
-          <input type="text" id="folderInput"
-            class="w-full p-3 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-slate-50/50 text-slate-800 font-semibold placeholder-slate-400"
-            placeholder="Tempel link folder utama di sini..." />
-        </div>
-
-        <button id="scanBtn" onclick="startScan()"
-          class="w-full bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs py-3.5 rounded-xl font-bold shadow-sm transition duration-200 flex items-center justify-center gap-2">
-          <iconify-icon icon="heroicons:magnifying-glass-20-solid" class="text-base"></iconify-icon>
-          <span>Hitung Gambar Tiap Subfolder</span>
-        </button>
-
-        <div id="status" class="text-xs font-semibold text-center text-amber-600 pt-1"></div>
+      <div class="table-tools">
+        <span style="font-size: 13px; color: var(--text-muted);">Klik judul kolom untuk ubah urutan sortir</span>
+        <input type="text" id="searchBox" placeholder="Cari nama folder..." oninput="handleSearch()"
+          style="width: 220px; padding: 6px 10px; font-size: 12px; border-radius: 6px;">
       </div>
 
-      <!-- HASIL PEMINDAIAN -->
-      <div id="results" class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5 sm:p-6 space-y-5" style="display: none;">
-        
-        <!-- Statistik Grid -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-4 text-center">
-            <div id="totalFoldersCount" class="text-2xl font-extrabold text-slate-800">0</div>
-            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mt-1">Total Subfolder</div>
-          </div>
-          <div class="bg-emerald-50/60 border border-emerald-200/60 rounded-xl p-4 text-center">
-            <div id="totalImagesCount" class="text-2xl font-extrabold text-emerald-700">0</div>
-            <div class="text-[11px] font-bold text-emerald-600 uppercase tracking-wider mt-1">Total Gambar</div>
-          </div>
-          <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-4 text-center">
-            <div id="totalSizeCount" class="text-2xl font-extrabold text-slate-800">0 MB</div>
-            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mt-1">Total Ukuran Gambar</div>
-          </div>
-        </div>
-
-        <!-- Tools Pencarian & Info Sortir -->
-        <div class="flex flex-col sm:flex-row justify-between items-center gap-3 pt-2">
-          <span class="text-xs text-slate-400 font-medium">💡 Klik judul kolom tabel untuk mengubah urutan sortir</span>
-          <div class="relative w-full sm:w-64">
-            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
-              <iconify-icon icon="heroicons:magnifying-glass-20-solid" class="text-sm"></iconify-icon>
-            </span>
-            <input type="text" id="searchBox" placeholder="Cari nama folder..." oninput="handleSearch()"
-              class="w-full pl-9 pr-3 py-2 text-xs border border-slate-200 rounded-xl bg-slate-50/50 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-slate-700">
-          </div>
-        </div>
-
-        <!-- Tabel Hasil -->
-        <div class="border border-slate-200 rounded-xl overflow-hidden shadow-sm">
-          <div class="max-h-[500px] overflow-y-auto">
-            <table class="w-full text-left text-xs border-collapse">
-              <thead class="bg-slate-50 text-slate-500 uppercase font-bold sticky top-0 border-b border-slate-200 z-10">
-                <tr>
-                  <th onclick="changeSort('name')" class="p-3.5 cursor-pointer hover:bg-slate-100 select-none">
-                    Nama Folder <span id="sort-name" class="text-emerald-600">▲</span>
-                  </th>
-                  <th onclick="changeSort('imageCount')" class="p-3.5 cursor-pointer hover:bg-slate-100 select-none">
-                    Jumlah Gambar <span id="sort-imageCount" class="text-emerald-600"></span>
-                  </th>
-                  <th onclick="changeSort('otherCount')" class="p-3.5 cursor-pointer hover:bg-slate-100 select-none">
-                    Total File Lain <span id="sort-otherCount" class="text-emerald-600"></span>
-                  </th>
-                  <th onclick="changeSort('imageSize')" class="p-3.5 cursor-pointer hover:bg-slate-100 select-none">
-                    Ukuran Gambar <span id="sort-imageSize" class="text-emerald-600"></span>
-                  </th>
-                  <th class="p-3.5 text-center cursor-default">Aksi</th>
-                </tr>
-              </thead>
-              <tbody id="folderTableBody" class="divide-y divide-slate-100 text-slate-700"></tbody>
-            </table>
-          </div>
-        </div>
-
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th onclick="changeSort('name')">Nama Folder <span id="sort-name">▲</span></th>
+              <th onclick="changeSort('imageCount')">Jumlah Gambar <span id="sort-imageCount"></span></th>
+              <th onclick="changeSort('otherCount')">Total File Lain <span id="sort-otherCount"></span></th>
+              <th onclick="changeSort('imageSize')">Ukuran Gambar <span id="sort-imageSize"></span></th>
+              <th class="no-sort">Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="folderTableBody"></tbody>
+        </table>
       </div>
-
-      <!-- FOOTER OTOMATIS -->
-      <div id="app-footer"></div>
-    </main>
+    </div>
   </div>
 
   <script>
-    // API KEY GOOGLE DRIVE ANDA
+    // MASUKKAN API KEY LENGKAP MILIKMU DI SINI
     const GOOGLE_API_KEY = 'AIzaSyC6qH2ELD6bpDuccwkffScYX_irPI1ZvAs';
 
     let globalReports = [];
@@ -275,6 +404,7 @@
           });
         }
 
+        // Set urutan awal: Berdasarkan nama folder (A-Z, natural numeric)
         currentSort = { key: 'name', asc: true };
         sortData();
 
@@ -295,11 +425,13 @@
 
     function sortData() {
       globalReports.sort((a, b) => {
+        // Root folder tetap ditaruh paling atas
         if (a.isRoot) return -1;
         if (b.isRoot) return 1;
 
         let result = 0;
         if (currentSort.key === 'name') {
+          // Natural sort agar urutan "Folder 2" berada sebelum "Folder 10"
           result = a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' });
         } else {
           result = a[currentSort.key] - b[currentSort.key];
@@ -308,6 +440,7 @@
         return currentSort.asc ? result : -result;
       });
 
+      // Perbarui icon indikator panah sortir di header
       ['name', 'imageCount', 'otherCount', 'imageSize'].forEach(col => {
         const el = document.getElementById(`sort-${col}`);
         if (el) {
@@ -321,7 +454,7 @@
         currentSort.asc = !currentSort.asc;
       } else {
         currentSort.key = key;
-        currentSort.asc = (key === 'name');
+        currentSort.asc = (key === 'name'); // Jika nama default ascending, jika angka default descending bisa diatur di sini
       }
       sortData();
       handleSearch();
@@ -338,42 +471,33 @@
       tbody.innerHTML = '';
 
       if (reports.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" class="text-center text-slate-400 p-6">Tidak ada subfolder yang ditemukan.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 20px;">Tidak ada subfolder yang ditemukan.</td></tr>`;
         return;
       }
 
       reports.forEach(item => {
         const tr = document.createElement('tr');
-        tr.className = "hover:bg-slate-50/80 transition-colors";
-        
         const badge = item.imageCount > 0
-          ? `<span class="bg-emerald-50 text-emerald-700 border border-emerald-200/60 px-2.5 py-1 rounded-lg font-bold">${item.imageCount.toLocaleString('id-ID')} Gambar</span>`
-          : `<span class="bg-slate-100 text-slate-400 px-2.5 py-1 rounded-lg font-medium">0 Gambar</span>`;
+          ? `<span class="badge-count">${item.imageCount.toLocaleString('id-ID')} Gambar</span>`
+          : `<span class="badge-empty">0 Gambar</span>`;
 
         tr.innerHTML = `
-          <td class="p-3.5 font-semibold text-slate-800">
-            <div class="flex items-center gap-2">
+          <td>
+            <div class="folder-title">
               <span>📁</span>
-              <span class="truncate max-w-[220px] sm:max-w-xs" title="${item.name}">${item.name}</span>
+              <span>${item.name}</span>
             </div>
           </td>
-          <td class="p-3.5">${badge}</td>
-          <td class="p-3.5 text-slate-500 font-medium">${item.otherCount.toLocaleString('id-ID')} file</td>
-          <td class="p-3.5 font-semibold text-slate-700">${formatBytes(item.imageSize)}</td>
-          <td class="p-3.5 text-center">
-            <a href="${item.link}" target="_blank" class="inline-flex items-center gap-1 bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-slate-700 px-3 py-1.5 rounded-lg font-bold transition">
-              Buka <iconify-icon icon="heroicons:arrow-top-right-on-square-20-solid" class="text-sm"></iconify-icon>
-            </a>
-          </td>
+          <td>${badge}</td>
+          <td>${item.otherCount.toLocaleString('id-ID')} file</td>
+          <td>${formatBytes(item.imageSize)}</td>
+          <td><a href="${item.link}" target="_blank" class="link-btn">Buka Folder ↗</a></td>
         `;
         tbody.appendChild(tr);
       });
     }
-
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./sw.js');
-    }
   </script>
+
 </body>
 
 </html>
