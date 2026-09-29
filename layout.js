@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
 
         <!-- Bagi Job -->
-        <a href="./bagi-job.html" class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl ${
+        <a href="./bagi-job" class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl ${
           isActive("bagi-job")
             ? "bg-emerald-50 text-emerald-800 font-semibold shadow-sm shadow-emerald-500/10 border border-emerald-200/50"
             : "text-slate-600 hover:text-emerald-700 hover:bg-slate-50 font-medium hover:translate-x-1"
