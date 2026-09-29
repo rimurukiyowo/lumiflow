@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport"
     content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-  <title>Batch Upload ke Folder - Kimi Team</title>
+  <title>Subfolder Image Counter - Kimi Team</title>
 
   <!-- Favicon & PWA Config -->
   <link rel="icon" type="image/png" href="./logo.png">
@@ -56,117 +56,96 @@
     <div id="app-navbar"></div>
 
     <!-- CONTENT BODY -->
-    <main class="p-6 max-w-4xl w-full mx-auto space-y-6">
+    <main class="p-6 max-w-5xl w-full mx-auto space-y-6">
 
       <!-- HEADER INFO -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <div>
-          <h1 class="text-xl font-bold text-slate-900 tracking-tight">Upload Massal ke Folder Drive</h1>
-          <p class="text-xs text-slate-500 mt-0.5">Tentukan nama folder, file otomatis urut A-Z & link siap di-copy</p>
+          <h1 class="text-xl font-bold text-slate-900 tracking-tight">Deteksi Jumlah Gambar Per Subfolder</h1>
+          <p class="text-xs text-slate-500 mt-0.5">Data langsung diurutkan otomatis berdasarkan nama folder (A-Z / 1-10)</p>
         </div>
         <span
           class="inline-flex items-center gap-1.5 text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200 px-3 py-1.5 rounded-full w-fit">
           <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-          Custom Folder Upload
+          Drive Subfolder Scanner
         </span>
       </div>
 
-      <!-- MAIN CARD WORKSPACE -->
-      <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5 sm:p-6 space-y-5">
-
-        <!-- 1. Form Nama Folder Buatan Anda -->
+      <!-- MAIN CARD INPUT -->
+      <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5 sm:p-6 space-y-4">
         <div>
-          <label for="folderNameInput" class="block text-xs font-bold text-slate-700 mb-1">
-            📁 Ketik Nama Folder Google Drive: <span class="text-rose-500">*</span>
+          <label for="folderInput" class="block text-xs font-bold text-slate-700 mb-1.5">
+            🔗 Link atau ID Folder Utama Google Drive: <span class="text-rose-500">*</span>
           </label>
-          <input type="text" id="folderNameInput"
+          <input type="text" id="folderInput"
             class="w-full p-3 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-slate-50/50 text-slate-800 font-semibold placeholder-slate-400"
-            placeholder="Contoh: Batch Order 25 September / Tugas Tim Kimi" />
+            placeholder="Tempel link folder utama di sini..." />
         </div>
 
-        <!-- 2. Form Upload Berkas Massal -->
-        <div class="space-y-4 pt-2 border-t border-slate-100">
-          <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1.5">Pilih Berkas (60+ Berkas Sekaligus):</label>
-            <input type="file" id="fileBatch" multiple class="hidden" onchange="handleFilesSelect(this)" />
+        <button id="scanBtn" onclick="startScan()"
+          class="w-full bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs py-3.5 rounded-xl font-bold shadow-sm transition duration-200 flex items-center justify-center gap-2">
+          <iconify-icon icon="heroicons:magnifying-glass-20-solid" class="text-base"></iconify-icon>
+          <span>Hitung Gambar Tiap Subfolder</span>
+        </button>
 
-            <!-- Drop Zone File -->
-            <div id="dropZone" onclick="document.getElementById('fileBatch').click()"
-              class="border-2 border-dashed border-slate-200 hover:border-emerald-500 bg-slate-50/60 hover:bg-emerald-50/20 rounded-2xl p-6 text-center cursor-pointer transition-all duration-300 group flex flex-col items-center justify-center space-y-1.5">
-              <div
-                class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform shadow-sm">
-                <iconify-icon icon="heroicons:folder-plus-solid"></iconify-icon>
-              </div>
-              <div id="filePromptText" class="space-y-0.5">
-                <p class="text-xs font-bold text-slate-800">Klik untuk memilih seluruh berkas</p>
-                <p class="text-[11px] text-slate-400">Tekan tahan di HP atau Ctrl+A di laptop untuk memilih 60 file atau
-                  lebih</p>
-              </div>
+        <div id="status" class="text-xs font-semibold text-center text-amber-600 pt-1"></div>
+      </div>
 
-              <!-- Preview Status Berkas Terpilih -->
-              <div id="fileInfoBox"
-                class="hidden w-full max-w-sm bg-white p-3 rounded-xl border border-slate-200 flex items-center justify-between shadow-sm mt-2">
-                <div class="flex items-center gap-2.5 overflow-hidden pr-2">
-                  <iconify-icon icon="heroicons:document-duplicate-solid"
-                    class="text-emerald-600 text-lg shrink-0"></iconify-icon>
-                  <div class="text-left truncate">
-                    <p id="fileCountText" class="text-xs font-bold text-slate-800 truncate">0 File dipilih</p>
-                    <p id="fileTotalSizeText" class="text-[10px] text-slate-400">Total: 0 MB</p>
-                  </div>
-                </div>
-                <button type="button" onclick="event.stopPropagation(); removeSelectedFiles()"
-                  class="text-xs text-rose-500 hover:bg-rose-50 p-1.5 rounded-lg font-bold transition">✕ Reset</button>
-              </div>
-            </div>
+      <!-- HASIL PEMINDAIAN -->
+      <div id="results" class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5 sm:p-6 space-y-5" style="display: none;">
+        
+        <!-- Statistik Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-4 text-center">
+            <div id="totalFoldersCount" class="text-2xl font-extrabold text-slate-800">0</div>
+            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mt-1">Total Subfolder</div>
           </div>
-
-          <!-- Progress Bar Upload -->
-          <div id="progressContainer" class="hidden space-y-2 pt-2">
-            <div class="flex justify-between text-xs font-semibold">
-              <span id="progressStatusText" class="text-slate-700">Menyiapkan folder...</span>
-              <span id="progressPercent" class="text-emerald-700">0%</span>
-            </div>
-            <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden border border-slate-200">
-              <div id="progressBar" class="bg-emerald-600 h-full w-0 transition-all duration-300"></div>
-            </div>
+          <div class="bg-emerald-50/60 border border-emerald-200/60 rounded-xl p-4 text-center">
+            <div id="totalImagesCount" class="text-2xl font-extrabold text-emerald-700">0</div>
+            <div class="text-[11px] font-bold text-emerald-600 uppercase tracking-wider mt-1">Total Gambar</div>
           </div>
-
-          <!-- Tombol Aksi Upload -->
-          <button onclick="startBatchFolderUpload()" id="btnUpload"
-            class="w-full bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs py-3.5 rounded-xl font-bold shadow-sm transition duration-200 flex items-center justify-center gap-2">
-            <iconify-icon icon="heroicons:cloud-arrow-up-solid" class="text-lg"></iconify-icon>
-            <span>Buat Folder & Unggah Semua File</span>
-          </button>
+          <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-4 text-center">
+            <div id="totalSizeCount" class="text-2xl font-extrabold text-slate-800">0 MB</div>
+            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mt-1">Total Ukuran Gambar</div>
+          </div>
         </div>
 
-        <!-- 3. Box Hasil Rekap (Link Folder + Link Berkas A-Z) -->
-        <div id="resultBox" class="hidden p-4 bg-slate-50 border border-slate-200 rounded-xl text-xs space-y-3">
-
-          <!-- Banner Tautan Folder Utama -->
-          <div class="p-3.5 bg-emerald-50 border border-emerald-200 rounded-xl space-y-1.5">
-            <div class="flex items-center justify-between">
-              <span class="font-bold text-emerald-900 text-xs flex items-center gap-1.5">
-                <span>📁</span> <span id="resFolderName">Nama Folder</span>
-              </span>
-              <button onclick="copyFolderUrl()"
-                class="bg-emerald-600 hover:bg-emerald-700 text-white px-2.5 py-1 rounded-lg font-bold text-[11px] transition">
-                📋 Salin Link Folder
-              </button>
-            </div>
-            <p class="text-[11px] text-slate-600 break-all font-mono" id="resFolderLink">https://drive.google.com/...
-            </p>
+        <!-- Tools Pencarian & Info Sortir -->
+        <div class="flex flex-col sm:flex-row justify-between items-center gap-3 pt-2">
+          <span class="text-xs text-slate-400 font-medium">💡 Klik judul kolom tabel untuk mengubah urutan sortir</span>
+          <div class="relative w-full sm:w-64">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+              <iconify-icon icon="heroicons:magnifying-glass-20-solid" class="text-sm"></iconify-icon>
+            </span>
+            <input type="text" id="searchBox" placeholder="Cari nama folder..." oninput="handleSearch()"
+              class="w-full pl-9 pr-3 py-2 text-xs border border-slate-200 rounded-xl bg-slate-50/50 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-slate-700">
           </div>
+        </div>
 
-          <!-- Header List Berkas & Tombol Salin Semua Link -->
-          <div class="flex items-center justify-between pt-1">
-            <span class="font-bold text-slate-700">Daftar Berkas Terunggah (Urut A-Z):</span>
-            <button onclick="copyAllUploadedLinks()" class="text-emerald-700 hover:underline font-bold text-[11px]">
-              📋 Salin Semua Link (A-Z)
-            </button>
+        <!-- Tabel Hasil -->
+        <div class="border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+          <div class="max-h-[500px] overflow-y-auto">
+            <table class="w-full text-left text-xs border-collapse">
+              <thead class="bg-slate-50 text-slate-500 uppercase font-bold sticky top-0 border-b border-slate-200 z-10">
+                <tr>
+                  <th onclick="changeSort('name')" class="p-3.5 cursor-pointer hover:bg-slate-100 select-none">
+                    Nama Folder <span id="sort-name" class="text-emerald-600">▲</span>
+                  </th>
+                  <th onclick="changeSort('imageCount')" class="p-3.5 cursor-pointer hover:bg-slate-100 select-none">
+                    Jumlah Gambar <span id="sort-imageCount" class="text-emerald-600"></span>
+                  </th>
+                  <th onclick="changeSort('otherCount')" class="p-3.5 cursor-pointer hover:bg-slate-100 select-none">
+                    Total File Lain <span id="sort-otherCount" class="text-emerald-600"></span>
+                  </th>
+                  <th onclick="changeSort('imageSize')" class="p-3.5 cursor-pointer hover:bg-slate-100 select-none">
+                    Ukuran Gambar <span id="sort-imageSize" class="text-emerald-600"></span>
+                  </th>
+                  <th class="p-3.5 text-center cursor-default">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="folderTableBody" class="divide-y divide-slate-100 text-slate-700"></tbody>
+            </table>
           </div>
-
-          <!-- List File Yang Sudah Berurutan Abjad -->
-          <div id="uploadedLinksList" class="max-h-64 overflow-y-auto space-y-1.5 pr-1"></div>
         </div>
 
       </div>
@@ -177,236 +156,218 @@
   </div>
 
   <script>
-    // URL Google Apps Script Anda
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbxns9ZqlN5NVS4o8LSsdG2qobEkMdNng4O9vyfRQDToHBOzl1lsb5ZDGgYuQDGwAtMhUQ/exec";
+    // API KEY GOOGLE DRIVE ANDA
+    const GOOGLE_API_KEY = 'AIzaSyC6qH2ELD6bpDuccwkffScYX_irPI1ZvAs';
 
-    let selectedFiles = [];
-    let uploadedResults = [];
-    let createdFolderUrl = "";
+    let globalReports = [];
+    let currentSort = { key: 'name', asc: true };
 
-    const fileToBase64 = file => new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        const res = reader.result;
-        resolve(res.indexOf(',') !== -1 ? res.split(',')[1] : res);
-      };
-      reader.onerror = error => reject(error);
-    });
-
-    // Helper Universal Copy
-    function copyText(text, btnElement, successMsg = "Link Tersalin!") {
-      if (!text) return;
-
-      const onSuccess = () => {
-        if (btnElement) {
-          const originalText = btnElement.innerHTML;
-          btnElement.innerHTML = `✅ Tersalin!`;
-          btnElement.classList.add("bg-emerald-600", "text-white");
-          setTimeout(() => {
-            btnElement.innerHTML = originalText;
-            btnElement.classList.remove("bg-emerald-600", "text-white");
-          }, 1500);
-        } else {
-          alert(successMsg);
-        }
-      };
-
-      if (navigator.clipboard && window.isSecureContext) {
-        navigator.clipboard.writeText(text).then(onSuccess).catch(() => fallbackCopy(text, onSuccess));
-      } else {
-        fallbackCopy(text, onSuccess);
-      }
+    function extractFolderId(input) {
+      const trimmed = input.trim();
+      const match = trimmed.match(/folders\/([a-zA-Z0-9_-]+)/);
+      return match ? match[1] : trimmed.split('?')[0];
     }
 
-    function fallbackCopy(text, callback) {
-      const ta = document.createElement("textarea");
-      ta.value = text;
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand("copy");
-      document.body.removeChild(ta);
-      callback();
+    function formatBytes(bytes) {
+      if (!bytes || bytes === 0) return '0 B';
+      const k = 1024;
+      const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
     }
 
-    async function sendRequest(payload) {
-      const response = await fetch(GAS_URL, {
-        method: "POST",
-        headers: { "Content-Type": "text/plain;charset=utf-8" },
-        body: JSON.stringify(payload)
-      });
-
-      const rawText = await response.text();
-      try {
-        return JSON.parse(rawText);
-      } catch (e) {
-        throw new Error("Respons server bukan JSON: " + rawText.substring(0, 100));
-      }
+    function isImageMime(mime) {
+      return mime.startsWith('image/') ||
+        mime.includes('jpeg') ||
+        mime.includes('png') ||
+        mime.includes('webp') ||
+        mime.includes('gif');
     }
 
-    function handleFilesSelect(input) {
-      if (input.files && input.files.length > 0) {
-        // Otomatis urut abjad A-Z saat file pertama kali dipilih
-        selectedFiles = Array.from(input.files).sort((a, b) =>
-          a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' })
-        );
+    async function fetchFolderContents(folderId) {
+      let pageToken = null;
+      const items = [];
 
-        let totalBytes = selectedFiles.reduce((acc, f) => acc + f.size, 0);
-        let totalMB = (totalBytes / (1024 * 1024)).toFixed(2);
+      do {
+        const query = encodeURIComponent(`'${folderId}' in parents and trashed = false`);
+        let url = `https://www.googleapis.com/drive/v3/files?q=${query}&key=${GOOGLE_API_KEY}&pageSize=1000&fields=nextPageToken,files(id,name,mimeType,size,webViewLink)`;
+        if (pageToken) url += `&pageToken=${pageToken}`;
 
-        document.getElementById("fileCountText").innerText = `${selectedFiles.length} Berkas Dipilih (Urut A-Z)`;
-        document.getElementById("fileTotalSizeText").innerText = `Total Ukuran: ${totalMB} MB`;
+        const res = await fetch(url);
+        const data = await res.json();
+        if (data.error) throw new Error(data.error.message);
 
-        document.getElementById("filePromptText").classList.add("hidden");
-        document.getElementById("fileInfoBox").classList.remove("hidden");
-      }
+        if (data.files) items.push(...data.files);
+        pageToken = data.nextPageToken;
+      } while (pageToken);
+
+      return items;
     }
 
-    function removeSelectedFiles() {
-      const input = document.getElementById("fileBatch");
-      input.value = "";
-      selectedFiles = [];
-      document.getElementById("filePromptText").classList.remove("hidden");
-      document.getElementById("fileInfoBox").classList.add("hidden");
-      document.getElementById("progressContainer").classList.add("hidden");
-      document.getElementById("resultBox").classList.add("hidden");
-    }
+    async function startScan() {
+      const rawFolder = document.getElementById('folderInput').value.trim();
+      const rootFolderId = extractFolderId(rawFolder);
+      const statusEl = document.getElementById('status');
+      const scanBtn = document.getElementById('scanBtn');
 
-    // Render ulang list file yang rapi terurut A-Z
-    function renderSortedResults() {
-      const linksContainer = document.getElementById("uploadedLinksList");
-      linksContainer.innerHTML = "";
-
-      uploadedResults.sort((a, b) =>
-        a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' })
-      );
-
-      uploadedResults.forEach((item, index) => {
-        linksContainer.innerHTML += `
-          <div class="p-2.5 bg-white rounded-xl border border-slate-200 flex justify-between items-center text-xs shadow-sm hover:border-emerald-300 transition">
-            <div class="truncate max-w-[210px] sm:max-w-xs pr-2">
-              <span class="font-bold text-slate-800">#${index + 1}</span>
-              <span class="text-slate-700 font-medium ml-1" title="${item.name}">${item.name}</span>
-            </div>
-            <div class="flex items-center gap-1.5 shrink-0">
-              <button type="button" onclick="copyText('${item.link}', this)" 
-                class="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 px-3 py-1.5 rounded-lg font-bold text-xs border border-emerald-200 transition flex items-center gap-1 active:scale-95">
-                📋 Copy Link
-              </button>
-              <a href="${item.link}" target="_blank" 
-                class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1.5 rounded-lg font-semibold text-xs transition">
-                ↗ Buka
-              </a>
-            </div>
-          </div>
-        `;
-      });
-    }
-
-    async function startBatchFolderUpload() {
-      const folderName = document.getElementById("folderNameInput").value.trim();
-      if (!folderName) {
-        alert("Wajib mengetik nama folder terlebih dahulu!");
-        document.getElementById("folderNameInput").focus();
-        return;
-      }
-      if (!selectedFiles.length) {
-        alert("Pilih minimal satu berkas terlebih dahulu!");
+      if (!rootFolderId) {
+        statusEl.innerText = 'Masukkan link atau ID folder terlebih dahulu.';
         return;
       }
 
-      const btn = document.getElementById("btnUpload");
-      const progressContainer = document.getElementById("progressContainer");
-      const progressBar = document.getElementById("progressBar");
-      const progressPercent = document.getElementById("progressPercent");
-      const progressStatus = document.getElementById("progressStatusText");
-      const resultBox = document.getElementById("resultBox");
+      scanBtn.disabled = true;
+      statusEl.innerText = 'Membaca daftar subfolder...';
+      document.getElementById('results').style.display = 'none';
 
-      btn.disabled = true;
-      progressContainer.classList.remove("hidden");
-      resultBox.classList.remove("hidden");
-      document.getElementById("uploadedLinksList").innerHTML = "";
-      uploadedResults = [];
-
-      // 1. Buat Folder Baru
-      progressStatus.innerText = `Membuat folder "${folderName}" di Drive...`;
-      progressBar.style.width = `5%`;
-      progressPercent.innerText = `5%`;
-
-      let folderId = "";
       try {
-        const folderRes = await sendRequest({
-          action: "createFolder",
-          folderName: folderName
-        });
+        const rootItems = await fetchFolderContents(rootFolderId);
+        const subfolders = rootItems.filter(item => item.mimeType === 'application/vnd.google-apps.folder');
 
-        if (folderRes.status !== "success" || !folderRes.folderId) {
-          throw new Error(folderRes.message || "Gagal membuat folder di Google Drive.");
+        const rootImages = rootItems.filter(item => isImageMime(item.mimeType));
+        const rootOtherFiles = rootItems.filter(item => !isImageMime(item.mimeType) && item.mimeType !== 'application/vnd.google-apps.folder');
+        const rootImgSize = rootImages.reduce((sum, item) => sum + (Number(item.size) || 0), 0);
+
+        globalReports = [];
+
+        if (rootImages.length > 0 || rootOtherFiles.length > 0) {
+          globalReports.push({
+            name: '(Root / Luar Subfolder)',
+            isRoot: true,
+            imageCount: rootImages.length,
+            otherCount: rootOtherFiles.length,
+            imageSize: rootImgSize,
+            link: `https://drive.google.com/drive/folders/${rootFolderId}`
+          });
         }
 
-        folderId = folderRes.folderId;
-        createdFolderUrl = folderRes.folderUrl || folderRes.link;
+        let overallImages = rootImages.length;
+        let overallSize = rootImgSize;
 
-        document.getElementById("resFolderName").innerText = folderName;
-        document.getElementById("resFolderLink").innerText = createdFolderUrl;
+        for (let i = 0; i < subfolders.length; i++) {
+          const folder = subfolders[i];
+          statusEl.innerText = `Memindai (${i + 1}/${subfolders.length}): ${folder.name}...`;
 
-      } catch (err) {
-        alert("Gagal membuat folder: " + err.message);
-        btn.disabled = false;
-        progressContainer.classList.add("hidden");
-        return;
-      }
+          const contents = await fetchFolderContents(folder.id);
 
-      // 2. Unggah File (Diproses Berurutan A-Z)
-      const totalFiles = selectedFiles.length;
+          let imgCount = 0;
+          let otherCount = 0;
+          let imgSize = 0;
 
-      for (let i = 0; i < totalFiles; i++) {
-        const file = selectedFiles[i];
-        const currentNum = i + 1;
-
-        progressStatus.innerText = `Mengunggah (${currentNum}/${totalFiles}): ${file.name}`;
-
-        try {
-          const base64Data = await fileToBase64(file);
-
-          const res = await sendRequest({
-            action: "uploadToFolder",
-            folderId: folderId,
-            base64: base64Data,
-            fileName: file.name,
-            mimeType: file.type || "application/octet-stream"
+          contents.forEach(file => {
+            if (isImageMime(file.mimeType)) {
+              imgCount++;
+              imgSize += (Number(file.size) || 0);
+            } else if (file.mimeType !== 'application/vnd.google-apps.folder') {
+              otherCount++;
+            }
           });
 
-          if (res.status === "success") {
-            const fileLink = res.link || res.fileUrl;
-            uploadedResults.push({ name: file.name, link: fileLink });
-            renderSortedResults();
-          } else {
-            console.error(`Gagal unggah ${file.name}:`, res.message);
-          }
-        } catch (err) {
-          console.error(`Error file ${file.name}:`, err.message);
+          overallImages += imgCount;
+          overallSize += imgSize;
+
+          globalReports.push({
+            name: folder.name,
+            isRoot: false,
+            imageCount: imgCount,
+            otherCount: otherCount,
+            imageSize: imgSize,
+            link: folder.webViewLink || `https://drive.google.com/drive/folders/${folder.id}`
+          });
         }
 
-        const percent = Math.round(((currentNum) / totalFiles) * 95) + 5;
-        progressBar.style.width = `${percent}%`;
-        progressPercent.innerText = `${percent}%`;
+        currentSort = { key: 'name', asc: true };
+        sortData();
+
+        document.getElementById('totalFoldersCount').innerText = subfolders.length.toLocaleString('id-ID');
+        document.getElementById('totalImagesCount').innerText = overallImages.toLocaleString('id-ID');
+        document.getElementById('totalSizeCount').innerText = formatBytes(overallSize);
+
+        renderTable(globalReports);
+
+        statusEl.innerText = 'Pemindaian selesai!';
+        document.getElementById('results').style.display = 'block';
+      } catch (err) {
+        statusEl.innerText = 'Gagal: ' + err.message;
+      } finally {
+        scanBtn.disabled = false;
+      }
+    }
+
+    function sortData() {
+      globalReports.sort((a, b) => {
+        if (a.isRoot) return -1;
+        if (b.isRoot) return 1;
+
+        let result = 0;
+        if (currentSort.key === 'name') {
+          result = a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' });
+        } else {
+          result = a[currentSort.key] - b[currentSort.key];
+        }
+
+        return currentSort.asc ? result : -result;
+      });
+
+      ['name', 'imageCount', 'otherCount', 'imageSize'].forEach(col => {
+        const el = document.getElementById(`sort-${col}`);
+        if (el) {
+          el.innerText = (currentSort.key === col) ? (currentSort.asc ? ' ▲' : ' ▼') : '';
+        }
+      });
+    }
+
+    function changeSort(key) {
+      if (currentSort.key === key) {
+        currentSort.asc = !currentSort.asc;
+      } else {
+        currentSort.key = key;
+        currentSort.asc = (key === 'name');
+      }
+      sortData();
+      handleSearch();
+    }
+
+    function handleSearch() {
+      const q = document.getElementById('searchBox').value.toLowerCase();
+      const filtered = globalReports.filter(item => item.name.toLowerCase().includes(q));
+      renderTable(filtered);
+    }
+
+    function renderTable(reports) {
+      const tbody = document.getElementById('folderTableBody');
+      tbody.innerHTML = '';
+
+      if (reports.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="text-center text-slate-400 p-6">Tidak ada subfolder yang ditemukan.</td></tr>`;
+        return;
       }
 
-      progressStatus.innerText = `Selesai! Seluruh berkas berhasil diurutkan A-Z.`;
-      btn.disabled = false;
-    }
+      reports.forEach(item => {
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-slate-50/80 transition-colors";
+        
+        const badge = item.imageCount > 0
+          ? `<span class="bg-emerald-50 text-emerald-700 border border-emerald-200/60 px-2.5 py-1 rounded-lg font-bold">${item.imageCount.toLocaleString('id-ID')} Gambar</span>`
+          : `<span class="bg-slate-100 text-slate-400 px-2.5 py-1 rounded-lg font-medium">0 Gambar</span>`;
 
-    function copyFolderUrl() {
-      if (!createdFolderUrl) return;
-      copyText(createdFolderUrl, null, "Link folder Google Drive berhasil disalin!");
-    }
-
-    // Salin SEMUA link saja (urut abjad ke bawah)
-    function copyAllUploadedLinks() {
-      if (!uploadedResults.length) return alert("Belum ada file yang berhasil diunggah!");
-      const text = uploadedResults.map(item => item.link).join("\n");
-      copyText(text, null, "Semua link file berhasil disalin!");
+        tr.innerHTML = `
+          <td class="p-3.5 font-semibold text-slate-800">
+            <div class="flex items-center gap-2">
+              <span>📁</span>
+              <span class="truncate max-w-[220px] sm:max-w-xs" title="${item.name}">${item.name}</span>
+            </div>
+          </td>
+          <td class="p-3.5">${badge}</td>
+          <td class="p-3.5 text-slate-500 font-medium">${item.otherCount.toLocaleString('id-ID')} file</td>
+          <td class="p-3.5 font-semibold text-slate-700">${formatBytes(item.imageSize)}</td>
+          <td class="p-3.5 text-center">
+            <a href="${item.link}" target="_blank" class="inline-flex items-center gap-1 bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-slate-700 px-3 py-1.5 rounded-lg font-bold transition">
+              Buka <iconify-icon icon="heroicons:arrow-top-right-on-square-20-solid" class="text-sm"></iconify-icon>
+            </a>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
     }
 
     if ('serviceWorker' in navigator) {
