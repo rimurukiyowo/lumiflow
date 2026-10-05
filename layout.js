@@ -1,4 +1,4 @@
-// layout.js - Sidebar Drawer Responsif HP + Toggle Desktop & Animasi Modern
+// layout.js - Sidebar Drawer Responsif HP + Toggle Desktop & Animasi Modern (Navy & White Theme)
 document.addEventListener("DOMContentLoaded", () => {
   const currentPath = window.location.pathname.split("/").pop() || "index.html";
 
@@ -29,12 +29,12 @@ document.addEventListener("DOMContentLoaded", () => {
       <!-- Brand Header -->
       <div class="h-16 flex items-center justify-between px-5 border-b border-slate-100/90">
         <a href="./index.html" class="flex items-center gap-3 group">
-          <div class="w-9 h-9 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center text-white shadow-md shadow-emerald-500/25 group-hover:scale-105 transition-transform duration-200">
+          <div class="w-9 h-9 rounded-2xl bg-gradient-to-tr from-blue-900 to-indigo-800 flex items-center justify-center text-white shadow-md shadow-blue-900/25 group-hover:scale-105 transition-transform duration-200">
             <iconify-icon icon="heroicons:sparkles-20-solid" class="text-lg"></iconify-icon>
           </div>
           <div class="leading-tight">
-            <span class="font-extrabold text-base tracking-tight text-slate-800 group-hover:text-emerald-700 transition-colors">Kimi Suite</span>
-            <span class="block text-[9px] uppercase tracking-widest font-bold text-emerald-600">Workspace</span>
+            <span class="font-extrabold text-base tracking-tight text-slate-900 group-hover:text-blue-900 transition-colors">Kimi Suite</span>
+            <span class="block text-[9px] uppercase tracking-widest font-bold text-blue-800">Workspace</span>
           </div>
         </a>
         
@@ -49,16 +49,16 @@ document.addEventListener("DOMContentLoaded", () => {
         <!-- Dashboard -->
         <a href="./index.html" class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl ${
           currentPath === "index.html"
-            ? "bg-emerald-50 text-emerald-800 font-semibold shadow-sm shadow-emerald-500/10 border border-emerald-200/50"
-            : "text-slate-600 hover:text-emerald-700 hover:bg-slate-50 font-medium hover:translate-x-1"
+            ? "bg-blue-50 text-blue-900 font-semibold shadow-sm shadow-blue-900/10 border border-blue-200/50"
+            : "text-slate-600 hover:text-blue-900 hover:bg-slate-50 font-medium hover:translate-x-1"
         } text-xs transition-all duration-200">
           <div class="flex items-center gap-3">
-            <iconify-icon icon="heroicons:home" class="text-base ${currentPath === "index.html" ? "text-emerald-600" : "text-slate-400 group-hover:text-emerald-600"}"></iconify-icon>
+            <iconify-icon icon="heroicons:home" class="text-base ${currentPath === "index.html" ? "text-blue-900" : "text-slate-400 group-hover:text-blue-900"}"></iconify-icon>
             <span>Dashboard</span>
           </div>
           ${
             currentPath === "index.html"
-              ? '<span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>'
+              ? '<span class="w-1.5 h-1.5 rounded-full bg-blue-900"></span>'
               : ""
           }
         </a>
@@ -69,70 +69,70 @@ document.addEventListener("DOMContentLoaded", () => {
           <span class="text-[9px] font-medium text-slate-300">v3.0</span>
         </div>
 
-        <!-- Bagi Job -->
+        <!-- 1. Bagi Job -->
         <a href="./bagi-job.html" class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl ${
           currentPath.includes("bagi-job")
-            ? "bg-emerald-50 text-emerald-800 font-semibold shadow-sm shadow-emerald-500/10 border border-emerald-200/50"
-            : "text-slate-600 hover:text-emerald-700 hover:bg-slate-50 font-medium hover:translate-x-1"
+            ? "bg-blue-50 text-blue-900 font-semibold shadow-sm shadow-blue-900/10 border border-blue-200/50"
+            : "text-slate-600 hover:text-blue-900 hover:bg-slate-50 font-medium hover:translate-x-1"
         } text-xs transition-all duration-200">
           <div class="flex items-center gap-3">
-            <iconify-icon icon="heroicons:clipboard-document-list" class="text-base ${currentPath.includes("bagi-job") ? "text-emerald-600" : "text-slate-400 group-hover:text-emerald-600"}"></iconify-icon>
-            <span>Bagi Job & Drive</span>
+            <iconify-icon icon="heroicons:clipboard-document-list" class="text-base ${currentPath.includes("bagi-job") ? "text-blue-900" : "text-slate-400 group-hover:text-blue-900"}"></iconify-icon>
+            <span>Bagi Job</span>
           </div>
           ${
             currentPath.includes("bagi-job")
-              ? '<span class="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-md font-bold">Aktif</span>'
+              ? '<span class="text-[10px] bg-blue-100 text-blue-900 px-2 py-0.5 rounded-md font-bold">Aktif</span>'
               : ""
           }
         </a>
 
-        <!-- Brief Splitter -->
+        <!-- 2. Pisah Job -->
         <a href="./brief-parser.html" class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl ${
           currentPath.includes("brief-parser")
-            ? "bg-emerald-50 text-emerald-800 font-semibold shadow-sm shadow-emerald-500/10 border border-emerald-200/50"
-            : "text-slate-600 hover:text-emerald-700 hover:bg-slate-50 font-medium hover:translate-x-1"
+            ? "bg-blue-50 text-blue-900 font-semibold shadow-sm shadow-blue-900/10 border border-blue-200/50"
+            : "text-slate-600 hover:text-blue-900 hover:bg-slate-50 font-medium hover:translate-x-1"
         } text-xs transition-all duration-200">
           <div class="flex items-center gap-3">
-            <iconify-icon icon="heroicons:scissors" class="text-base ${currentPath.includes("brief-parser") ? "text-emerald-600" : "text-slate-400 group-hover:text-emerald-600"}"></iconify-icon>
-            <span>Brief Splitter</span>
+            <iconify-icon icon="heroicons:scissors" class="text-base ${currentPath.includes("brief-parser") ? "text-blue-900" : "text-slate-400 group-hover:text-blue-900"}"></iconify-icon>
+            <span>Pisah Job</span>
           </div>
           ${
             currentPath.includes("brief-parser")
-              ? '<span class="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-md font-bold">Aktif</span>'
+              ? '<span class="text-[10px] bg-blue-100 text-blue-900 px-2 py-0.5 rounded-md font-bold">Aktif</span>'
               : ""
           }
         </a>
 
-        <!-- Duplicate & OCR -->
+        <!-- 3. Upload dan Duplikat -->
         <a href="./duplicate.html" class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl ${
           currentPath.includes("duplicate")
-            ? "bg-emerald-50 text-emerald-800 font-semibold shadow-sm shadow-emerald-500/10 border border-emerald-200/50"
-            : "text-slate-600 hover:text-emerald-700 hover:bg-slate-50 font-medium hover:translate-x-1"
+            ? "bg-blue-50 text-blue-900 font-semibold shadow-sm shadow-blue-900/10 border border-blue-200/50"
+            : "text-slate-600 hover:text-blue-900 hover:bg-slate-50 font-medium hover:translate-x-1"
         } text-xs transition-all duration-200">
           <div class="flex items-center gap-3">
-            <iconify-icon icon="heroicons:document-duplicate" class="text-base ${currentPath.includes("duplicate") ? "text-emerald-600" : "text-slate-400 group-hover:text-emerald-600"}"></iconify-icon>
-            <span>Duplicate & OCR</span>
+            <iconify-icon icon="heroicons:document-duplicate" class="text-base ${currentPath.includes("duplicate") ? "text-blue-900" : "text-slate-400 group-hover:text-blue-900"}"></iconify-icon>
+            <span>Upload dan Duplikat</span>
           </div>
           ${
             currentPath.includes("duplicate")
-              ? '<span class="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-md font-bold">Aktif</span>'
+              ? '<span class="text-[10px] bg-blue-100 text-blue-900 px-2 py-0.5 rounded-md font-bold">Aktif</span>'
               : ""
           }
         </a>
 
-        <!-- Upload Drive -->
+        <!-- 4. Cek Drive -->
         <a href="./upload-drive.html" class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl ${
           currentPath.includes("upload-drive")
-            ? "bg-emerald-50 text-emerald-800 font-semibold shadow-sm shadow-emerald-500/10 border border-emerald-200/50"
-            : "text-slate-600 hover:text-emerald-700 hover:bg-slate-50 font-medium hover:translate-x-1"
+            ? "bg-blue-50 text-blue-900 font-semibold shadow-sm shadow-blue-900/10 border border-blue-200/50"
+            : "text-slate-600 hover:text-blue-900 hover:bg-slate-50 font-medium hover:translate-x-1"
         } text-xs transition-all duration-200">
           <div class="flex items-center gap-3">
-            <iconify-icon icon="heroicons:cloud-arrow-up" class="text-base ${currentPath.includes("upload-drive") ? "text-emerald-600" : "text-slate-400 group-hover:text-emerald-600"}"></iconify-icon>
-            <span>Upload Drive</span>
+            <iconify-icon icon="heroicons:cloud" class="text-base ${currentPath.includes("upload-drive") ? "text-blue-900" : "text-slate-400 group-hover:text-blue-900"}"></iconify-icon>
+            <span>Cek Drive</span>
           </div>
           ${
             currentPath.includes("upload-drive")
-              ? '<span class="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-md font-bold">Aktif</span>'
+              ? '<span class="text-[10px] bg-blue-100 text-blue-900 px-2 py-0.5 rounded-md font-bold">Aktif</span>'
               : ""
           }
         </a>
@@ -143,14 +143,14 @@ document.addEventListener("DOMContentLoaded", () => {
     <div class="p-3.5 border-t border-slate-100">
       <div class="flex items-center gap-3 p-2.5 rounded-2xl bg-slate-50/80 border border-slate-200/60 hover:bg-slate-100/70 transition-all">
         <div class="relative">
-          <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 text-white font-black flex items-center justify-center text-xs shadow-sm">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-900 to-indigo-800 text-white font-black flex items-center justify-center text-xs shadow-sm">
             KT
           </div>
-          <span class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 border-2 border-white rounded-full animate-pulse-slow"></span>
+          <span class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-blue-600 border-2 border-white rounded-full animate-pulse-slow"></span>
         </div>
         <div class="leading-tight truncate flex-1">
           <p class="text-xs font-bold text-slate-800 truncate">@kimii_team</p>
-          <span class="inline-flex items-center gap-1 text-[10px] text-emerald-600 font-semibold">
+          <span class="inline-flex items-center gap-1 text-[10px] text-blue-900 font-semibold">
             <iconify-icon icon="heroicons:check-badge-20-solid" class="text-xs"></iconify-icon>
             Active Work
           </span>
@@ -164,12 +164,12 @@ document.addEventListener("DOMContentLoaded", () => {
   <header class="h-16 bg-white/80 backdrop-blur-md border-b border-slate-200/80 px-4 sm:px-6 flex items-center justify-between sticky top-0 z-30 transition-all">
     <div class="flex items-center gap-3">
       <!-- Tombol Hamburger (HP & Desktop) -->
-      <button onclick="toggleSidebar()" class="group text-slate-600 hover:text-emerald-700 p-2 rounded-xl border border-slate-200/80 hover:border-emerald-200 hover:bg-emerald-50/50 flex items-center justify-center transition-all active:scale-95 shadow-sm" title="Toggle Sidebar">
+      <button onclick="toggleSidebar()" class="group text-slate-600 hover:text-blue-900 p-2 rounded-xl border border-slate-200/80 hover:border-blue-200 hover:bg-blue-50/50 flex items-center justify-center transition-all active:scale-95 shadow-sm" title="Toggle Sidebar">
         <iconify-icon icon="heroicons:bars-3-bottom-left-20-solid" class="text-xl transition-transform group-hover:scale-110"></iconify-icon>
       </button>
 
       <!-- Input Search Visual -->
-      <div class="hidden sm:flex items-center gap-2 text-slate-400 bg-slate-50 border border-slate-200/80 px-3 py-1.5 rounded-xl w-64 focus-within:w-72 focus-within:border-emerald-500 focus-within:bg-white focus-within:ring-2 focus-within:ring-emerald-500/10 transition-all">
+      <div class="hidden sm:flex items-center gap-2 text-slate-400 bg-slate-50 border border-slate-200/80 px-3 py-1.5 rounded-xl w-64 focus-within:w-72 focus-within:border-blue-900 focus-within:bg-white focus-within:ring-2 focus-within:ring-blue-900/10 transition-all">
         <iconify-icon icon="heroicons:magnifying-glass-20-solid" class="text-slate-400 text-sm"></iconify-icon>
         <input type="text" placeholder="Cari modul atau menu..." class="w-full text-xs bg-transparent text-slate-700 placeholder-slate-400 focus:outline-none" />
       </div>
@@ -178,12 +178,12 @@ document.addEventListener("DOMContentLoaded", () => {
     <!-- Info & Profile Status -->
     <div class="flex items-center gap-3">
       <div class="hidden md:flex items-center gap-2 bg-slate-50 border border-slate-200/70 px-3 py-1 rounded-xl text-xs font-semibold text-slate-600">
-        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span class="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></span>
         <span class="text-slate-500 font-medium">Sistem:</span>
-        <span class="text-emerald-700 font-bold">Online</span>
+        <span class="text-blue-900 font-bold">Online</span>
       </div>
 
-      <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200/70 flex items-center justify-center font-extrabold text-xs shadow-sm hover:scale-105 transition-transform cursor-pointer">
+      <div class="w-9 h-9 rounded-xl bg-blue-50 text-blue-900 border border-blue-200/70 flex items-center justify-center font-extrabold text-xs shadow-sm hover:scale-105 transition-transform cursor-pointer">
         K
       </div>
     </div>

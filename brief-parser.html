@@ -11,7 +11,7 @@
   <link rel="icon" type="image/png" href="./logo.png">
   <link rel="apple-touch-icon" href="./logo.png">
   <link rel="manifest" href="./manifest.json">
-  <meta name="theme-color" content="#2d6a4f">
+  <meta name="theme-color" content="#0f172a">
 
   <!-- Google Fonts: Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -29,7 +29,9 @@
   <style>
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      background-color: #f4f7f5;
+      background-color: #f8fafc;
+      background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+      background-size: 24px 24px;
     }
 
     ::-webkit-scrollbar {
@@ -38,7 +40,7 @@
     }
 
     ::-webkit-scrollbar-thumb {
-      background: #c7d8ce;
+      background: #cbd5e1;
       border-radius: 10px;
     }
   </style>
@@ -46,58 +48,59 @@
 
 <body class="text-slate-700 antialiased min-h-screen flex overflow-x-hidden">
 
-  <!-- SIDEBAR OTOMATIS (DIPASANG OLEH LAYOUT.JS) -->
+  <!-- SIDEBAR OTOMATIS -->
   <div id="app-sidebar"></div>
 
   <!-- MAIN WRAPPER -->
   <div class="flex-1 flex flex-col min-w-0">
 
-    <!-- NAVBAR ATAS OTOMATIS (DIPASANG OLEH LAYOUT.JS) -->
+    <!-- NAVBAR ATAS OTOMATIS -->
     <div id="app-navbar"></div>
 
     <!-- CONTENT BODY -->
-    <main class="p-6 max-w-5xl w-full mx-auto space-y-6">
+    <main class="p-4 sm:p-6 max-w-5xl w-full mx-auto space-y-5 sm:space-y-6">
 
       <!-- HEADER INFO -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <div>
-          <h1 class="text-xl font-bold text-slate-900 tracking-tight">Brief List Parser</h1>
+          <h1 class="text-xl font-extrabold text-slate-900 tracking-tight">Brief List Parser</h1>
           <p class="text-xs text-slate-500 mt-0.5">Konversi teks brief mentah pesanan WhatsApp ke format tabel rekap</p>
         </div>
         <span
-          class="inline-flex items-center gap-1.5 text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200 px-3 py-1.5 rounded-full w-fit">
-          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+          class="inline-flex items-center gap-1.5 text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-100 px-3 py-1.5 rounded-full w-fit">
+          <span class="w-1.5 h-1.5 rounded-full bg-indigo-600"></span>
           Modul Format Brief
         </span>
       </div>
 
       <!-- MAIN CARD WORKSPACE -->
-      <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5 sm:p-6 space-y-5">
+      <div
+        class="bg-white/90 backdrop-blur-md rounded-3xl border border-slate-200/85 shadow-sm p-4 sm:p-6 space-y-4 sm:space-y-5">
 
         <!-- Input Brief Section -->
         <div class="space-y-1.5">
           <label for="inputBrief" class="block text-xs font-bold text-slate-700">
             Tempel Brief di sini:
           </label>
-          <textarea id="inputBrief" rows="6"
-            class="w-full p-3 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-slate-50/50 text-slate-800 font-mono transition resize-y"
+          <textarea id="inputBrief" rows="5"
+            class="w-full p-3.5 text-xs border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent bg-slate-50/85 text-slate-800 font-mono transition resize-y placeholder-slate-400 font-medium"
             placeholder="Salin & tempel brief dari WhatsApp di sini (memuat ID, Orderan, Target, dsb)..."></textarea>
         </div>
 
         <!-- Tombol Aksi -->
-        <div class="grid grid-cols-3 gap-2.5 pt-1">
+        <div class="grid grid-cols-3 gap-2 pt-1">
           <button onclick="parseBrief()"
-            class="flex items-center justify-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-semibold py-2.5 px-3 rounded-xl text-xs shadow-sm transition duration-200">
+            class="flex items-center justify-center gap-1.5 bg-slate-900 hover:bg-slate-800 active:scale-95 text-white font-bold py-3 px-3 rounded-2xl text-xs shadow-md shadow-slate-900/10 transition">
             <iconify-icon icon="heroicons:cog-6-tooth-solid" class="text-sm"></iconify-icon>
             <span>Generate</span>
           </button>
           <button onclick="copyResult()"
-            class="flex items-center justify-center gap-1.5 bg-slate-800 hover:bg-slate-900 active:scale-95 text-white font-semibold py-2.5 px-3 rounded-xl text-xs shadow-sm transition duration-200">
+            class="flex items-center justify-center gap-1.5 bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white font-bold py-3 px-3 rounded-2xl text-xs shadow-sm transition">
             <iconify-icon icon="heroicons:clipboard-document-solid" class="text-sm"></iconify-icon>
             <span>Salin Tabel</span>
           </button>
           <button onclick="clearAll()"
-            class="flex items-center justify-center gap-1.5 bg-slate-100 hover:bg-rose-50 hover:text-rose-600 text-slate-600 active:scale-95 font-semibold py-2.5 px-3 rounded-xl text-xs border border-slate-200 transition duration-200">
+            class="flex items-center justify-center gap-1.5 bg-slate-100 hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 text-slate-600 active:scale-95 font-semibold py-3 px-3 rounded-2xl text-xs border border-slate-200 transition">
             <iconify-icon icon="heroicons:trash-solid" class="text-sm"></iconify-icon>
             <span>Reset</span>
           </button>
@@ -105,18 +108,18 @@
 
         <!-- Status Notifikasi Copy -->
         <div id="copyStatus"
-          class="text-xs font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-3 py-2 rounded-xl text-center hidden transition">
-          ✅ Berhasil disalin ke clipboard! Siap ditempel ke Google Sheets / Excel.
+          class="text-xs font-bold text-indigo-700 bg-indigo-50 border border-indigo-100 px-3.5 py-2.5 rounded-2xl text-center hidden transition">
+          ✨ Berhasil disalin ke clipboard! Siap ditempel ke Google Sheets / Excel.
         </div>
 
         <!-- Hasil Tabel Preview -->
-        <div class="space-y-2 pt-2 border-t border-slate-100">
+        <div class="space-y-2 pt-3 border-t border-slate-100">
           <div class="flex items-center justify-between">
             <label class="block text-xs font-bold text-slate-700">Hasil Rekap Tabel:</label>
-            <span class="text-[11px] text-slate-400">Otomatis deteksi platform & ID pesanan</span>
+            <span class="text-[11px] text-slate-400 font-medium">Otomatis deteksi platform & ID pesanan</span>
           </div>
 
-          <div class="overflow-x-auto border border-slate-200/80 rounded-xl bg-white shadow-inner max-h-[360px]">
+          <div class="overflow-x-auto border border-slate-200/80 rounded-2xl bg-white shadow-inner max-h-[360px]">
             <table class="w-full text-left border-collapse text-xs">
               <thead>
                 <tr
@@ -140,9 +143,10 @@
 
       </div>
 
-      <!-- FOOTER OTOMATIS (DIPASANG OLEH LAYOUT.JS) -->
-      <div id="app-footer"></div>
     </main>
+
+    <!-- FOOTER OTOMATIS -->
+    <div id="app-footer"></div>
   </div>
 
   <textarea id="hiddenClipboard" class="sr-only" aria-hidden="true"></textarea>
@@ -225,13 +229,12 @@
       let rawLines = [];
 
       structuredGroups.forEach((group, groupIndex) => {
-        // Spasi 8 baris antar ID jika terdapat beberapa grup ID berbeda
         if (groupIndex > 0) {
           for (let i = 0; i < 8; i++) {
             rawLines.push('');
 
             const spacerTr = document.createElement('tr');
-            spacerTr.className = 'h-2 bg-emerald-50/40';
+            spacerTr.className = 'h-2 bg-indigo-50/40';
             spacerTr.innerHTML = `<td colspan="4" class="border-none"></td>`;
             tbody.appendChild(spacerTr);
           }
@@ -244,7 +247,7 @@
           tr.className = 'hover:bg-slate-50 transition text-slate-700 bg-white';
           tr.innerHTML = `
             <td class="p-3 border-b border-slate-100 font-semibold text-slate-800">${item.name}</td>
-            <td class="p-3 border-b border-slate-100 font-bold text-emerald-700 text-center">${item.count}</td>
+            <td class="p-3 border-b border-slate-100 font-bold text-indigo-600 text-center">${item.count}</td>
             <td class="p-3 border-b border-slate-100 text-slate-500 font-mono whitespace-nowrap text-xs">${item.id}</td>
             <td class="p-3 border-b border-slate-100 text-slate-600">${item.order}</td>
           `;

@@ -3,37 +3,47 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
   <title>Bagi Job & Drive - Kimi Team</title>
+
   <link rel="icon" type="image/png" href="./logo.png">
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#0f172a">
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://code.iconify.design/iconify-icon/1.0.8/iconify-icon.min.js"></script>
+
   <!-- PANGGIL FILE LAYOUT DI SINI -->
   <script src="./layout.js"></script>
+
   <style>
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #f8fafc;
+      background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+      background-size: 24px 24px;
     }
 
-    ::-webkit-scrollbar-track {
-      background: #f1f5f9;
-      border-radius: 8px;
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
     }
 
     ::-webkit-scrollbar-thumb {
       background: #cbd5e1;
-      border-radius: 8px;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-      background: #94a3b8;
+      border-radius: 10px;
     }
   </style>
 </head>
 
-<body
-  class="text-slate-700 antialiased min-h-screen flex overflow-x-hidden bg-slate-50/60 selection:bg-emerald-500 selection:text-white">
+<body class="text-slate-700 antialiased min-h-screen flex overflow-x-hidden">
 
   <!-- SIDEBAR OTOMATIS TERPASANG -->
   <div id="app-sidebar"></div>
@@ -44,58 +54,55 @@
     <!-- NAVBAR ATAS OTOMATIS TERPASANG -->
     <div id="app-navbar"></div>
 
-    <!-- HANYA ISI KONTEN SPESIFIK HALAMAN INI -->
-    <main class="p-4 sm:p-6 md:p-8 max-w-4xl w-full mx-auto space-y-6">
+    <!-- KONTEN UTAMA -->
+    <main class="p-4 sm:p-6 md:p-8 max-w-4xl w-full mx-auto space-y-5 sm:space-y-6">
 
       <!-- Header Banner -->
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-200/60">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200/80">
         <div>
-          <div class="flex items-center gap-2">
-            <span class="p-2 rounded-xl bg-emerald-100 text-emerald-700 inline-flex shadow-sm">
-              <iconify-icon icon="heroicons:folder-git-2-20-solid" class="text-xl"></iconify-icon>
-            </span>
-            <h1 class="text-xl font-extrabold text-slate-900 tracking-tight">Pembagian Job & Struktur Folder</h1>
-          </div>
-          <p class="text-xs text-slate-500 mt-1">Tempel format brief pesanan dan tentukan anggota yang bertugas</p>
+          <h1 class="text-xl font-extrabold text-slate-900 tracking-tight">Pembagian Job & Struktur Folder</h1>
+          <p class="text-xs text-slate-500 mt-0.5">Tempel format brief pesanan dan tentukan anggota yang bertugas secara
+            instan</p>
         </div>
+        <span
+          class="inline-flex items-center gap-1.5 text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-100 px-3 py-1.5 rounded-full w-fit">
+          <span class="w-1.5 h-1.5 rounded-full bg-indigo-600"></span>
+          Modul Bagi Job
+        </span>
       </div>
 
       <!-- Main Card Container -->
-      <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm p-5 sm:p-7 space-y-6">
+      <div class="bg-white/90 backdrop-blur-md rounded-3xl border border-slate-200/85 shadow-sm p-4 sm:p-7 space-y-5">
 
-        <!-- Input Brief Section -->
-        <div>
-          <div class="flex items-center justify-between mb-2">
-            <label class="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-600">
-              <iconify-icon icon="heroicons:clipboard-document-list-20-solid"
-                class="text-emerald-600 text-base"></iconify-icon>
-              Tempel Format Brief
+        <!-- 1. Input Brief Section -->
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between">
+            <label class="block text-xs font-bold text-slate-700">
+              1. Tempel Format Brief Pesanan:
             </label>
-            <span class="text-[11px] font-medium text-slate-400">Bisa 1 ID atau banyak ID sekaligus</span>
+            <span class="text-[11px] text-slate-400 font-medium">Mendukung 1 ID atau banyak ID sekaligus</span>
           </div>
           <textarea id="briefInput"
-            class="w-full h-36 p-3.5 text-xs border border-slate-200 rounded-2xl bg-slate-50/50 font-mono text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 focus:bg-white transition-all shadow-inner resize-y leading-relaxed"
-            placeholder="Tempel brief di sini...&#10;Contoh:&#10;ID : 286023&#10;Target : https://...&#10;Jumlah : 56&#10;Report :"></textarea>
+            class="w-full h-32 p-3.5 text-xs border border-slate-200 rounded-2xl bg-slate-50/85 font-mono text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition resize-y leading-relaxed"
+            placeholder="Contoh:&#10;ID : 286023&#10;Target : https://...&#10;Jumlah : 56&#10;Report :"></textarea>
         </div>
 
-        <!-- Tambah & Seleksi Anggota Section -->
-        <div class="space-y-3 pt-4 border-t border-slate-100">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+        <!-- 2. Pilih Anggota Tim Section -->
+        <div class="space-y-3 pt-3 border-t border-slate-100">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
-              <label class="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-600">
-                <iconify-icon icon="heroicons:users-20-solid" class="text-emerald-600 text-base"></iconify-icon>
-                Pilih Anggota Tim
+              <label class="block text-xs font-bold text-slate-700">
+                2. Pilih Anggota Tim yang Bertugas:
               </label>
-              <p class="text-[11px] text-slate-400">Klik nama untuk memilih. Ikon ⚙️ hanya untuk mengunci anggota yang
-                akunnya terbatas (misal 5 akun).</p>
+              <p class="text-[11px] text-slate-400 font-medium">Klik nama untuk mencentang/membatalkan pilihan.</p>
             </div>
 
             <div class="flex gap-2">
               <input type="text" id="newNameInput"
-                class="p-2 px-3 text-xs border border-slate-200 rounded-xl bg-slate-50/50 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:bg-white transition-all"
-                placeholder="Tambah nama..." onkeydown="if(event.key === 'Enter') addName()">
+                class="p-2.5 px-3 text-xs border border-slate-200 rounded-2xl bg-slate-50/85 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent font-medium"
+                placeholder="Tambah nama baru..." onkeydown="if(event.key === 'Enter') addName()">
               <button onclick="addName()"
-                class="inline-flex items-center gap-1 bg-emerald-600 hover:bg-emerald-700 text-white text-xs px-3.5 py-2 rounded-xl font-bold transition-all shadow-sm active:scale-95">
+                class="inline-flex items-center gap-1 bg-slate-900 hover:bg-slate-800 active:scale-95 text-white text-xs px-4 py-2.5 rounded-2xl font-bold transition shadow-sm shrink-0">
                 <iconify-icon icon="heroicons:plus-20-solid" class="text-base"></iconify-icon> Tambah
               </button>
             </div>
@@ -103,14 +110,14 @@
 
           <!-- Container Badge Nama -->
           <div id="nameContainer"
-            class="flex flex-wrap gap-2 max-h-52 overflow-y-auto p-3.5 border border-slate-200/80 rounded-2xl bg-slate-50/40">
+            class="flex flex-wrap gap-1.5 max-h-48 overflow-y-auto p-3.5 border border-slate-200/80 rounded-2xl bg-slate-50/50">
           </div>
 
-          <!-- Sub-bar Aksi Seleksi Cepat -->
+          <!-- Aksi Seleksi Cepat -->
           <div class="flex justify-between items-center text-xs px-1">
             <div class="flex items-center gap-3">
               <button onclick="selectAll()"
-                class="text-emerald-600 hover:text-emerald-700 font-bold hover:underline inline-flex items-center gap-1">
+                class="text-indigo-600 hover:text-indigo-700 font-bold hover:underline inline-flex items-center gap-1">
                 <iconify-icon icon="heroicons:check-badge-20-solid" class="text-sm"></iconify-icon> Pilih Semua
               </button>
               <button onclick="deselectAll()" class="text-slate-400 hover:text-slate-600 font-semibold hover:underline">
@@ -118,106 +125,71 @@
               </button>
             </div>
             <span
-              class="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-[11px] font-medium border border-slate-200/50">
-              Terpilih: <strong id="totalSelected" class="text-emerald-700 font-bold text-xs">0</strong> Orang
+              class="bg-indigo-50 text-indigo-700 border border-indigo-100 px-3 py-1 rounded-full text-[11px] font-bold">
+              Terpilih: <strong id="totalSelected" class="font-extrabold">0</strong> Orang
             </span>
           </div>
         </div>
 
-        <!-- Opsi Mode Pembagian -->
-        <div class="space-y-3 pt-4 border-t border-slate-100">
-          <label class="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-600">
-            <iconify-icon icon="heroicons:adjustments-horizontal-20-solid"
-              class="text-emerald-600 text-base"></iconify-icon>
-            Mode Pembagian
+        <!-- 3. Opsi Mode Pembagian -->
+        <div class="space-y-2.5 pt-3 border-t border-slate-100">
+          <label class="block text-xs font-bold text-slate-700">
+            3. Pilih Mode Pembagian:
           </label>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-
-            <!-- Mode 1 -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
             <label
-              class="group relative flex flex-col p-3.5 border-2 border-slate-200 rounded-2xl bg-white cursor-pointer hover:border-emerald-500/50 transition-all has-[:checked]:border-emerald-600 has-[:checked]:bg-emerald-50/30 has-[:checked]:shadow-sm">
+              class="group relative flex flex-col p-3.5 border-2 border-slate-200 rounded-2xl bg-white cursor-pointer hover:border-indigo-500 transition has-[:checked]:border-indigo-600 has-[:checked]:bg-indigo-50/30">
               <div class="flex items-center justify-between mb-1">
-                <span class="text-xs font-bold text-slate-800 group-hover:text-emerald-700">1. Khusus 1 ID Saja</span>
-                <input type="radio" name="distributionMode" value="single" checked onchange="toggleCapVisibility()"
-                  class="w-4 h-4 text-emerald-600 focus:ring-emerald-500 border-slate-300">
+                <span class="text-xs font-bold text-slate-800 group-hover:text-indigo-600">Bagi Rata ke Semua
+                  Anggota</span>
+                <input type="radio" name="distributionMode" value="multi_all" checked
+                  class="w-4 h-4 text-indigo-600 focus:ring-indigo-600 border-slate-300">
               </div>
-              <span class="text-[11px] text-slate-500 leading-tight">Proses ID pertama saja & bagi rata patuh batas akun
-                yang dikunci.</span>
+              <span class="text-[11px] text-slate-500 font-medium">Jumlah orderan dibagi rata ke seluruh anggota yang
+                dicentang.</span>
             </label>
 
-            <!-- Mode 2 -->
             <label
-              class="group relative flex flex-col p-3.5 border-2 border-slate-200 rounded-2xl bg-white cursor-pointer hover:border-emerald-500/50 transition-all has-[:checked]:border-emerald-600 has-[:checked]:bg-emerald-50/30 has-[:checked]:shadow-sm">
+              class="group relative flex flex-col p-3.5 border-2 border-slate-200 rounded-2xl bg-white cursor-pointer hover:border-indigo-500 transition has-[:checked]:border-indigo-600 has-[:checked]:bg-indigo-50/30">
               <div class="flex items-center justify-between mb-1">
-                <span class="text-xs font-bold text-slate-800 group-hover:text-emerald-700">2. Multi ID (Semua
-                  Dapat)</span>
-                <input type="radio" name="distributionMode" value="multi_all" onchange="toggleCapVisibility()"
-                  class="w-4 h-4 text-emerald-600 focus:ring-emerald-500 border-slate-300">
+                <span class="text-xs font-bold text-slate-800 group-hover:text-indigo-600">Khusus 1 ID Saja</span>
+                <input type="radio" name="distributionMode" value="single"
+                  class="w-4 h-4 text-indigo-600 focus:ring-indigo-600 border-slate-300">
               </div>
-              <span class="text-[11px] text-slate-500 leading-tight">Di tiap ID, semua orang yang dicentang mendapat
-                bagian rata.</span>
+              <span class="text-[11px] text-slate-500 font-medium">Hanya memproses ID pesanan yang paling atas
+                saja.</span>
             </label>
-
-            <!-- Mode 3 -->
-            <label
-              class="group relative flex flex-col p-3.5 border-2 border-slate-200 rounded-2xl bg-white cursor-pointer hover:border-emerald-500/50 transition-all has-[:checked]:border-emerald-600 has-[:checked]:bg-emerald-50/30 has-[:checked]:shadow-sm">
-              <div class="flex items-center justify-between mb-1">
-                <span class="text-xs font-bold text-slate-800 group-hover:text-emerald-700">3. Multi ID (Maks
-                  Batas)</span>
-                <input type="radio" name="distributionMode" value="multi_capped" onchange="toggleCapVisibility()"
-                  class="w-4 h-4 text-emerald-600 focus:ring-emerald-500 border-slate-300">
-              </div>
-              <span class="text-[11px] text-slate-500 leading-tight">Prioritas akun banyak tuntas target 20, akun
-                terbatas dicicil sampai 20.</span>
-            </label>
-
-          </div>
-
-          <!-- Input Kuota Maksimal Khusus Opsi 3 -->
-          <div id="capInputContainer"
-            class="hidden items-center gap-2.5 p-3 rounded-xl bg-emerald-50/70 border border-emerald-100 text-xs text-slate-700">
-            <iconify-icon icon="heroicons:information-circle-20-solid"
-              class="text-emerald-600 text-base flex-shrink-0"></iconify-icon>
-            <div class="flex items-center gap-2 flex-wrap">
-              <span>Batas target per orang:</span>
-              <input type="number" id="maxCapInput" value="20" min="1"
-                class="w-16 p-1.5 border border-emerald-200 rounded-lg text-center font-bold text-emerald-800 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20">
-              <span class="text-slate-500">(Akun banyak dituntaskan duluan, akun terbatas dicicil sampai target)</span>
-            </div>
           </div>
         </div>
 
         <!-- Tombol Aksi Utama -->
-        <div class="flex flex-col sm:flex-row gap-3 pt-4 border-t border-slate-100">
+        <div class="flex flex-col sm:flex-row gap-2.5 pt-3 border-t border-slate-100">
           <button id="btnGenerate" onclick="generateJob()"
-            class="flex-1 inline-flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white text-xs py-3.5 px-6 rounded-2xl font-bold shadow-lg shadow-emerald-600/20 active:scale-[0.99] transition-all">
+            class="flex-1 inline-flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 active:scale-95 text-white text-xs py-3.5 px-6 rounded-2xl font-bold shadow-md shadow-slate-900/10 transition">
             <iconify-icon icon="heroicons:sparkles-20-solid" class="text-base"></iconify-icon>
-            <span id="btnGenerateText">✨ Bagi Job & Buat Folder</span>
+            <span id="btnGenerateText">✨ Generate Pembagian Job</span>
           </button>
           <button onclick="clearAll()"
-            class="inline-flex items-center justify-center gap-1.5 px-6 bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs py-3.5 rounded-2xl font-bold border border-slate-200 active:scale-[0.99] transition-all">
+            class="inline-flex items-center justify-center gap-1.5 px-6 bg-slate-100 hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 text-slate-600 text-xs py-3.5 rounded-2xl font-bold border border-slate-200 active:scale-95 transition">
             <iconify-icon icon="heroicons:arrow-path-20-solid" class="text-base"></iconify-icon> Reset
           </button>
         </div>
 
-        <!-- Hasil Rekap Output -->
-        <div class="space-y-3 pt-4 border-t border-slate-100">
+        <!-- 4. Hasil Rekap Output -->
+        <div class="space-y-2.5 pt-3 border-t border-slate-100">
           <div class="flex justify-between items-center">
-            <label class="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-600">
-              <iconify-icon icon="heroicons:check-circle-20-solid" class="text-emerald-600 text-base"></iconify-icon>
-              Hasil Rekap Output
+            <label class="block text-xs font-bold text-slate-700">
+              4. Hasil Rekap Output:
             </label>
-            <span class="text-[11px] text-slate-400">Siap disalin ke WhatsApp/grup</span>
+            <span class="text-[11px] text-slate-400 font-medium">Siap disalin ke WhatsApp</span>
           </div>
 
-          <div class="relative">
-            <textarea id="outputResult" readonly
-              class="w-full h-64 p-4 text-xs border border-slate-200 rounded-2xl bg-slate-900 text-emerald-400 font-mono focus:outline-none shadow-inner resize-y leading-relaxed"
-              placeholder="# Hasil generate akan muncul di sini secara rapi..."></textarea>
-          </div>
+          <textarea id="outputResult" readonly
+            class="w-full h-52 p-4 text-xs border border-slate-200 rounded-2xl bg-slate-900 text-indigo-300 font-mono focus:outline-none shadow-inner resize-y leading-relaxed"
+            placeholder="# Hasil rekap pembagian job akan muncul di sini..."></textarea>
 
           <button id="btnCopy" onclick="copyToClipboard()"
-            class="w-full inline-flex items-center justify-center gap-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200/80 text-xs py-3 rounded-2xl font-bold transition-all active:scale-[0.99]">
+            class="w-full inline-flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white text-xs py-3 rounded-2xl font-bold transition shadow-sm">
             <iconify-icon icon="heroicons:clipboard-document-check-20-solid" class="text-base"></iconify-icon>
             <span id="btnCopyText">Salin Teks Hasil</span>
           </button>
@@ -230,15 +202,15 @@
     </main>
   </div>
 
-  <!-- SCRIPT LOGIKA PEMBAGIAN JOB -->
+  <!-- SCRIPT LOGIKA PEMBAGIAN JOB YANG DISEMPURNAKAN -->
   <script>
     let teamMembers = [
-      "Amelie", "Alvina", "Ami", "Ana", "Novi", "Ann", "Ria", "Dastan", "Desi", "Difarani",
+      "Amelie", "Ami", "Ana", "Novi", "Ann", "Ria", "Dastan", "Desi", "Difarani",
       "Duwi", "Elmira", "Elok", "Endang", "Feni", "Fiafida", "Firanny", "Fdia", "Fitria", "Yani",
       "Irma", "Istidary", "Khariza", "Kholif", "Kyla", "Leha", "Lies", "Linda", "Mahmudah",
       "Mufida", "Ndang", "Novita", "Nurmina", "Puja", "Ratna", "Riri", "Sakucil", "Sanjen",
-      "Siros", "Tya", "Udin", "Kim", "Yahya", "Yosep", "Zal", "Damis", "Risda", "Niar", "Bila"
-    ].map(name => ({ name, customLimit: null }));
+      "Siros", "Tya", "Udin", "Kim", "Yahya", "Vina", "Zal", "Damis", "Risda", "Niar", "Bila"
+    ].map(name => ({ name }));
 
     let selectedNames = [];
 
@@ -250,56 +222,19 @@
 
       sorted.forEach(member => {
         const isSelected = selectedNames.includes(member.name);
-        const hasLock = member.customLimit !== null;
-
-        const wrap = document.createElement("div");
-        wrap.className = `inline-flex items-center rounded-xl border text-xs overflow-hidden transition-all duration-150 ${isSelected
-          ? "bg-emerald-600 text-white border-emerald-600 shadow-sm shadow-emerald-600/20"
-          : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"
-          }`;
 
         const btnName = document.createElement("button");
         btnName.type = "button";
-        btnName.className = "px-3 py-1.5 font-semibold text-left flex items-center gap-1.5";
+        btnName.className = `px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border ${isSelected
+            ? "bg-indigo-600 text-white border-indigo-600 shadow-xs"
+            : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"
+          }`;
         btnName.innerHTML = isSelected
           ? `<iconify-icon icon="heroicons:check-20-solid" class="text-sm"></iconify-icon> ${member.name}`
           : member.name;
         btnName.onclick = () => toggleName(member.name);
 
-        wrap.appendChild(btnName);
-
-        if (hasLock) {
-          const lockBadge = document.createElement("button");
-          lockBadge.type = "button";
-          lockBadge.title = "Klik untuk membuka batasan kunci akun";
-          lockBadge.className = `px-2 py-1.5 text-[10px] font-bold border-l flex items-center gap-0.5 ${isSelected ? "bg-emerald-700/70 border-emerald-500 text-amber-300 hover:bg-emerald-800" : "bg-amber-50 border-slate-200 text-amber-700 hover:bg-amber-100"
-            }`;
-          lockBadge.innerHTML = `🔒 ${member.customLimit}`;
-          lockBadge.onclick = (e) => {
-            e.stopPropagation();
-            member.customLimit = null;
-            renderNames();
-          };
-          wrap.appendChild(lockBadge);
-        } else {
-          const setBtn = document.createElement("button");
-          setBtn.type = "button";
-          setBtn.title = `Kunci batas akun khusus untuk ${member.name} (misal cuma punya 5 akun)`;
-          setBtn.className = `px-1.5 py-1.5 text-[10px] border-l opacity-25 hover:opacity-100 transition-opacity ${isSelected ? "border-emerald-500 text-white hover:bg-emerald-700" : "border-slate-200 text-slate-400 hover:bg-slate-100"
-            }`;
-          setBtn.innerHTML = `⚙️`;
-          setBtn.onclick = (e) => {
-            e.stopPropagation();
-            const val = prompt(`Masukkan jumlah akun maksimal untuk ${member.name} (contoh: 5):`, "5");
-            if (val !== null && val.trim() !== "" && !isNaN(val)) {
-              member.customLimit = parseInt(val, 10);
-              renderNames();
-            }
-          };
-          wrap.appendChild(setBtn);
-        }
-
-        container.appendChild(wrap);
+        container.appendChild(btnName);
       });
 
       document.getElementById("totalSelected").innerText = selectedNames.length;
@@ -329,22 +264,10 @@
       const input = document.getElementById("newNameInput");
       const val = input.value.trim();
       if (val && !teamMembers.some(m => m.name.toLowerCase() === val.toLowerCase())) {
-        teamMembers.push({ name: val, customLimit: null });
+        teamMembers.push({ name: val });
         selectedNames.push(val);
         input.value = "";
         renderNames();
-      }
-    }
-
-    function toggleCapVisibility() {
-      const mode = document.querySelector('input[name="distributionMode"]:checked').value;
-      const container = document.getElementById("capInputContainer");
-      if (mode === "multi_capped") {
-        container.classList.remove("hidden");
-        container.classList.add("flex");
-      } else {
-        container.classList.add("hidden");
-        container.classList.remove("flex");
       }
     }
 
@@ -355,27 +278,22 @@
       renderNames();
     }
 
-    async function generateJob() {
+    function generateJob() {
       const rawBrief = document.getElementById("briefInput").value.trim();
-      const btn = document.getElementById("btnGenerate");
-      const btnText = document.getElementById("btnGenerateText");
       const modeInput = document.querySelector('input[name="distributionMode"]:checked');
-      const mode = modeInput ? modeInput.value : "single";
-      const maxCapInput = document.getElementById("maxCapInput");
-      const globalTarget = maxCapInput && maxCapInput.value ? parseInt(maxCapInput.value, 10) : 20;
+      const mode = modeInput ? modeInput.value : "multi_all";
 
       if (!rawBrief) {
-        return alert("Format brief belum ditempel!");
+        return alert("Silakan tempel format brief terlebih dahulu!");
       }
 
       if (selectedNames.length === 0) {
-        return alert("Pilih minimal satu anggota tim terlebih dahulu!");
+        return alert("Pilih minimal satu anggota tim yang bertugas!");
       }
 
-      btn.disabled = true;
-
+      // Pisahkan blok per ID jika ada banyak ID
       let rawBlocks = rawBrief
-        .split(/(?:^|\n)\s*={3,}\s*(?:\n|$)|(?=(?:^|\n)\s*ID\s*:)/i)
+        .split(/(?=ID\s*:\s*\d+)/i)
         .map(b => b.trim())
         .filter(b => b.length > 0 && /ID\s*:/i.test(b));
 
@@ -389,196 +307,49 @@
 
       let finalOutput = [];
 
-      const pickedMembers = selectedNames.map(name => {
-        const item = teamMembers.find(m => m.name === name);
-        const isLocked = item && item.customLimit !== null;
-        return {
-          name,
-          perIdCap: isLocked ? item.customLimit : globalTarget,
-          targetTotal: globalTarget,
-          totalEarned: 0,
-          isLocked: isLocked
-        };
-      });
-
-      let unlimitedQueueIndex = 0;
-
-      for (let i = 0; i < rawBlocks.length; i++) {
-        let brief = rawBlocks[i];
-        if (btnText) btnText.innerText = `Memproses (${i + 1}/${rawBlocks.length})...`;
-
-        const idMatch = brief.match(/ID\s*:\s*([^\n\r]+)/i);
-        const jumlahMatch = brief.match(/Jumlah\s*:\s*(\d+)/i);
-
-        const jobId = idMatch ? idMatch[1].trim() : `${i + 1}`;
+      rawBlocks.forEach((block, index) => {
+        const jumlahMatch = block.match(/Jumlah\s*:\s*(\d+)/i);
         let totalAmount = jumlahMatch ? parseInt(jumlahMatch[1], 10) : 0;
 
-        let folderUrl = "[Link folder otomatis]";
-        try {
-          const controller = new AbortController();
-          const timeoutId = setTimeout(() => controller.abort(), 2000);
+        let blockResult = block + "\n\n";
 
-          const res = await fetch('/api/create-folder', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ folderName: `Job ID ${jobId}` }),
-            signal: controller.signal
+        if (totalAmount > 0 && selectedNames.length > 0) {
+          // Algoritma pembagian rata sederhana dan adil
+          let baseCount = Math.floor(totalAmount / selectedNames.length);
+          let remainder = totalAmount % selectedNames.length;
+
+          selectedNames.forEach((name, i) => {
+            let assigned = baseCount + (i < remainder ? 1 : 0);
+            if (assigned > 0) {
+              blockResult += `${i + 1}. ${name} ${assigned}\n`;
+            }
           });
-          clearTimeout(timeoutId);
-
-          if (res.ok) {
-            const data = await res.json();
-            if (data.folderUrl) folderUrl = data.folderUrl;
-          }
-        } catch (err) { }
-
-        if (/Report\s*:/i.test(brief)) {
-          brief = brief.replace(/(Report\s*:)[^\n\r]*/i, `$1 ${folderUrl}`);
         } else {
-          brief += `\nReport : ${folderUrl}`;
-        }
-
-        let blockResult = `${brief}\n\n`;
-
-        const allocatedThisID = {};
-        pickedMembers.forEach(m => { allocatedThisID[m.name] = 0; });
-
-        if (mode === "single" || mode === "multi_all") {
-          while (totalAmount > 0) {
-            let given = 0;
-            for (const member of pickedMembers) {
-              if (totalAmount > 0 && allocatedThisID[member.name] < member.perIdCap) {
-                allocatedThisID[member.name] += 1;
-                totalAmount -= 1;
-                given++;
-              }
-            }
-            if (given === 0) break;
-          }
-        } else if (mode === "multi_capped") {
-          const unlimitedMembers = pickedMembers.filter(m => !m.isLocked);
-          const lockedMembers = pickedMembers.filter(m => m.isLocked);
-
-          let uTurns = 0;
-          while (totalAmount > 0 && unlimitedMembers.length > 0 && uTurns < unlimitedMembers.length) {
-            const member = unlimitedMembers[unlimitedQueueIndex];
-            const neededToTarget = member.targetTotal - member.totalEarned;
-
-            if (neededToTarget > 0) {
-              const give = Math.min(totalAmount, neededToTarget);
-              allocatedThisID[member.name] += give;
-              member.totalEarned += give;
-              totalAmount -= give;
-
-              if (member.totalEarned >= member.targetTotal) {
-                unlimitedQueueIndex = (unlimitedQueueIndex + 1) % unlimitedMembers.length;
-              }
-            } else {
-              unlimitedQueueIndex = (unlimitedQueueIndex + 1) % unlimitedMembers.length;
-            }
-            uTurns++;
-          }
-
-          if (totalAmount > 0 && lockedMembers.length > 0) {
-            for (const member of lockedMembers) {
-              if (totalAmount <= 0) break;
-              const neededToTarget = member.targetTotal - member.totalEarned;
-              if (neededToTarget > 0) {
-                const roomInThisId = Math.min(member.perIdCap, neededToTarget);
-                const give = Math.min(totalAmount, roomInThisId);
-                allocatedThisID[member.name] += give;
-                member.totalEarned += give;
-                totalAmount -= give;
-              }
-            }
-          }
-
-          if (totalAmount > 0 && unlimitedMembers.length > 0) {
-            let overflowIdx = 0;
-            while (totalAmount > 0) {
-              const receiver = unlimitedMembers[overflowIdx % unlimitedMembers.length];
-              allocatedThisID[receiver.name] += 1;
-              receiver.totalEarned += 1;
-              totalAmount -= 1;
-              overflowIdx++;
-            }
-          }
-        }
-
-        let assignedIndex = 1;
-        pickedMembers.forEach(member => {
-          if (allocatedThisID[member.name] > 0) {
-            blockResult += `${assignedIndex}. ${member.name} ${allocatedThisID[member.name]}\n`;
-            assignedIndex++;
-          }
-        });
-
-        if (totalAmount > 0) {
-          blockResult += `\n*(Sisa ${totalAmount} orderan tidak terbagi)*\n`;
+          blockResult += `(Jumlah orderan tidak terdeteksi atau anggota kosong)`;
         }
 
         finalOutput.push(blockResult);
-      }
+      });
 
-      document.getElementById("outputResult").value = finalOutput.join("\n====\n\n");
-      btn.disabled = false;
-      if (btnText) btnText.innerText = "✨ Bagi Job & Buat Folder";
+      document.getElementById("outputResult").value = finalOutput.join("\n====================\n\n");
     }
 
     function copyToClipboard() {
       const output = document.getElementById("outputResult");
-      const btn = document.getElementById("btnCopy");
-      const btnText = document.getElementById("btnCopyText");
-
       if (!output || !output.value.trim()) {
         return alert("Belum ada teks hasil untuk disalin!");
       }
 
-      const text = output.value;
-
-      function onCopySuccess() {
-        const oldHtml = btn.innerHTML;
-        btn.innerHTML = `<iconify-icon icon="heroicons:check-circle-20-solid" class="text-base text-emerald-600"></iconify-icon> Tersalin ke Clipboard!`;
-        btn.classList.add("bg-emerald-100", "text-emerald-900");
-        setTimeout(() => {
-          btn.innerHTML = oldHtml;
-          btn.classList.remove("bg-emerald-100", "text-emerald-900");
-        }, 2000);
-      }
-
-      function execCopyFallback(str) {
-        const temp = document.createElement("textarea");
-        temp.value = str;
-        temp.style.position = "fixed";
-        temp.style.top = "0";
-        temp.style.left = "-9999px";
-        temp.setAttribute("readonly", "");
-        document.body.appendChild(temp);
-        temp.select();
-        temp.setSelectionRange(0, 99999);
-
-        try {
-          const ok = document.execCommand("copy");
-          if (ok) {
-            onCopySuccess();
-          } else {
-            alert("Gagal menyalin otomatis. Silakan blok teks hasil lalu salin manual.");
-          }
-        } catch (e) {
-          alert("Gagal menyalin otomatis. Silakan blok teks hasil lalu salin manual.");
-        }
-        document.body.removeChild(temp);
-      }
-
-      if (navigator.clipboard && window.isSecureContext) {
-        navigator.clipboard.writeText(text)
-          .then(onCopySuccess)
-          .catch(() => execCopyFallback(text));
-      } else {
-        execCopyFallback(text);
-      }
+      navigator.clipboard.writeText(output.value)
+        .then(() => alert("Berhasil disalin ke clipboard!"))
+        .catch(() => {
+          output.select();
+          document.execCommand('copy');
+          alert("Berhasil disalin!");
+        });
     }
 
+    // Inisialisasi awal
     renderNames();
   </script>
 </body>

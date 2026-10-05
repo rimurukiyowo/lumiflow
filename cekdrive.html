@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subfolder Image Counter - Fun Pink Fusia</title>
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 50%, #fce7f3 100%);
+      --card-bg: rgba(255, 255, 255, 0.9);
+      --text: #4c1d95;
+      --text-muted: #865a7d;
+      --primary: #ec4899;
+      --primary-hover: #db2777;
+      --border: #fbcfe8;
+      --image-color: #be185d;
+      --shadow: 0 15px 35px -5px rgba(236, 72, 153, 0.15);
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background: var(--bg-gradient);
+      background-attachment: fixed;
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      padding: 40px 16px;
+      margin: 0;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 950px;
+      animation: fadeIn 0.6s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .header h1 {
+      margin: 0 0 8px 0;
+      font-size: 28px;
+      background: linear-gradient(135deg, #db2777 0%, #9333ea 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 800;
+    }
+
+    .header p {
+      margin: 0;
+      color: #701a75;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      color: #701a75;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 14px 16px;
+      background: #ffffff;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      color: var(--text);
+      font-size: 14px;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    input[type="text"]:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(236, 72, 153, 0.15);
+      transform: translateY(-1px);
+    }
+
+    .btn {
+      background: linear-gradient(135deg, #ec4899 0%, #9333ea 100%);
+      color: #fff;
+      border: none;
+      padding: 14px 24px;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+      font-size: 15px;
+      box-shadow: 0 4px 15px rgba(236, 72, 153, 0.35);
+      transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+      opacity: 0.95;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(236, 72, 153, 0.45);
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .btn-secondary {
+      background: #fce7f3;
+      color: #be185d;
+      border: 1px solid #f472b6;
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 13px;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 2px 5px rgba(236, 72, 153, 0.1);
+      position: relative;
+      z-index: 10;
+    }
+
+    .btn-secondary:hover {
+      background: #ec4899;
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    .status {
+      font-size: 13px;
+      color: #db2777;
+      text-align: center;
+      margin-top: 14px;
+      font-weight: 600;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .stat-box {
+      background: linear-gradient(135deg, #ffffff 0%, #fff5f7 100%);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+    }
+
+    .stat-val {
+      font-size: 26px;
+      font-weight: 800;
+      color: #db2777;
+    }
+
+    .stat-val.highlight-image {
+      color: #9333ea;
+    }
+
+    .stat-lbl {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-top: 6px;
+      letter-spacing: 0.8px;
+      font-weight: 600;
+    }
+
+    .table-tools {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .table-container {
+      max-height: 520px;
+      overflow-y: auto;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: #ffffff;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.01);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 13px;
+    }
+
+    th {
+      background: #fff1f2;
+      color: #701a75;
+      padding: 14px 16px;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      border-bottom: 2px solid var(--border);
+      user-select: none;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    th:hover {
+      color: #db2777;
+    }
+
+    th.no-sort {
+      cursor: default;
+    }
+
+    td {
+      padding: 14px 16px;
+      border-bottom: 1px solid #fdf2f8;
+      user-select: text;
+    }
+
+    tr {
+      transition: background 0.15s ease;
+    }
+
+    tr:hover {
+      background: #fff5f7;
+    }
+
+    .folder-title {
+      font-weight: 600;
+      user-select: text;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge-count {
+      background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
+      color: #be185d;
+      padding: 5px 10px;
+      border-radius: 8px;
+      font-weight: 700;
+      user-select: text;
+      border: 1px solid #f472b6;
+      display: inline-block;
+      box-shadow: 0 2px 5px rgba(236, 72, 153, 0.1);
+    }
+
+    .badge-empty {
+      background: #f1f5f9;
+      color: #64748b;
+      padding: 5px 10px;
+      border-radius: 8px;
+      font-weight: 600;
+      user-select: text;
+      display: inline-block;
+    }
+
+    .link-btn {
+      color: #db2777;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+
+    .link-btn:hover {
+      text-decoration: underline;
+      color: #9333ea;
+    }
+
+    .copy-btn {
+      background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
+      color: #be185d;
+      border: 1px solid #f472b6;
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 700;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+      position: relative;
+      z-index: 5;
+    }
+
+    .copy-btn:hover {
+      background: #ec4899;
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <div class="header">
+      <h1>✨ Deteksi Jumlah Gambar Per Subfolder ✨</h1>
+      <p>Pindai dan kelola file Google Drive dengan tampilan yang ceria dan estetik!</p>
+    </div>
+
+    <div class="card">
+      <div class="form-group">
+        <label for="folderInput">📂 Link atau ID Folder Utama Google Drive</label>
+        <input type="text" id="folderInput" placeholder="Tempel link folder utama di sini...">
+      </div>
+      <button id="scanBtn" class="btn" type="button" onclick="startScan()">🚀 Mulai Hitung Gambar</button>
+      <div id="status" class="status"></div>
+    </div>
+
+    <div id="results" class="card" style="display: none;">
+      <div class="grid">
+        <div class="stat-box">
+          <div id="totalFoldersCount" class="stat-val">0</div>
+          <div class="stat-lbl">Total Subfolder</div>
+        </div>
+        <div class="stat-box">
+          <div id="totalImagesCount" class="stat-val highlight-image">0</div>
+          <div class="stat-lbl">Total Gambar</div>
+        </div>
+        <div class="stat-box">
+          <div id="totalSizeCount" class="stat-val">0 MB</div>
+          <div class="stat-lbl">Total Ukuran Gambar</div>
+        </div>
+      </div>
+
+      <div class="table-tools">
+        <button class="btn-secondary" type="button" onclick="copyAllData()">📋Salin</button>
+        <input type="text" id="searchBox" placeholder="🔍 Cari nama folder..." oninput="handleSearch()"
+          style="width: 240px; padding: 10px 14px; font-size: 13px; border-radius: 10px;">
+      </div>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th onclick="changeSort('name')">Nama Folder <span id="sort-name">▲</span></th>
+              <th onclick="changeSort('imageCount')">Jumlah Gambar <span id="sort-imageCount"></span></th>
+              <th onclick="changeSort('otherCount')">Total File Lain <span id="sort-otherCount"></span></th>
+              <th onclick="changeSort('imageSize')">Ukuran Gambar <span id="sort-imageSize"></span></th>
+              <th class="no-sort">Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="folderTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const GOOGLE_API_KEY = 'AIzaSyC6qH2ELD6bpDuccwkffScYX_irPI1ZvAs';
+
+    let globalReports = [];
+    let currentSort = { key: 'name', asc: true };
+
+    function extractFolderId(input) {
+      if (!input) return '';
+      const trimmed = input.trim();
+      const match = trimmed.match(/folders\/([a-zA-Z0-9_-]+)/);
+      return match ? match[1] : trimmed.split('?')[0];
+    }
+
+    // Fungsi untuk membuang angka di belakang nama folder (misal: "Ann 13" menjadi "Ann")
+    function cleanFolderName(name) {
+      if (name.includes('(Root')) return name;
+      // Menghapus spasi dan angka di akhir string
+      return name.replace(/\s+\d+$/, '').trim();
+    }
+
+    function formatBytes(bytes) {
+      if (!bytes || bytes === 0) return '0 B';
+      const k = 1024;
+      const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    function isImageMime(mime) {
+      if (!mime) return false;
+      return mime.startsWith('image/') ||
+        mime.includes('jpeg') ||
+        mime.includes('png') ||
+        mime.includes('webp') ||
+        mime.includes('gif');
+    }
+
+    async function fetchFolderContents(folderId) {
+      let pageToken = null;
+      const items = [];
+
+      do {
+        const query = encodeURIComponent(`'${folderId}' in parents and trashed = false`);
+        let url = `https://www.googleapis.com/drive/v3/files?q=${query}&key=${GOOGLE_API_KEY}&pageSize=1000&fields=nextPageToken,files(id,name,mimeType,size,webViewLink)`;
+        if (pageToken) url += `&pageToken=${pageToken}`;
+
+        const res = await fetch(url);
+        const data = await res.json();
+        if (data.error) throw new Error(data.error.message);
+
+        if (data.files) items.push(...data.files);
+        pageToken = data.nextPageToken;
+      } while (pageToken);
+
+      return items;
+    }
+
+    async function startScan() {
+      const inputEl = document.getElementById('folderInput');
+      const statusEl = document.getElementById('status');
+      const scanBtn = document.getElementById('scanBtn');
+
+      const rawFolder = inputEl ? inputEl.value.trim() : '';
+      const rootFolderId = extractFolderId(rawFolder);
+
+      if (!rootFolderId) {
+        statusEl.innerText = '⚠️ Masukkan link atau ID folder terlebih dahulu!';
+        inputEl.focus();
+        return;
+      }
+
+      scanBtn.disabled = true;
+      statusEl.innerText = '✨ Membaca daftar subfolder...';
+      const resultsEl = document.getElementById('results');
+      if (resultsEl) resultsEl.style.display = 'none';
+
+      try {
+        const rootItems = await fetchFolderContents(rootFolderId);
+        const subfolders = rootItems.filter(item => item.mimeType === 'application/vnd.google-apps.folder');
+
+        const rootImages = rootItems.filter(item => isImageMime(item.mimeType));
+        const rootOtherFiles = rootItems.filter(item => !isImageMime(item.mimeType) && item.mimeType !== 'application/vnd.google-apps.folder');
+        const rootImgSize = rootImages.reduce((sum, item) => sum + (Number(item.size) || 0), 0);
+
+        globalReports = [];
+
+        if (rootImages.length > 0 || rootOtherFiles.length > 0) {
+          globalReports.push({
+            name: '(Root / Luar Subfolder)',
+            isRoot: true,
+            imageCount: rootImages.length,
+            otherCount: rootOtherFiles.length,
+            imageSize: rootImgSize,
+            link: `https://drive.google.com/drive/folders/${rootFolderId}`
+          });
+        }
+
+        let overallImages = rootImages.length;
+        let overallSize = rootImgSize;
+
+        for (let i = 0; i < subfolders.length; i++) {
+          const folder = subfolders[i];
+          statusEl.innerText = `🔍 Memindai (${i + 1}/${subfolders.length}): ${folder.name}...`;
+
+          const contents = await fetchFolderContents(folder.id);
+
+          let imgCount = 0;
+          let otherCount = 0;
+          let imgSize = 0;
+
+          contents.forEach(file => {
+            if (isImageMime(file.mimeType)) {
+              imgCount++;
+              imgSize += (Number(file.size) || 0);
+            } else if (file.mimeType !== 'application/vnd.google-apps.folder') {
+              otherCount++;
+            }
+          });
+
+          overallImages += imgCount;
+          overallSize += imgSize;
+
+          globalReports.push({
+            name: folder.name,
+            isRoot: false,
+            imageCount: imgCount,
+            otherCount: otherCount,
+            imageSize: imgSize,
+            link: folder.webViewLink || `https://drive.google.com/drive/folders/${folder.id}`
+          });
+        }
+
+        currentSort = { key: 'name', asc: true };
+        sortData();
+
+        document.getElementById('totalFoldersCount').innerText = subfolders.length.toLocaleString('id-ID');
+        document.getElementById('totalImagesCount').innerText = overallImages.toLocaleString('id-ID');
+        document.getElementById('totalSizeCount').innerText = formatBytes(overallSize);
+
+        renderTable(globalReports);
+
+        statusEl.innerText = '🎉 Pemindaian selesai dengan sukses!';
+        if (resultsEl) resultsEl.style.display = 'block';
+      } catch (err) {
+        statusEl.innerText = '❌ Gagal: ' + err.message;
+      } finally {
+        scanBtn.disabled = false;
+      }
+    }
+
+    function sortData() {
+      globalReports.sort((a, b) => {
+        if (a.isRoot) return -1;
+        if (b.isRoot) return 1;
+
+        let result = 0;
+        if (currentSort.key === 'name') {
+          result = a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' });
+        } else {
+          result = a[currentSort.key] - b[currentSort.key];
+        }
+
+        return currentSort.asc ? result : -result;
+      });
+
+      ['name', 'imageCount', 'otherCount', 'imageSize'].forEach(col => {
+        const el = document.getElementById(`sort-${col}`);
+        if (el) {
+          el.innerText = (currentSort.key === col) ? (currentSort.asc ? ' ▲' : ' ▼') : '';
+        }
+      });
+    }
+
+    function changeSort(key) {
+      if (currentSort.key === key) {
+        currentSort.asc = !currentSort.asc;
+      } else {
+        currentSort.key = key;
+        currentSort.asc = (key === 'name');
+      }
+      sortData();
+      handleSearch();
+    }
+
+    function handleSearch() {
+      const searchBox = document.getElementById('searchBox');
+      const q = searchBox ? searchBox.value.toLowerCase() : '';
+      const filtered = globalReports.filter(item => item.name.toLowerCase().includes(q));
+      renderTable(filtered);
+    }
+
+    function renderTable(reports) {
+      const tbody = document.getElementById('folderTableBody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      if (reports.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 24px;">🚫 Tidak ada subfolder yang ditemukan.</td></tr>`;
+        return;
+      }
+
+      reports.forEach(item => {
+        const tr = document.createElement('tr');
+        const badge = item.imageCount > 0
+          ? `<span class="badge-count">${item.imageCount.toLocaleString('id-ID')} Gambar</span>`
+          : `<span class="badge-empty">0 Gambar</span>`;
+
+        // Nama bersih tanpa angka untuk disalin
+        const cleanName = cleanFolderName(item.name);
+
+        tr.innerHTML = `
+          <td>
+            <div class="folder-title">📁 ${item.name}</div>
+          </td>
+          <td>${badge}</td>
+          <td>${item.otherCount.toLocaleString('id-ID')} file</td>
+          <td>${formatBytes(item.imageSize)}</td>
+          <td style="display: flex; gap: 8px; align-items: center;">
+            <button class="copy-btn" type="button" onclick="copyRow(this)" data-name="${cleanName.replace(/"/g, '&quot;')}" data-count="${item.imageCount}">Salin</button>
+            <a href="${item.link}" target="_blank" class="link-btn">Buka ↗</a>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Fungsi salin per baris (nama bersih tanpa angka + jumlah gambar)
+    function copyRow(btn) {
+      const name = btn.getAttribute('data-name');
+      const count = btn.getAttribute('data-count');
+      const textToCopy = `${name}\t${count}`;
+
+      fallbackCopyText(textToCopy, () => {
+        alert(`✨ Berhasil disalin: ${name} (${count})`);
+      });
+    }
+
+    // Fungsi salin semua (nama bersih tanpa angka + jumlah gambar)
+    function copyAllData() {
+      const searchBox = document.getElementById('searchBox');
+      const q = searchBox ? searchBox.value.toLowerCase() : '';
+      const filtered = globalReports.filter(item => item.name.toLowerCase().includes(q));
+
+      if (filtered.length === 0) {
+        alert('⚠️ Tidak ada data untuk disalin.');
+        return;
+      }
+
+      let text = 'Nama Folder\tJumlah Gambar\n';
+      filtered.forEach(item => {
+        const cleanName = cleanFolderName(item.name);
+        text += `${cleanName}\t${item.imageCount}\n`;
+      });
+
+      fallbackCopyText(text, () => {
+        alert('🎉 Semua data berhasil disalin! (Siap dipaste ke Excel/Google Sheets)');
+      });
+    }
+
+    function fallbackCopyText(text, onSuccess) {
+      if (navigator.clipboard && navigator.clipboard.writeText && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(onSuccess).catch(() => {
+          executeTextAreaFallback(text, onSuccess);
+        });
+      } else {
+        executeTextAreaFallback(text, onSuccess);
+      }
+    }
+
+    function executeTextAreaFallback(text, onSuccess) {
+      const textArea = document.createElement("textarea");
+      textArea.value = text;
+      textArea.style.position = "fixed";
+      textArea.style.top = "0";
+      textArea.style.left = "0";
+      textArea.style.opacity = "0";
+
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+
+      try {
+        const successful = document.execCommand('copy');
+        if (successful) {
+          onSuccess();
+        } else {
+          alert('Gagal menyalin teks secara otomatis.');
+        }
+      } catch (err) {
+        console.error('Gagal menyalin', err);
+        alert('Browser tidak mendukung fitur salin otomatis.');
+      }
+
+      document.body.removeChild(textArea);
+    }
+  </script>
+
+</body>
+
+</html>

@@ -12,7 +12,7 @@
   <link rel="icon" type="image/png" href="./logo.png">
   <link rel="apple-touch-icon" href="./logo.png">
   <link rel="manifest" href="./manifest.json">
-  <meta name="theme-color" content="#2d6a4f">
+  <meta name="theme-color" content="#0f172a">
 
   <!-- Google Fonts: Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,7 +30,10 @@
   <style>
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      background-color: #f4f7f5;
+      /* Background dengan Pola Titik-Titik (Dot Grid) ala Gen Z */
+      background-color: #f8fafc;
+      background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+      background-size: 24px 24px;
     }
 
     ::-webkit-scrollbar {
@@ -39,7 +42,7 @@
     }
 
     ::-webkit-scrollbar-thumb {
-      background: #c7d8ce;
+      background: #cbd5e1;
       border-radius: 10px;
     }
   </style>
@@ -57,56 +60,70 @@
     <div id="app-navbar"></div>
 
     <!-- CONTENT BODY -->
-    <main class="p-6 max-w-6xl w-full mx-auto space-y-6">
+    <main class="p-4 sm:p-6 max-w-6xl w-full mx-auto space-y-5 sm:space-y-6">
 
       <!-- HERO BANNER -->
       <div
-        class="bg-white rounded-2xl border border-slate-200/80 p-6 flex flex-col md:flex-row items-center justify-between shadow-sm relative overflow-hidden">
-        <div class="space-y-2 z-10 max-w-lg">
-          <h2 class="text-xl font-bold text-emerald-950 flex items-center gap-2">
-            Selamat Datang di Kimi Tools! 🌿
+        class="bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 text-white rounded-3xl p-5 sm:p-8 flex flex-col md:flex-row items-center justify-between shadow-xl relative overflow-hidden border border-slate-800">
+
+        <!-- Background Glow Accents -->
+        <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none">
+        </div>
+        <div class="absolute left-1/3 top-0 w-32 h-32 bg-blue-500/10 rounded-full blur-2xl pointer-events-none"></div>
+
+        <div class="space-y-3 z-10 max-w-lg text-center md:text-left">
+          <div
+            class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-indigo-300 text-[11px] font-bold tracking-wide uppercase">
+            <span>✨ Workspace v2.0</span>
+          </div>
+          <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight text-white">
+            Kimi Team Tools
           </h2>
-          <p class="text-xs text-slate-500 leading-relaxed">
-            Pusat automasi kerja tim. Gunakan tool ekstraksi drive instan di bawah ini atau buka modul pembagian job dan
-            brief parser melalui menu navigasi.
+          <p class="text-xs md:text-sm text-slate-300 leading-relaxed">
+            Pusat automasi kerja tim. Ekstraksi Google Drive instan atau akses modul pembagian job & brief parser dengan
+            lebih cepat.
           </p>
-          <div class="pt-2 flex gap-2">
+          <div class="pt-2 flex flex-wrap justify-center md:justify-start gap-2.5">
             <a href="./bagi-job.html"
-              class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-semibold text-xs px-4 py-2 rounded-xl transition shadow-sm shadow-emerald-600/30">
+              class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 active:scale-95 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition shadow-lg shadow-indigo-600/30">
               <span>Bagi Job Tim</span>
               <iconify-icon icon="heroicons:arrow-right-20-solid"></iconify-icon>
             </a>
             <a href="./brief-parser.html"
-              class="inline-flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs px-3.5 py-2 rounded-xl transition border border-slate-200">
+              class="inline-flex items-center gap-1.5 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white font-semibold text-xs px-4 py-2.5 rounded-xl transition border border-white/10">
               <span>Brief Parser</span>
             </a>
           </div>
         </div>
 
-        <div class="mt-4 md:mt-0 flex justify-center shrink-0">
+        <div class="mt-6 md:mt-0 flex justify-center shrink-0 z-10">
           <div
-            class="w-32 h-32 rounded-full bg-emerald-50 flex items-center justify-center border-4 border-emerald-100 shadow-inner">
-            <iconify-icon icon="fluent-emoji:technologist-light" class="text-6xl"></iconify-icon>
+            class="w-28 h-28 sm:w-32 sm:h-32 rounded-3xl bg-gradient-to-br from-indigo-500/30 to-purple-500/30 backdrop-blur-xl flex items-center justify-center border border-white/15 shadow-2xl rotate-3 hover:rotate-0 transition duration-300">
+            <iconify-icon icon="fluent-emoji:technologist-light"
+              class="text-5xl sm:text-6xl drop-shadow-md"></iconify-icon>
           </div>
         </div>
       </div>
 
-      <!-- WIDGET UTAMA: DRIVE LINK EXTRACTOR (LANGSUNG DI DASHBOARD) -->
-      <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5 sm:p-6 space-y-4">
+      <!-- WIDGET UTAMA: DRIVE LINK EXTRACTOR -->
+      <div
+        class="bg-white/90 backdrop-blur-md rounded-3xl border border-slate-200/85 shadow-sm p-4 sm:p-7 space-y-4 sm:space-y-5">
 
         <!-- Header Widget -->
-        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
-          <div class="flex items-center gap-2.5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-slate-100">
+          <div class="flex items-center gap-3">
             <div
-              class="w-9 h-9 rounded-xl bg-teal-50 border border-teal-200/60 text-teal-700 flex items-center justify-center text-lg">
+              class="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center text-xl shadow-sm shrink-0">
               <iconify-icon icon="heroicons:link-solid"></iconify-icon>
             </div>
             <div>
-              <h3 class="text-sm font-bold text-slate-900">Google Drive Link Extractor</h3>
-              <p class="text-[11px] text-slate-400">Ekstraksi berkas Google Drive langsung dari dashboard</p>
+              <h3 class="text-sm font-bold text-slate-900 tracking-tight">Google Drive Link Extractor</h3>
+              <p class="text-[11px] text-slate-400 font-medium">Ekstraksi berkas Google Drive langsung dari dashboard
+              </p>
             </div>
           </div>
-          <span class="text-[11px] font-bold bg-teal-50 text-teal-800 border border-teal-200 px-2.5 py-1 rounded-lg">
+          <span
+            class="self-start sm:self-auto text-[11px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-100 px-3 py-1 rounded-full flex items-center gap-1">
             ⚡ Quick Tool
           </span>
         </div>
@@ -116,12 +133,12 @@
           <!-- API Key Tersembunyi bawaan -->
           <input id="userApiKey" type="hidden" value="AIzaSyD71nWVbtMxWK4T05Ty4qMuIRTP4ij2i48" />
 
-          <div class="flex flex-col sm:flex-row gap-2">
+          <div class="flex flex-col sm:flex-row gap-2.5">
             <input id="folderInput" type="text"
-              class="flex-1 p-3 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500 bg-slate-50/50 text-slate-800 placeholder-slate-400 transition"
+              class="flex-1 p-3.5 text-xs rounded-2xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent bg-slate-50/85 text-slate-800 placeholder-slate-400 transition font-medium"
               placeholder="Tempel link atau ID folder Google Drive di sini..." />
             <button onclick="fetchFiles()" id="btnFetch"
-              class="bg-teal-700 hover:bg-teal-800 active:scale-95 text-white text-xs px-5 py-3 rounded-xl font-bold transition shadow-sm flex items-center justify-center gap-1.5">
+              class="bg-slate-900 hover:bg-slate-800 active:scale-95 text-white text-xs px-6 py-3.5 rounded-2xl font-bold transition shadow-md shadow-slate-900/10 flex items-center justify-center gap-1.5 shrink-0">
               <span>Ambil Berkas</span>
               <iconify-icon icon="heroicons:arrow-down-tray-20-solid"></iconify-icon>
             </button>
@@ -130,30 +147,30 @@
 
         <!-- Error Banner -->
         <div id="driveError"
-          class="text-xs font-semibold text-rose-800 bg-rose-50 p-3 rounded-xl border border-rose-200 hidden"></div>
+          class="text-xs font-semibold text-rose-700 bg-rose-50 p-3.5 rounded-2xl border border-rose-200 hidden"></div>
 
         <!-- Hasil Container -->
-        <div id="driveResultContainer" class="hidden space-y-3 pt-2 border-t border-slate-100">
+        <div id="driveResultContainer" class="hidden space-y-3 pt-3 border-t border-slate-100">
 
           <!-- Tombol Salin Cepat -->
           <div class="grid grid-cols-3 gap-2">
             <button onclick="copyNames()"
-              class="bg-slate-100 hover:bg-slate-200 active:scale-95 text-slate-700 text-xs py-2 rounded-xl font-semibold transition border border-slate-200">
+              class="bg-slate-50 hover:bg-slate-100 active:scale-95 text-slate-700 text-xs py-2.5 rounded-xl font-semibold transition border border-slate-200 shadow-xs">
               📋 Salin Nama
             </button>
             <button onclick="copyLinks()"
-              class="bg-slate-100 hover:bg-slate-200 active:scale-95 text-slate-700 text-xs py-2 rounded-xl font-semibold transition border border-slate-200">
+              class="bg-slate-50 hover:bg-slate-100 active:scale-95 text-slate-700 text-xs py-2.5 rounded-xl font-semibold transition border border-slate-200 shadow-xs">
               🔗 Salin Link
             </button>
             <button onclick="copyAll()"
-              class="bg-teal-700 hover:bg-teal-800 active:scale-95 text-white text-xs py-2 rounded-xl font-bold transition shadow-sm">
+              class="bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white text-xs py-2.5 rounded-xl font-bold transition shadow-sm">
               ✨ Salin Semua
             </button>
           </div>
 
           <div class="text-xs font-semibold text-slate-500 flex justify-between items-center px-1">
             <span>Daftar Berkas:</span>
-            <span>Total: <strong id="driveTotal" class="text-teal-700 font-bold">0</strong> File</span>
+            <span>Total: <strong id="driveTotal" class="text-indigo-600 font-bold">0</strong> File</span>
           </div>
 
           <!-- List File Terkumpul -->
@@ -162,70 +179,58 @@
 
       </div>
 
-      <!-- 4 KARTU STAT/RINGKASAN MODUL LAIN -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <!-- MODUL NAVIGATION CARDS -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
 
         <a href="./bagi-job.html"
-          class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm hover:border-emerald-500/50 hover:shadow-md transition-all group block">
+          class="bg-white/90 backdrop-blur-md p-5 rounded-3xl border border-slate-200/85 shadow-sm hover:border-indigo-500 hover:shadow-md transition-all group block relative overflow-hidden">
           <div class="flex items-center justify-between">
-            <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-lg">
+            <div
+              class="w-10 h-10 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-lg border border-indigo-100 group-hover:bg-indigo-600 group-hover:text-white transition">
               <iconify-icon icon="heroicons:user-group-solid"></iconify-icon>
             </div>
             <iconify-icon icon="heroicons:arrow-up-right-20-solid"
-              class="text-slate-400 group-hover:text-emerald-600 transition"></iconify-icon>
+              class="text-slate-400 group-hover:text-indigo-600 transition"></iconify-icon>
           </div>
           <div class="mt-4">
-            <span class="text-xs font-semibold text-slate-400">Modul #1</span>
-            <h3 class="text-base font-bold text-slate-800 group-hover:text-emerald-700 transition">Bagi Job</h3>
-            <p class="text-[11px] text-emerald-600 font-semibold mt-1">Pembagian task & folder</p>
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Modul #1</span>
+            <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition mt-0.5">Bagi Job</h3>
+            <p class="text-[11px] text-slate-500 font-medium mt-0.5">Pembagian task & folder tim</p>
           </div>
         </a>
 
         <a href="./brief-parser.html"
-          class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm hover:border-lime-500/50 hover:shadow-md transition-all group block">
+          class="bg-white/90 backdrop-blur-md p-5 rounded-3xl border border-slate-200/85 shadow-sm hover:border-indigo-500 hover:shadow-md transition-all group block relative overflow-hidden">
           <div class="flex items-center justify-between">
-            <div class="w-10 h-10 rounded-xl bg-lime-100 text-lime-700 flex items-center justify-center text-lg">
+            <div
+              class="w-10 h-10 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-lg border border-blue-100 group-hover:bg-blue-600 group-hover:text-white transition">
               <iconify-icon icon="heroicons:document-text-solid"></iconify-icon>
             </div>
             <iconify-icon icon="heroicons:arrow-up-right-20-solid"
-              class="text-slate-400 group-hover:text-lime-600 transition"></iconify-icon>
+              class="text-slate-400 group-hover:text-blue-600 transition"></iconify-icon>
           </div>
           <div class="mt-4">
-            <span class="text-xs font-semibold text-slate-400">Modul #2</span>
-            <h3 class="text-base font-bold text-slate-800 group-hover:text-lime-700 transition">Brief Splitter</h3>
-            <p class="text-[11px] text-lime-600 font-semibold mt-1">Parser format WhatsApp</p>
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Modul #2</span>
+            <h3 class="text-sm font-bold text-slate-900 group-hover:text-blue-600 transition mt-0.5">Brief Splitter</h3>
+            <p class="text-[11px] text-slate-500 font-medium mt-0.5">Parser format WhatsApp otomatis</p>
           </div>
         </a>
 
         <a href="./duplicate.html"
-          class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm hover:border-cyan-500/50 hover:shadow-md transition-all group block">
+          class="bg-white/90 backdrop-blur-md p-5 rounded-3xl border border-slate-200/85 shadow-sm hover:border-indigo-500 hover:shadow-md transition-all group block relative overflow-hidden">
           <div class="flex items-center justify-between">
-            <div class="w-10 h-10 rounded-xl bg-cyan-100 text-cyan-700 flex items-center justify-center text-lg">
+            <div
+              class="w-10 h-10 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-lg border border-purple-100 group-hover:bg-purple-600 group-hover:text-white transition">
               <iconify-icon icon="heroicons:document-duplicate-solid"></iconify-icon>
             </div>
             <iconify-icon icon="heroicons:arrow-up-right-20-solid"
-              class="text-slate-400 group-hover:text-cyan-600 transition"></iconify-icon>
+              class="text-slate-400 group-hover:text-purple-600 transition"></iconify-icon>
           </div>
           <div class="mt-4">
-            <span class="text-xs font-semibold text-slate-400">Modul #3</span>
-            <h3 class="text-base font-bold text-slate-800 group-hover:text-cyan-700 transition">Duplicate & OCR</h3>
-            <p class="text-[11px] text-cyan-600 font-semibold mt-1">Duplikasi & Scan SS</p>
-          </div>
-        </a>
-
-        <a href="https://drive.google.com" target="_blank"
-          class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm hover:border-teal-500/50 hover:shadow-md transition-all group block">
-          <div class="flex items-center justify-between">
-            <div class="w-10 h-10 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center text-lg">
-              <iconify-icon icon="heroicons:folder-open-solid"></iconify-icon>
-            </div>
-            <iconify-icon icon="heroicons:arrow-top-right-on-square-20-solid"
-              class="text-slate-400 group-hover:text-teal-600 transition"></iconify-icon>
-          </div>
-          <div class="mt-4">
-            <span class="text-xs font-semibold text-slate-400">Storage</span>
-            <h3 class="text-base font-bold text-slate-800 group-hover:text-teal-700 transition">Google Drive</h3>
-            <p class="text-[11px] text-teal-600 font-semibold mt-1">Buka cloud storage ↗</p>
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Modul #3</span>
+            <h3 class="text-sm font-bold text-slate-900 group-hover:text-purple-600 transition mt-0.5">Duplicate & OCR
+            </h3>
+            <p class="text-[11px] text-slate-500 font-medium mt-0.5">Duplikasi berkas & scan screenshot</p>
           </div>
         </a>
 
@@ -298,9 +303,9 @@
 
         files.forEach((f, i) => {
           listEl.innerHTML += `
-            <div class="p-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl text-xs flex justify-between items-center border border-slate-200 transition">
-              <span class="font-semibold text-slate-800 truncate max-w-[280px]">#${i + 1} ${f.name}</span>
-              <a href="${f.link}" target="_blank" rel="noreferrer" class="text-teal-700 bg-teal-50 hover:bg-teal-700 hover:text-white border border-teal-200 px-2.5 py-1 rounded-lg text-[11px] font-bold transition">
+            <div class="p-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl text-xs flex justify-between items-center border border-slate-200/80 transition gap-2">
+              <span class="font-semibold text-slate-800 truncate">#${i + 1} ${f.name}</span>
+              <a href="${f.link}" target="_blank" rel="noreferrer" class="text-indigo-600 bg-indigo-50 hover:bg-indigo-600 hover:text-white border border-indigo-200/60 px-2.5 py-1 rounded-lg text-[11px] font-bold transition shrink-0">
                 Buka ↗
               </a>
             </div>`;
