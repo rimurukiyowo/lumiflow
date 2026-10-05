@@ -1,6 +1,6 @@
 // layout.js - Sidebar Drawer Responsif HP + Toggle Desktop & Animasi Modern (Navy & White Theme)
 document.addEventListener("DOMContentLoaded", () => {
-  const currentPath = window.location.pathname.split("/").pop() || "index";
+  const currentPath = window.location.pathname.split("/").pop() || "index.html";
 
   // Sisipkan CSS Keyframes & styling khusus sekali saja
   if (!document.getElementById("kimi-layout-styles")) {
@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
     <div>
       <!-- Brand Header -->
       <div class="h-16 flex items-center justify-between px-5 border-b border-slate-100/90">
-        <a href="./index" class="flex items-center gap-3 group">
+        <a href="./index.html" class="flex items-center gap-3 group">
           <div class="w-9 h-9 rounded-2xl bg-gradient-to-tr from-blue-900 to-indigo-800 flex items-center justify-center text-white shadow-md shadow-blue-900/25 group-hover:scale-105 transition-transform duration-200">
             <iconify-icon icon="heroicons:sparkles-20-solid" class="text-lg"></iconify-icon>
           </div>
@@ -47,17 +47,17 @@ document.addEventListener("DOMContentLoaded", () => {
       <!-- Navigation Links -->
       <nav class="p-3.5 space-y-1.5">
         <!-- Dashboard -->
-        <a href="./index" class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl ${
-          currentPath === "index"
+        <a href="./index.html" class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl ${
+          currentPath === "index.html" || currentPath === ""
             ? "bg-blue-50 text-blue-900 font-semibold shadow-sm shadow-blue-900/10 border border-blue-200/50"
             : "text-slate-600 hover:text-blue-900 hover:bg-slate-50 font-medium hover:translate-x-1"
         } text-xs transition-all duration-200">
           <div class="flex items-center gap-3">
-            <iconify-icon icon="heroicons:home" class="text-base ${currentPath === "index" ? "text-blue-900" : "text-slate-400 group-hover:text-blue-900"}"></iconify-icon>
+            <iconify-icon icon="heroicons:home" class="text-base ${currentPath === "index.html" || currentPath === "" ? "text-blue-900" : "text-slate-400 group-hover:text-blue-900"}"></iconify-icon>
             <span>Dashboard</span>
           </div>
           ${
-            currentPath === "index"
+            currentPath === "index.html" || currentPath === ""
               ? '<span class="w-1.5 h-1.5 rounded-full bg-blue-900"></span>'
               : ""
           }
@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
 
         <!-- 1. Bagi Job -->
-        <a href="./bagi-job" class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl ${
+        <a href="./bagi-job.html" class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl ${
           currentPath.includes("bagi-job")
             ? "bg-blue-50 text-blue-900 font-semibold shadow-sm shadow-blue-900/10 border border-blue-200/50"
             : "text-slate-600 hover:text-blue-900 hover:bg-slate-50 font-medium hover:translate-x-1"
@@ -87,7 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
         </a>
 
         <!-- 2. Pisah Job -->
-        <a href="./brief-parser" class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl ${
+        <a href="./brief-parser.html" class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl ${
           currentPath.includes("brief-parser")
             ? "bg-blue-50 text-blue-900 font-semibold shadow-sm shadow-blue-900/10 border border-blue-200/50"
             : "text-slate-600 hover:text-blue-900 hover:bg-slate-50 font-medium hover:translate-x-1"
@@ -104,7 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
         </a>
 
         <!-- 3. Upload dan Duplikat -->
-        <a href="./duplicate" class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl ${
+        <a href="./duplicate.html" class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl ${
           currentPath.includes("duplicate")
             ? "bg-blue-50 text-blue-900 font-semibold shadow-sm shadow-blue-900/10 border border-blue-200/50"
             : "text-slate-600 hover:text-blue-900 hover:bg-slate-50 font-medium hover:translate-x-1"
@@ -121,7 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
         </a>
 
         <!-- 4. Cek Drive -->
-        <a href="./upload-drive" class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl ${
+        <a href="./upload-drive.html" class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl ${
           currentPath.includes("upload-drive")
             ? "bg-blue-50 text-blue-900 font-semibold shadow-sm shadow-blue-900/10 border border-blue-200/50"
             : "text-slate-600 hover:text-blue-900 hover:bg-slate-50 font-medium hover:translate-x-1"
@@ -159,23 +159,20 @@ document.addEventListener("DOMContentLoaded", () => {
     </div>
   </aside>`;
 
-  // 2. Navbar Atas (Toggle Sidebar untuk HP & Desktop)
+  // 2. Navbar Atas
   const navbarHTML = `
   <header class="h-16 bg-white/80 backdrop-blur-md border-b border-slate-200/80 px-4 sm:px-6 flex items-center justify-between sticky top-0 z-30 transition-all">
     <div class="flex items-center gap-3">
-      <!-- Tombol Hamburger (HP & Desktop) -->
       <button onclick="toggleSidebar()" class="group text-slate-600 hover:text-blue-900 p-2 rounded-xl border border-slate-200/80 hover:border-blue-200 hover:bg-blue-50/50 flex items-center justify-center transition-all active:scale-95 shadow-sm" title="Toggle Sidebar">
         <iconify-icon icon="heroicons:bars-3-bottom-left-20-solid" class="text-xl transition-transform group-hover:scale-110"></iconify-icon>
       </button>
 
-      <!-- Input Search Visual -->
       <div class="hidden sm:flex items-center gap-2 text-slate-400 bg-slate-50 border border-slate-200/80 px-3 py-1.5 rounded-xl w-64 focus-within:w-72 focus-within:border-blue-900 focus-within:bg-white focus-within:ring-2 focus-within:ring-blue-900/10 transition-all">
         <iconify-icon icon="heroicons:magnifying-glass-20-solid" class="text-slate-400 text-sm"></iconify-icon>
         <input type="text" placeholder="Cari modul atau menu..." class="w-full text-xs bg-transparent text-slate-700 placeholder-slate-400 focus:outline-none" />
       </div>
     </div>
 
-    <!-- Info & Profile Status -->
     <div class="flex items-center gap-3">
       <div class="hidden md:flex items-center gap-2 bg-slate-50 border border-slate-200/70 px-3 py-1 rounded-xl text-xs font-semibold text-slate-600">
         <span class="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></span>
@@ -205,7 +202,6 @@ document.addEventListener("DOMContentLoaded", () => {
   if (footerTarget) footerTarget.outerHTML = footerHTML;
 });
 
-// Fungsi Toggle Buka-Tutup Menu (Responsif HP & Desktop)
 window.toggleSidebar = function () {
   const sidebar = document.getElementById("mainSidebar");
   const backdrop = document.getElementById("mobileBackdrop");
@@ -214,7 +210,6 @@ window.toggleSidebar = function () {
   const isMobile = window.innerWidth < 768;
 
   if (isMobile) {
-    // Mode HP (Drawer Overlay)
     const isClosed = sidebar.classList.contains("-translate-x-full");
     if (isClosed) {
       sidebar.classList.remove("-translate-x-full");
@@ -226,7 +221,6 @@ window.toggleSidebar = function () {
       setTimeout(() => backdrop.classList.add("hidden"), 300);
     }
   } else {
-    // Mode Desktop (Collapse / Hide-Show Sidebar)
     const isHiddenDesktop = sidebar.classList.contains("md:hidden");
     if (isHiddenDesktop) {
       sidebar.classList.remove("md:hidden");
