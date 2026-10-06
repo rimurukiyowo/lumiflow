@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
 
         <!-- 1. Bagi Job -->
-        <a href="./bagi-job.html" class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl ${
+        <a href="./bagi-job" class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl ${
           currentPath.includes("bagi-job")
             ? "bg-blue-50 text-blue-900 font-semibold shadow-sm shadow-blue-900/10 border border-blue-200/50"
             : "text-slate-600 hover:text-blue-900 hover:bg-slate-50 font-medium hover:translate-x-1"
