@@ -74,11 +74,36 @@
       <!-- Main Card Container -->
       <div class="bg-white/90 backdrop-blur-md rounded-3xl border border-slate-200/85 shadow-sm p-4 sm:p-7 space-y-5">
 
-        <!-- 1. Input Brief Section -->
+        <!-- 1. INPUT LINK FOLDER / DRIVE UTAMA (INDUK) DENGAN FITUR KUNCI -->
+        <div class="space-y-2.5 bg-slate-50/90 p-4 rounded-2xl border border-slate-200/80">
+          <div class="flex items-center justify-between">
+            <label class="block text-xs font-bold text-slate-700 flex items-center gap-1.5">
+              <iconify-icon icon="heroicons:folder-open-20-solid" class="text-indigo-600 text-base"></iconify-icon>
+              1. Link Folder Utama / Google Drive Induk:
+            </label>
+            <span id="folderStatusBadge"
+              class="text-[10px] font-bold bg-slate-200 text-slate-700 px-2.5 py-1 rounded-lg">Belum Dikunci</span>
+          </div>
+
+          <div class="flex gap-2">
+            <input type="text" id="folderLinkInput"
+              class="w-full p-3 text-xs border border-slate-200 rounded-xl bg-white text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent font-medium"
+              placeholder="Tempel link Google Drive induk di sini...">
+            <button id="btnLockFolder" onclick="toggleLockFolder()"
+              class="inline-flex items-center justify-center gap-1 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs px-4 py-2.5 rounded-xl font-bold transition shadow-sm shrink-0">
+              <iconify-icon id="lockFolderIcon" icon="heroicons:lock-open-20-solid" class="text-base"></iconify-icon>
+              <span id="btnLockFolderText">Kunci</span>
+            </button>
+          </div>
+          <p class="text-[11px] text-slate-400 font-medium">Klik "Kunci" agar link induk tersimpan permanen di
+            perangkatmu dan otomatis mengisi bagian <strong>Report</strong>.</p>
+        </div>
+
+        <!-- 2. Input Brief Section -->
         <div class="space-y-1.5">
           <div class="flex items-center justify-between">
             <label class="block text-xs font-bold text-slate-700">
-              1. Tempel Format Brief Pesanan:
+              2. Tempel Format Brief Pesanan:
             </label>
             <span class="text-[11px] text-slate-400 font-medium">Mendukung 1 ID atau banyak ID sekaligus</span>
           </div>
@@ -87,12 +112,12 @@
             placeholder="Contoh:&#10;ID : 286023&#10;Target : https://...&#10;Jumlah : 56&#10;Report :"></textarea>
         </div>
 
-        <!-- 2. Pilih Anggota Tim Section -->
+        <!-- 3. Pilih Anggota Tim Section -->
         <div class="space-y-3 pt-3 border-t border-slate-100">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
               <label class="block text-xs font-bold text-slate-700">
-                2. Pilih Anggota Tim yang Bertugas:
+                3. Pilih Anggota Tim yang Bertugas:
               </label>
               <p class="text-[11px] text-slate-400 font-medium">Klik nama untuk mencentang/membatalkan pilihan.</p>
             </div>
@@ -131,10 +156,10 @@
           </div>
         </div>
 
-        <!-- 3. Opsi Mode Pembagian -->
+        <!-- 4. Opsi Mode Pembagian -->
         <div class="space-y-2.5 pt-3 border-t border-slate-100">
           <label class="block text-xs font-bold text-slate-700">
-            3. Pilih Mode Pembagian:
+            4. Pilih Mode Pembagian:
           </label>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
             <label
@@ -175,11 +200,11 @@
           </button>
         </div>
 
-        <!-- 4. Hasil Rekap Output -->
+        <!-- 5. Hasil Rekap Output -->
         <div class="space-y-2.5 pt-3 border-t border-slate-100">
           <div class="flex justify-between items-center">
             <label class="block text-xs font-bold text-slate-700">
-              4. Hasil Rekap Output:
+              5. Hasil Rekap Output (Report Otomatis Terisi Link Drive):
             </label>
             <span class="text-[11px] text-slate-400 font-medium">Siap disalin ke WhatsApp</span>
           </div>
@@ -195,51 +220,6 @@
           </button>
         </div>
 
-        <!-- 5. INPUT LINK FOLDER / DRIVE & PENGUNCIAN HARIAN (DI BAWAH POL) -->
-        <div class="pt-4 border-t-2 border-dashed border-slate-200 space-y-3.5 bg-slate-50/80 p-4 rounded-2xl">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-2">
-              <div id="lockIndicatorIcon"
-                class="w-8 h-8 rounded-xl bg-slate-200 text-slate-600 flex items-center justify-center font-bold">
-                <iconify-icon icon="heroicons:lock-open-20-solid" class="text-base"></iconify-icon>
-              </div>
-              <div>
-                <h3 class="text-xs font-extrabold text-slate-900">Link Folder / Google Drive & Kunci Sesi</h3>
-                <p id="lockStatusText" class="text-[11px] text-slate-500 font-medium">Status: Belum Dikunci (Data bisa
-                  diubah)</p>
-              </div>
-            </div>
-            <span id="lockDateBadge"
-              class="hidden text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-lg">Terbuka</span>
-          </div>
-
-          <!-- Kolom Input Link Folder Drive -->
-          <div class="space-y-1">
-            <label class="block text-[11px] font-bold text-slate-700">Link Folder / Google Drive Harian:</label>
-            <div class="relative flex items-center">
-              <span class="absolute left-3 text-slate-400">
-                <iconify-icon icon="heroicons:folder-open-20-solid" class="text-base"></iconify-icon>
-              </span>
-              <input type="text" id="folderLinkInput"
-                class="w-full pl-9 pr-3 py-2.5 text-xs border border-slate-200 rounded-xl bg-white text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent font-medium"
-                placeholder="Tempel link Google Drive atau folder harian di sini (opsional)...">
-            </div>
-          </div>
-
-          <!-- Tombol Kontrol Kunci -->
-          <div class="flex flex-col sm:flex-row gap-2 pt-1">
-            <button id="btnToggleLock" onclick="toggleLockSession()"
-              class="flex-1 inline-flex items-center justify-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs py-3 px-4 rounded-xl font-bold transition shadow-sm">
-              <iconify-icon icon="heroicons:lock-closed-20-solid" class="text-base"></iconify-icon>
-              <span id="btnLockText">Kunci Data & Folder Hari Ini</span>
-            </button>
-            <button onclick="resetLockSession()"
-              class="inline-flex items-center justify-center gap-1.5 bg-white hover:bg-rose-50 text-slate-600 hover:text-rose-600 border border-slate-200 hover:border-rose-200 text-xs py-3 px-4 rounded-xl font-bold transition">
-              <iconify-icon icon="heroicons:trash-20-solid" class="text-base"></iconify-icon> Buka Kunci / Hapus Sesi
-            </button>
-          </div>
-        </div>
-
       </div>
 
       <!-- FOOTER OTOMATIS TERPASANG -->
@@ -247,7 +227,7 @@
     </main>
   </div>
 
-  <!-- SCRIPT LOGIKA PEMBAGIAN JOB & LOCK FOLDER HARIAN -->
+  <!-- SCRIPT LOGIKA PEMBAGIAN JOB & NAMA LENGKAP TIM -->
   <script>
     let teamMembers = [
       "Amelie", "Ami", "Ana", "Novi", "Ann", "Ria", "Dastan", "Desi", "Difarani",
@@ -258,10 +238,11 @@
     ].map(name => ({ name }));
 
     let selectedNames = [];
-    let isLocked = false;
+    let isFolderLocked = false;
 
     document.addEventListener("DOMContentLoaded", () => {
-      loadSavedSession();
+      renderNames();
+      loadLockedFolder();
     });
 
     function renderNames() {
@@ -275,11 +256,10 @@
 
         const btnName = document.createElement("button");
         btnName.type = "button";
-        btnName.disabled = isLocked;
         btnName.className = `px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border ${isSelected
-            ? "bg-indigo-600 text-white border-indigo-600 shadow-xs"
-            : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"
-          } ${isLocked ? 'opacity-70 cursor-not-allowed' : ''}`;
+          ? "bg-indigo-600 text-white border-indigo-600 shadow-xs"
+          : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"
+          }`;
 
         btnName.innerHTML = isSelected
           ? `<iconify-icon icon="heroicons:check-20-solid" class="text-sm"></iconify-icon> ${member.name}`
@@ -293,7 +273,6 @@
     }
 
     function toggleName(name) {
-      if (isLocked) return;
       const idx = selectedNames.indexOf(name);
       if (idx > -1) {
         selectedNames.splice(idx, 1);
@@ -304,19 +283,16 @@
     }
 
     function selectAll() {
-      if (isLocked) return;
       selectedNames = teamMembers.map(m => m.name);
       renderNames();
     }
 
     function deselectAll() {
-      if (isLocked) return;
       selectedNames = [];
       renderNames();
     }
 
     function addName() {
-      if (isLocked) return alert("Sesi sedang dikunci! Buka kunci terlebih dahulu untuk menambah anggota.");
       const input = document.getElementById("newNameInput");
       const val = input.value.trim();
       if (val && !teamMembers.some(m => m.name.toLowerCase() === val.toLowerCase())) {
@@ -328,12 +304,66 @@
     }
 
     function clearAll() {
-      if (isLocked) return alert("Sesi sedang terkunci! Buka kunci terlebih dahulu.");
       selectedNames = [];
       document.getElementById("briefInput").value = "";
       document.getElementById("outputResult").value = "";
-      document.getElementById("folderLinkInput").value = "";
       renderNames();
+    }
+
+    // --- FUNGSI KUNCI FOLDER INDUK ---
+    function toggleLockFolder() {
+      const input = document.getElementById("folderLinkInput");
+      const val = input.value.trim();
+
+      if (!isFolderLocked) {
+        if (!val) {
+          return alert("Masukkan link folder induk terlebih dahulu sebelum dikunci!");
+        }
+        localStorage.setItem("kimi_locked_folder_induk", val);
+        isFolderLocked = true;
+        applyFolderLockUI(true);
+      } else {
+        localStorage.removeItem("kimi_locked_folder_induk");
+        isFolderLocked = false;
+        applyFolderLockUI(false);
+      }
+    }
+
+    function loadLockedFolder() {
+      const savedFolder = localStorage.getItem("kimi_locked_folder_induk");
+      if (savedFolder) {
+        document.getElementById("folderLinkInput").value = savedFolder;
+        isFolderLocked = true;
+        applyFolderLockUI(true);
+      }
+    }
+
+    function applyFolderLockUI(locked) {
+      const input = document.getElementById("folderLinkInput");
+      const badge = document.getElementById("folderStatusBadge");
+      const btnIcon = document.getElementById("lockFolderIcon");
+      const btnText = document.getElementById("btnLockFolderText");
+      const btnEl = document.getElementById("btnLockFolder");
+
+      input.disabled = locked;
+
+      if (locked) {
+        input.classList.add("bg-slate-100", "cursor-not-allowed");
+        badge.className = "text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-lg";
+        badge.innerText = "Terkunci Aman";
+
+        btnIcon.setAttribute("icon", "heroicons:lock-closed-20-solid");
+        btnText.innerText = "Buka";
+        btnEl.className = "inline-flex items-center justify-center gap-1 bg-amber-600 hover:bg-amber-700 active:scale-95 text-white text-xs px-4 py-2.5 rounded-xl font-bold transition shadow-sm shrink-0";
+      } else {
+        input.classList.remove("bg-slate-100", "cursor-not-allowed");
+        badge.className = "text-[10px] font-bold bg-slate-200 text-slate-700 px-2.5 py-1 rounded-lg";
+        badge.innerText = "Belum Dikunci";
+
+        btnIcon.setAttribute("icon", "heroicons:lock-open-20-solid");
+        btnText.innerText = "Kunci";
+        btnEl.className = "inline-flex items-center justify-center gap-1 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs px-4 py-2.5 rounded-xl font-bold transition shadow-sm shrink-0";
+      }
     }
 
     function generateJob() {
@@ -366,10 +396,31 @@
       let finalOutput = [];
 
       rawBlocks.forEach((block) => {
-        const jumlahMatch = block.match(/Jumlah\s*:\s*(\d+)/i);
+        // Ambil ID Pesanan
+        const idMatch = block.match(/ID\s*:\s*([^\n\r]+)/i);
+        let orderId = idMatch ? idMatch[1].trim() : "Tanpa_ID";
+
+        // Buat link sub-folder jika folder induk terisi
+        let targetReport = "";
+        if (folderLink) {
+          let cleanInduk = folderLink.replace(/\/$/, "");
+          targetReport = `${cleanInduk}/${orderId}`;
+        }
+
+        // Otomatis masukkan link ke bagian 'Report :'
+        let processedBlock = block;
+        if (/Report\s*:/i.test(processedBlock)) {
+          if (targetReport) {
+            processedBlock = processedBlock.replace(/Report\s*:\s*([^\n\r]*)/i, `Report : ${targetReport}`);
+          }
+        } else if (targetReport) {
+          processedBlock += `\nReport : ${targetReport}`;
+        }
+
+        const jumlahMatch = processedBlock.match(/Jumlah\s*:\s*(\d+)/i);
         let totalAmount = jumlahMatch ? parseInt(jumlahMatch[1], 10) : 0;
 
-        let blockResult = block + "\n\n";
+        let blockResult = processedBlock + "\n\n";
 
         if (totalAmount > 0 && selectedNames.length > 0) {
           let baseCount = Math.floor(totalAmount / selectedNames.length);
@@ -383,11 +434,6 @@
           });
         } else {
           blockResult += `(Jumlah orderan tidak terdeteksi atau anggota kosong)\n`;
-        }
-
-        // Tambahkan info link folder jika diisi
-        if (folderLink) {
-          blockResult += `\n📁 Link Folder: ${folderLink}`;
         }
 
         finalOutput.push(blockResult);
@@ -409,118 +455,6 @@
           document.execCommand('copy');
           alert("Berhasil disalin!");
         });
-    }
-
-    // --- FUNGSI KUNCI & SIMPAN FOLDER / SESI HARIAN ---
-    function toggleLockSession() {
-      const briefVal = document.getElementById("briefInput").value;
-      const outputVal = document.getElementById("outputResult").value;
-      const folderVal = document.getElementById("folderLinkInput").value;
-
-      if (!isLocked) {
-        if (!briefVal && !outputVal) {
-          return alert("Tidak ada data brief atau hasil rekap untuk dikunci!");
-        }
-
-        const sessionData = {
-          brief: briefVal,
-          output: outputVal,
-          folderLink: folderVal,
-          selectedNames: selectedNames,
-          teamMembers: teamMembers,
-          timestamp: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })
-        };
-
-        localStorage.setItem("kimi_locked_session", JSON.stringify(sessionData));
-        isLocked = true;
-        applyLockUI(true);
-        alert("Sesi dan link folder berhasil dikunci & disimpan aman untuk hari ini!");
-      } else {
-        isLocked = false;
-        applyLockUI(false);
-      }
-    }
-
-    function resetLockSession() {
-      if (confirm("Yakin ingin menghapus kunci dan mereset sesi folder & rekap tersimpan?")) {
-        localStorage.removeItem("kimi_locked_session");
-        isLocked = false;
-        document.getElementById("briefInput").value = "";
-        document.getElementById("outputResult").value = "";
-        document.getElementById("folderLinkInput").value = "";
-        selectedNames = [];
-        applyLockUI(false);
-        renderNames();
-        alert("Sesi berhasil dibuka dan direset!");
-      }
-    }
-
-    function loadSavedSession() {
-      const saved = localStorage.getItem("kimi_locked_session");
-      if (saved) {
-        try {
-          const data = JSON.parse(saved);
-          document.getElementById("briefInput").value = data.brief || "";
-          document.getElementById("outputResult").value = data.output || "";
-          document.getElementById("folderLinkInput").value = data.folderLink || "";
-          selectedNames = data.selectedNames || [];
-          if (data.teamMembers) {
-            teamMembers = data.teamMembers;
-          }
-          isLocked = true;
-          applyLockUI(true, data.timestamp);
-        } catch (e) {
-          console.error("Gagal memuat sesi tersimpan:", e);
-        }
-      }
-      renderNames();
-    }
-
-    function applyLockUI(locked, dateStr = "") {
-      const briefInput = document.getElementById("briefInput");
-      const outputResult = document.getElementById("outputResult");
-      const folderLinkInput = document.getElementById("folderLinkInput");
-      const newNameInput = document.getElementById("newNameInput");
-      const btnToggleLock = document.getElementById("btnToggleLock");
-      const btnLockText = document.getElementById("btnLockText");
-      const lockIndicatorIcon = document.getElementById("lockIndicatorIcon");
-      const lockStatusText = document.getElementById("lockStatusText");
-      const lockDateBadge = document.getElementById("lockDateBadge");
-
-      briefInput.disabled = locked;
-      outputResult.disabled = locked;
-      folderLinkInput.disabled = locked;
-      if (newNameInput) newNameInput.disabled = locked;
-
-      if (locked) {
-        briefInput.classList.add("bg-slate-100", "cursor-not-allowed");
-        outputResult.classList.add("bg-slate-950", "cursor-not-allowed");
-        folderLinkInput.classList.add("bg-slate-100", "cursor-not-allowed");
-
-        lockIndicatorIcon.className = "w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold";
-        lockIndicatorIcon.innerHTML = '<iconify-icon icon="heroicons:lock-closed-20-solid" class="text-base"></iconify-icon>';
-
-        lockStatusText.innerText = `Status: Terkunci Aman (${dateStr || new Date().toLocaleDateString('id-ID')})`;
-        lockDateBadge.classList.remove("hidden");
-        lockDateBadge.innerText = "Terkunci";
-
-        btnToggleLock.className = "flex-1 inline-flex items-center justify-center gap-1.5 bg-amber-600 hover:bg-amber-700 active:scale-95 text-white text-xs py-3 px-4 rounded-xl font-bold transition shadow-sm";
-        btnLockText.innerText = "Buka Kunci Sementara";
-      } else {
-        briefInput.classList.remove("bg-slate-100", "cursor-not-allowed");
-        outputResult.classList.remove("bg-slate-950", "cursor-not-allowed");
-        folderLinkInput.classList.remove("bg-slate-100", "cursor-not-allowed");
-
-        lockIndicatorIcon.className = "w-8 h-8 rounded-xl bg-slate-200 text-slate-600 flex items-center justify-center font-bold";
-        lockIndicatorIcon.innerHTML = '<iconify-icon icon="heroicons:lock-open-20-solid" class="text-base"></iconify-icon>';
-
-        lockStatusText.innerText = "Status: Belum Dikunci (Data bisa diubah)";
-        lockDateBadge.classList.add("hidden");
-
-        btnToggleLock.className = "flex-1 inline-flex items-center justify-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs py-3 px-4 rounded-xl font-bold transition shadow-sm";
-        btnLockText.innerText = "Kunci Data & Folder Hari Ini";
-      }
-      renderNames();
     }
   </script>
 </body>
