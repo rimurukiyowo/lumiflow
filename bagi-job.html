@@ -61,11 +61,9 @@
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200/80">
         <div>
           <h1 class="text-xl font-extrabold text-slate-900 tracking-tight">Pembagian Job & Struktur Folder</h1>
-          <p class="text-xs text-slate-500 mt-0.5">Tempel format brief pesanan dan tentukan anggota yang bertugas secara
-            instan</p>
+          <p class="text-xs text-slate-500 mt-0.5">Tempel format brief pesanan dan tentukan anggota yang bertugas secara instan</p>
         </div>
-        <span
-          class="inline-flex items-center gap-1.5 text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-100 px-3 py-1.5 rounded-full w-fit">
+        <span class="inline-flex items-center gap-1.5 text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-100 px-3 py-1.5 rounded-full w-fit">
           <span class="w-1.5 h-1.5 rounded-full bg-indigo-600"></span>
           Modul Bagi Job
         </span>
@@ -74,29 +72,37 @@
       <!-- Main Card Container -->
       <div class="bg-white/90 backdrop-blur-md rounded-3xl border border-slate-200/85 shadow-sm p-4 sm:p-7 space-y-5">
 
-        <!-- 1. INPUT LINK FOLDER / DRIVE UTAMA (INDUK) DENGAN FITUR KUNCI -->
-        <div class="space-y-2.5 bg-slate-50/90 p-4 rounded-2xl border border-slate-200/80">
+        <!-- 1. PENGATURAN GOOGLE DRIVE API & FOLDER INDUK -->
+        <div class="space-y-3 bg-slate-50/90 p-4 rounded-2xl border border-slate-200/80">
           <div class="flex items-center justify-between">
             <label class="block text-xs font-bold text-slate-700 flex items-center gap-1.5">
               <iconify-icon icon="heroicons:folder-open-20-solid" class="text-indigo-600 text-base"></iconify-icon>
-              1. Link Folder Utama / Google Drive Induk:
+              1. Pengaturan Google Drive Otomatis:
             </label>
-            <span id="folderStatusBadge"
-              class="text-[10px] font-bold bg-slate-200 text-slate-700 px-2.5 py-1 rounded-lg">Belum Dikunci</span>
+            <span id="folderStatusBadge" class="text-[10px] font-bold bg-slate-200 text-slate-700 px-2.5 py-1 rounded-lg">Belum Disimpan</span>
+          </div>
+          
+          <div class="space-y-2">
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-600 mb-1">ID Folder Induk Google Drive:</label>
+              <input type="text" id="parentFolderIdInput"
+                class="w-full p-2.5 text-xs border border-slate-200 rounded-xl bg-white text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-600 font-medium"
+                placeholder="Contoh: 1B2C3D4E5F6G7H8I9J0K...">
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-600 mb-1">Web App URL (Google Apps Script):</label>
+              <input type="text" id="scriptUrlInput"
+                class="w-full p-2.5 text-xs border border-slate-200 rounded-xl bg-white text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-600 font-medium"
+                placeholder="https://script.google.com/macros/s/.../exec">
+            </div>
           </div>
 
-          <div class="flex gap-2">
-            <input type="text" id="folderLinkInput"
-              class="w-full p-3 text-xs border border-slate-200 rounded-xl bg-white text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent font-medium"
-              placeholder="Tempel link Google Drive induk di sini...">
-            <button id="btnLockFolder" onclick="toggleLockFolder()"
-              class="inline-flex items-center justify-center gap-1 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs px-4 py-2.5 rounded-xl font-bold transition shadow-sm shrink-0">
-              <iconify-icon id="lockFolderIcon" icon="heroicons:lock-open-20-solid" class="text-base"></iconify-icon>
-              <span id="btnLockFolderText">Kunci</span>
+          <div class="flex justify-end pt-1">
+            <button onclick="saveDriveConfig()"
+              class="inline-flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs px-4 py-2 rounded-xl font-bold transition shadow-sm">
+              <iconify-icon icon="heroicons:check-badge-20-solid" class="text-base"></iconify-icon> Simpan Konfigurasi Drive
             </button>
           </div>
-          <p class="text-[11px] text-slate-400 font-medium">Klik "Kunci" agar link induk tersimpan permanen di
-            perangkatmu dan otomatis mengisi bagian <strong>Report</strong>.</p>
         </div>
 
         <!-- 2. Input Brief Section -->
@@ -108,7 +114,7 @@
             <span class="text-[11px] text-slate-400 font-medium">Mendukung 1 ID atau banyak ID sekaligus</span>
           </div>
           <textarea id="briefInput"
-            class="w-full h-32 p-3.5 text-xs border border-slate-200 rounded-2xl bg-slate-50/85 font-mono text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition resize-y leading-relaxed"
+            class="w-full h-32 p-3.5 text-xs border border-slate-200 rounded-2xl bg-slate-50/85 font-mono text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-600 transition resize-y leading-relaxed"
             placeholder="Contoh:&#10;ID : 286023&#10;Target : https://...&#10;Jumlah : 56&#10;Report :"></textarea>
         </div>
 
@@ -124,7 +130,7 @@
 
             <div class="flex gap-2">
               <input type="text" id="newNameInput"
-                class="p-2.5 px-3 text-xs border border-slate-200 rounded-2xl bg-slate-50/85 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent font-medium"
+                class="p-2.5 px-3 text-xs border border-slate-200 rounded-2xl bg-slate-50/85 focus:outline-none focus:ring-2 focus:ring-indigo-600 font-medium"
                 placeholder="Tambah nama baru..." onkeydown="if(event.key === 'Enter') addName()">
               <button onclick="addName()"
                 class="inline-flex items-center gap-1 bg-slate-900 hover:bg-slate-800 active:scale-95 text-white text-xs px-4 py-2.5 rounded-2xl font-bold transition shadow-sm shrink-0">
@@ -149,8 +155,7 @@
                 Batal Semua
               </button>
             </div>
-            <span
-              class="bg-indigo-50 text-indigo-700 border border-indigo-100 px-3 py-1 rounded-full text-[11px] font-bold">
+            <span class="bg-indigo-50 text-indigo-700 border border-indigo-100 px-3 py-1 rounded-full text-[11px] font-bold">
               Terpilih: <strong id="totalSelected" class="font-extrabold">0</strong> Orang
             </span>
           </div>
@@ -162,27 +167,20 @@
             4. Pilih Mode Pembagian:
           </label>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-            <label
-              class="group relative flex flex-col p-3.5 border-2 border-slate-200 rounded-2xl bg-white cursor-pointer hover:border-indigo-500 transition has-[:checked]:border-indigo-600 has-[:checked]:bg-indigo-50/30">
+            <label class="group relative flex flex-col p-3.5 border-2 border-slate-200 rounded-2xl bg-white cursor-pointer hover:border-indigo-500 transition has-[:checked]:border-indigo-600 has-[:checked]:bg-indigo-50/30">
               <div class="flex items-center justify-between mb-1">
-                <span class="text-xs font-bold text-slate-800 group-hover:text-indigo-600">Bagi Rata ke Semua
-                  Anggota</span>
-                <input type="radio" name="distributionMode" value="multi_all" checked
-                  class="w-4 h-4 text-indigo-600 focus:ring-indigo-600 border-slate-300">
+                <span class="text-xs font-bold text-slate-800 group-hover:text-indigo-600">Bagi Rata ke Semua Anggota</span>
+                <input type="radio" name="distributionMode" value="multi_all" checked class="w-4 h-4 text-indigo-600 focus:ring-indigo-600 border-slate-300">
               </div>
-              <span class="text-[11px] text-slate-500 font-medium">Jumlah orderan dibagi rata ke seluruh anggota yang
-                dicentang.</span>
+              <span class="text-[11px] text-slate-500 font-medium">Jumlah orderan dibagi rata ke seluruh anggota yang dicentang.</span>
             </label>
 
-            <label
-              class="group relative flex flex-col p-3.5 border-2 border-slate-200 rounded-2xl bg-white cursor-pointer hover:border-indigo-500 transition has-[:checked]:border-indigo-600 has-[:checked]:bg-indigo-50/30">
+            <label class="group relative flex flex-col p-3.5 border-2 border-slate-200 rounded-2xl bg-white cursor-pointer hover:border-indigo-500 transition has-[:checked]:border-indigo-600 has-[:checked]:bg-indigo-50/30">
               <div class="flex items-center justify-between mb-1">
                 <span class="text-xs font-bold text-slate-800 group-hover:text-indigo-600">Khusus 1 ID Saja</span>
-                <input type="radio" name="distributionMode" value="single"
-                  class="w-4 h-4 text-indigo-600 focus:ring-indigo-600 border-slate-300">
+                <input type="radio" name="distributionMode" value="single" class="w-4 h-4 text-indigo-600 focus:ring-indigo-600 border-slate-300">
               </div>
-              <span class="text-[11px] text-slate-500 font-medium">Hanya memproses ID pesanan yang paling atas
-                saja.</span>
+              <span class="text-[11px] text-slate-500 font-medium">Hanya memproses ID pesanan yang paling atas saja.</span>
             </label>
           </div>
         </div>
@@ -192,7 +190,7 @@
           <button id="btnGenerate" onclick="generateJob()"
             class="flex-1 inline-flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 active:scale-95 text-white text-xs py-3.5 px-6 rounded-2xl font-bold shadow-md shadow-slate-900/10 transition">
             <iconify-icon icon="heroicons:sparkles-20-solid" class="text-base"></iconify-icon>
-            <span id="btnGenerateText">✨ Generate Pembagian Job</span>
+            <span id="btnGenerateText">✨ Generate & Buat Folder Otomatis</span>
           </button>
           <button onclick="clearAll()"
             class="inline-flex items-center justify-center gap-1.5 px-6 bg-slate-100 hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 text-slate-600 text-xs py-3.5 rounded-2xl font-bold border border-slate-200 active:scale-95 transition">
@@ -204,7 +202,7 @@
         <div class="space-y-2.5 pt-3 border-t border-slate-100">
           <div class="flex justify-between items-center">
             <label class="block text-xs font-bold text-slate-700">
-              5. Hasil Rekap Output (Report Otomatis Terisi Link Drive):
+              5. Hasil Rekap Output (Report Otomatis Terisi Link Drive Asli):
             </label>
             <span class="text-[11px] text-slate-400 font-medium">Siap disalin ke WhatsApp</span>
           </div>
@@ -227,7 +225,7 @@
     </main>
   </div>
 
-  <!-- SCRIPT LOGIKA PEMBAGIAN JOB & NAMA LENGKAP TIM -->
+  <!-- SCRIPT LOGIKA UTAMA -->
   <script>
     let teamMembers = [
       "Amelie", "Ami", "Ana", "Novi", "Ann", "Ria", "Dastan", "Desi", "Difarani",
@@ -238,11 +236,10 @@
     ].map(name => ({ name }));
 
     let selectedNames = [];
-    let isFolderLocked = false;
 
     document.addEventListener("DOMContentLoaded", () => {
       renderNames();
-      loadLockedFolder();
+      loadDriveConfig();
     });
 
     function renderNames() {
@@ -257,8 +254,8 @@
         const btnName = document.createElement("button");
         btnName.type = "button";
         btnName.className = `px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border ${isSelected
-          ? "bg-indigo-600 text-white border-indigo-600 shadow-xs"
-          : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"
+            ? "bg-indigo-600 text-white border-indigo-600 shadow-xs"
+            : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"
           }`;
 
         btnName.innerHTML = isSelected
@@ -310,65 +307,38 @@
       renderNames();
     }
 
-    // --- FUNGSI KUNCI FOLDER INDUK ---
-    function toggleLockFolder() {
-      const input = document.getElementById("folderLinkInput");
-      const val = input.value.trim();
+    function saveDriveConfig() {
+      const parentId = document.getElementById("parentFolderIdInput").value.trim();
+      const scriptUrl = document.getElementById("scriptUrlInput").value.trim();
 
-      if (!isFolderLocked) {
-        if (!val) {
-          return alert("Masukkan link folder induk terlebih dahulu sebelum dikunci!");
-        }
-        localStorage.setItem("kimi_locked_folder_induk", val);
-        isFolderLocked = true;
-        applyFolderLockUI(true);
-      } else {
-        localStorage.removeItem("kimi_locked_folder_induk");
-        isFolderLocked = false;
-        applyFolderLockUI(false);
+      if (!parentId || !scriptUrl) {
+        return alert("Mohon isi ID Folder Induk dan Web App URL dengan lengkap!");
+      }
+
+      localStorage.setItem("kimi_parent_folder_id", parentId);
+      localStorage.setItem("kimi_script_url", scriptUrl);
+
+      document.getElementById("folderStatusBadge").className = "text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-lg";
+      document.getElementById("folderStatusBadge").innerText = "Tersimpan";
+      alert("Konfigurasi Drive berhasil disimpan!");
+    }
+
+    function loadDriveConfig() {
+      const savedId = localStorage.getItem("kimi_parent_folder_id");
+      const savedUrl = localStorage.getItem("kimi_script_url");
+
+      if (savedId && savedUrl) {
+        document.getElementById("parentFolderIdInput").value = savedId;
+        document.getElementById("scriptUrlInput").value = savedUrl;
+        document.getElementById("folderStatusBadge").className = "text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-lg";
+        document.getElementById("folderStatusBadge").innerText = "Tersimpan";
       }
     }
 
-    function loadLockedFolder() {
-      const savedFolder = localStorage.getItem("kimi_locked_folder_induk");
-      if (savedFolder) {
-        document.getElementById("folderLinkInput").value = savedFolder;
-        isFolderLocked = true;
-        applyFolderLockUI(true);
-      }
-    }
-
-    function applyFolderLockUI(locked) {
-      const input = document.getElementById("folderLinkInput");
-      const badge = document.getElementById("folderStatusBadge");
-      const btnIcon = document.getElementById("lockFolderIcon");
-      const btnText = document.getElementById("btnLockFolderText");
-      const btnEl = document.getElementById("btnLockFolder");
-
-      input.disabled = locked;
-
-      if (locked) {
-        input.classList.add("bg-slate-100", "cursor-not-allowed");
-        badge.className = "text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-lg";
-        badge.innerText = "Terkunci Aman";
-
-        btnIcon.setAttribute("icon", "heroicons:lock-closed-20-solid");
-        btnText.innerText = "Buka";
-        btnEl.className = "inline-flex items-center justify-center gap-1 bg-amber-600 hover:bg-amber-700 active:scale-95 text-white text-xs px-4 py-2.5 rounded-xl font-bold transition shadow-sm shrink-0";
-      } else {
-        input.classList.remove("bg-slate-100", "cursor-not-allowed");
-        badge.className = "text-[10px] font-bold bg-slate-200 text-slate-700 px-2.5 py-1 rounded-lg";
-        badge.innerText = "Belum Dikunci";
-
-        btnIcon.setAttribute("icon", "heroicons:lock-open-20-solid");
-        btnText.innerText = "Kunci";
-        btnEl.className = "inline-flex items-center justify-center gap-1 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs px-4 py-2.5 rounded-xl font-bold transition shadow-sm shrink-0";
-      }
-    }
-
-    function generateJob() {
+    async function generateJob() {
       const rawBrief = document.getElementById("briefInput").value.trim();
-      const folderLink = document.getElementById("folderLinkInput").value.trim();
+      const parentFolderId = document.getElementById("parentFolderIdInput").value.trim();
+      const scriptUrl = document.getElementById("scriptUrlInput").value.trim();
       const modeInput = document.querySelector('input[name="distributionMode"]:checked');
       const mode = modeInput ? modeInput.value : "multi_all";
 
@@ -393,21 +363,52 @@
         rawBlocks = [rawBlocks[0]];
       }
 
+      // Kumpulkan semua ID yang ada di brief
+      let orderIds = [];
+      rawBlocks.forEach(block => {
+        const idMatch = block.match(/ID\s*:\s*([^\n\r]+)/i);
+        if (idMatch) {
+          orderIds.push(idMatch[1].trim());
+        }
+      });
+
+      let folderMap = {};
+
+      // Jika konfigurasi Google Drive diisi, panggil Apps Script untuk buat folder otomatis
+      if (parentFolderId && scriptUrl && orderIds.length > 0) {
+        const btnGen = document.getElementById("btnGenerateText");
+        btnGen.innerText = "⏳ Sedang Membuat Folder di Drive...";
+
+        try {
+          let response = await fetch(scriptUrl, {
+            method: "POST",
+            body: JSON.stringify({ parentFolderId: parentFolderId, orderIds: orderIds })
+          });
+          let result = await response.json();
+
+          if (result.status === "success") {
+            result.folders.forEach(f => {
+              folderMap[f.id] = f.url;
+            });
+          } else {
+            alert("Gagal membuat folder otomatis: " + result.message);
+          }
+        } catch (err) {
+          console.error(err);
+          alert("Terjadi kesalahan koneksi saat membuat folder di Drive.");
+        }
+        btnGen.innerText = "✨ Generate & Buat Folder Otomatis";
+      }
+
       let finalOutput = [];
 
       rawBlocks.forEach((block) => {
-        // Ambil ID Pesanan
         const idMatch = block.match(/ID\s*:\s*([^\n\r]+)/i);
         let orderId = idMatch ? idMatch[1].trim() : "Tanpa_ID";
 
-        // Buat link sub-folder jika folder induk terisi
-        let targetReport = "";
-        if (folderLink) {
-          let cleanInduk = folderLink.replace(/\/$/, "");
-          targetReport = `${cleanInduk}/${orderId}`;
-        }
+        // Ambil link asli dari Google Drive jika berhasil dibuat, jika tidak kosongkan/beri keterangan
+        let targetReport = folderMap[orderId] || "";
 
-        // Otomatis masukkan link ke bagian 'Report :'
         let processedBlock = block;
         if (/Report\s*:/i.test(processedBlock)) {
           if (targetReport) {
