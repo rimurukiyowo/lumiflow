@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
     <div>
       <!-- Brand Header -->
       <div class="h-16 flex items-center justify-between px-5 border-b border-slate-100/90">
-        <a href="./index.html" class="flex items-center gap-3 group">
+        <a href="./index" class="flex items-center gap-3 group">
           <div class="w-9 h-9 rounded-2xl bg-gradient-to-tr from-blue-900 to-indigo-800 flex items-center justify-center text-white shadow-md shadow-blue-900/25 group-hover:scale-105 transition-transform duration-200">
             <iconify-icon icon="heroicons:sparkles-20-solid" class="text-lg"></iconify-icon>
           </div>
@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
       <!-- Navigation Links -->
       <nav class="p-3.5 space-y-1.5">
         <!-- Dashboard -->
-        <a href="./index.html" class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl ${
+        <a href="./index" class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl ${
           currentPath === "index.html" || currentPath === ""
             ? "bg-blue-50 text-blue-900 font-semibold shadow-sm shadow-blue-900/10 border border-blue-200/50"
             : "text-slate-600 hover:text-blue-900 hover:bg-slate-50 font-medium hover:translate-x-1"
@@ -87,7 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
         </a>
 
         <!-- 2. Pisah Job -->
-        <a href="./brief-parser.html" class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl ${
+        <a href="./brief-parser" class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl ${
           currentPath.includes("brief-parser")
             ? "bg-blue-50 text-blue-900 font-semibold shadow-sm shadow-blue-900/10 border border-blue-200/50"
             : "text-slate-600 hover:text-blue-900 hover:bg-slate-50 font-medium hover:translate-x-1"
@@ -104,7 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
         </a>
 
         <!-- 3. Upload dan Duplikat -->
-        <a href="./duplicate.html" class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl ${
+        <a href="./duplicate" class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl ${
           currentPath.includes("duplicate")
             ? "bg-blue-50 text-blue-900 font-semibold shadow-sm shadow-blue-900/10 border border-blue-200/50"
             : "text-slate-600 hover:text-blue-900 hover:bg-slate-50 font-medium hover:translate-x-1"
@@ -121,7 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
         </a>
 
         <!-- 4. Cek Drive -->
-        <a href="./upload-drive.html" class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl ${
+        <a href="./upload-drive" class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl ${
           currentPath.includes("upload-drive")
             ? "bg-blue-50 text-blue-900 font-semibold shadow-sm shadow-blue-900/10 border border-blue-200/50"
             : "text-slate-600 hover:text-blue-900 hover:bg-slate-50 font-medium hover:translate-x-1"
