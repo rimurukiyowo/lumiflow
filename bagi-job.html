@@ -40,6 +40,19 @@
       background: #cbd5e1;
       border-radius: 10px;
     }
+
+    /* Custom Notification Toast */
+    .toast-notification {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 9999;
+      animation: slideInUp 0.3s ease forwards;
+    }
+    @keyframes slideInUp {
+      from { transform: translateY(100px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
   </style>
 </head>
 
@@ -65,7 +78,7 @@
         </div>
         <span class="inline-flex items-center gap-1.5 text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-100 px-3 py-1.5 rounded-full w-fit">
           <span class="w-1.5 h-1.5 rounded-full bg-indigo-600"></span>
-          Modul Bagi Job
+          Modul Bagi Job (Lintas ID Adil)
         </span>
       </div>
 
@@ -172,7 +185,7 @@
                 <span class="text-xs font-bold text-slate-800 group-hover:text-indigo-600">Bagi Rata ke Semua Anggota</span>
                 <input type="radio" name="distributionMode" value="multi_all" checked class="w-4 h-4 text-indigo-600 focus:ring-indigo-600 border-slate-300">
               </div>
-              <span class="text-[11px] text-slate-500 font-medium">Jumlah orderan dibagi rata ke seluruh anggota yang dicentang.</span>
+              <span class="text-[11px] text-slate-500 font-medium">Jumlah orderan dibagi berkesinambungan lintas ID secara adil.</span>
             </label>
 
             <label class="group relative flex flex-col p-3.5 border-2 border-slate-200 rounded-2xl bg-white cursor-pointer hover:border-indigo-500 transition has-[:checked]:border-indigo-600 has-[:checked]:bg-indigo-50/30">
@@ -225,6 +238,9 @@
     </main>
   </div>
 
+  <!-- CUSTOM MODAL / TOAST CONTAINER -->
+  <div id="toastContainer"></div>
+
   <!-- SCRIPT LOGIKA UTAMA -->
   <script>
     let teamMembers = [
@@ -241,6 +257,20 @@
       renderNames();
       loadDriveConfig();
     });
+
+    function showToast(message, type = 'success') {
+      const container = document.getElementById("toastContainer");
+      const toast = document.createElement("div");
+      toast.className = `toast-notification flex items-center gap-2 px-4 py-3 rounded-2xl text-xs font-bold text-white shadow-xl transition-all ${
+        type === 'error' ? 'bg-rose-600' : 'bg-slate-900 border border-slate-700'
+      }`;
+      toast.innerHTML = `<iconify-icon icon="${type === 'error' ? 'heroicons:exclamation-circle-20-solid' : 'heroicons:check-circle-20-solid'}" class="text-base text-emerald-400"></iconify-icon> ${message}`;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
 
     function renderNames() {
       const container = document.getElementById("nameContainer");
@@ -297,6 +327,7 @@
         selectedNames.push(val);
         input.value = "";
         renderNames();
+        showToast(`Berhasil menambahkan ${val} ke daftar tim.`);
       }
     }
 
@@ -305,6 +336,7 @@
       document.getElementById("briefInput").value = "";
       document.getElementById("outputResult").value = "";
       renderNames();
+      showToast("Form berhasil direset.");
     }
 
     function saveDriveConfig() {
@@ -312,7 +344,7 @@
       const scriptUrl = document.getElementById("scriptUrlInput").value.trim();
 
       if (!parentId || !scriptUrl) {
-        return alert("Mohon isi ID Folder Induk dan Web App URL dengan lengkap!");
+        return showToast("Mohon isi ID Folder Induk dan Web App URL dengan lengkap!", "error");
       }
 
       localStorage.setItem("kimi_parent_folder_id", parentId);
@@ -320,7 +352,7 @@
 
       document.getElementById("folderStatusBadge").className = "text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-lg";
       document.getElementById("folderStatusBadge").innerText = "Tersimpan";
-      alert("Konfigurasi Drive berhasil disimpan!");
+      showToast("Konfigurasi Drive berhasil disimpan!");
     }
 
     function loadDriveConfig() {
@@ -343,11 +375,11 @@
       const mode = modeInput ? modeInput.value : "multi_all";
 
       if (!rawBrief) {
-        return alert("Silakan tempel format brief terlebih dahulu!");
+        return showToast("Silakan tempel format brief terlebih dahulu!", "error");
       }
 
       if (selectedNames.length === 0) {
-        return alert("Pilih minimal satu anggota tim yang bertugas!");
+        return showToast("Pilih minimal satu anggota tim yang bertugas!", "error");
       }
 
       let rawBlocks = rawBrief
@@ -391,14 +423,20 @@
               folderMap[f.id] = f.url;
             });
           } else {
-            alert("Gagal membuat folder otomatis: " + result.message);
+            showToast("Gagal membuat folder otomatis: " + result.message, "error");
           }
         } catch (err) {
           console.error(err);
-          alert("Terjadi kesalahan koneksi saat membuat folder di Drive.");
+          showToast("Terjadi kesalahan koneksi saat membuat folder di Drive.", "error");
         }
         btnGen.innerText = "✨ Generate & Buat Folder Otomatis";
       }
+
+      // ALGORITMA LINTAS ID BERKELANJUTAN (CONTINUOUS ROUND-ROBIN DISTRIBUTION)
+      // Kita lacak indeks giliran anggota saat ini (currentIndex) agar sisa pembagian atau ID berikutnya 
+      // terus melanjutkan pembagian ke anggota selanjutnya secara adil, tidak selalu dimulai dari orang pertama.
+      let teamSize = selectedNames.length;
+      let globalMemberIndex = 0; // Penunjuk index anggota tim secara global lintas ID
 
       let finalOutput = [];
 
@@ -406,7 +444,6 @@
         const idMatch = block.match(/ID\s*:\s*([^\n\r]+)/i);
         let orderId = idMatch ? idMatch[1].trim() : "Tanpa_ID";
 
-        // Ambil link asli dari Google Drive jika berhasil dibuat, jika tidak kosongkan/beri keterangan
         let targetReport = folderMap[orderId] || "";
 
         let processedBlock = block;
@@ -423,14 +460,31 @@
 
         let blockResult = processedBlock + "\n\n";
 
-        if (totalAmount > 0 && selectedNames.length > 0) {
-          let baseCount = Math.floor(totalAmount / selectedNames.length);
-          let remainder = totalAmount % selectedNames.length;
+        if (totalAmount > 0 && teamSize > 0) {
+          // Setiap anggota mendapat bagian dasar yang sama (floor)
+          let baseCount = Math.floor(totalAmount / teamSize);
+          let remainder = totalAmount % teamSize;
 
-          selectedNames.forEach((name, i) => {
-            let assigned = baseCount + (i < remainder ? 1 : 0);
+          // Alokasikan jumlah dasar ke setiap anggota
+          let allocation = {};
+          selectedNames.forEach(name => {
+            allocation[name] = baseCount;
+          });
+
+          // Distribusikan sisa (remainder) secara berkesinambungan mulai dari globalMemberIndex saat ini
+          for (let r = 0; r < remainder; r++) {
+            let currentMemberName = selectedNames[globalMemberIndex % teamSize];
+            allocation[currentMemberName] += 1;
+            globalMemberIndex++; // Geser indeks untuk sisa berikutnya/ID berikutnya
+          }
+
+          // Format hasil output per anggota sesuai urutan asli tim (atau terurut rapi)
+          let itemIndex = 1;
+          selectedNames.forEach(name => {
+            let assigned = allocation[name];
             if (assigned > 0) {
-              blockResult += `${i + 1}. ${name} ${assigned}\n`;
+              blockResult += `${itemIndex}. ${name} ${assigned}\n`;
+              itemIndex++;
             }
           });
         } else {
@@ -441,20 +495,21 @@
       });
 
       document.getElementById("outputResult").value = finalOutput.join("\n====================\n\n");
+      showToast("Job berhasil di-generate secara adil lintas ID!");
     }
 
     function copyToClipboard() {
       const output = document.getElementById("outputResult");
       if (!output || !output.value.trim()) {
-        return alert("Belum ada teks hasil untuk disalin!");
+        return showToast("Belum ada teks hasil untuk disalin!", "error");
       }
 
       navigator.clipboard.writeText(output.value)
-        .then(() => alert("Berhasil disalin ke clipboard!"))
+        .then(() => showToast("Berhasil disalin ke clipboard!"))
         .catch(() => {
           output.select();
           document.execCommand('copy');
-          alert("Berhasil disalin!");
+          showToast("Berhasil disalin!");
         });
     }
   </script>
