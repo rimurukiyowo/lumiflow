@@ -131,14 +131,14 @@
             placeholder="Contoh:&#10;ID : 286023&#10;Target : https://...&#10;Jumlah : 56&#10;Report :"></textarea>
         </div>
 
-        <!-- 3. Pilih Anggota Tim Section -->
+        <!-- 3. Pilih Anggota Tim & Atur Kuota Akun Section -->
         <div class="space-y-3 pt-3 border-t border-slate-100">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
               <label class="block text-xs font-bold text-slate-700">
-                3. Pilih Anggota Tim yang Bertugas:
+                3. Pilih Anggota Tim & Batas Kuota Akun:
               </label>
-              <p class="text-[11px] text-slate-400 font-medium">Klik nama untuk mencentang/membatalkan pilihan.</p>
+              <p class="text-[11px] text-slate-400 font-medium">Klik nama untuk mengaktifkan, lalu atur batas maksimal kuota/akun jika terbatas.</p>
             </div>
 
             <div class="flex gap-2">
@@ -152,9 +152,9 @@
             </div>
           </div>
 
-          <!-- Container Badge Nama -->
+          <!-- Container Anggota & Pengaturan Kuota -->
           <div id="nameContainer"
-            class="flex flex-wrap gap-1.5 max-h-48 overflow-y-auto p-3.5 border border-slate-200/80 rounded-2xl bg-slate-50/50">
+            class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 max-h-56 overflow-y-auto p-3.5 border border-slate-200/80 rounded-2xl bg-slate-50/50">
           </div>
 
           <!-- Aksi Seleksi Cepat -->
@@ -179,21 +179,13 @@
           <label class="block text-xs font-bold text-slate-700">
             4. Pilih Mode Pembagian:
           </label>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
             <label class="group relative flex flex-col p-3.5 border-2 border-slate-200 rounded-2xl bg-white cursor-pointer hover:border-indigo-500 transition has-[:checked]:border-indigo-600 has-[:checked]:bg-indigo-50/30">
               <div class="flex items-center justify-between mb-1">
-                <span class="text-xs font-bold text-slate-800 group-hover:text-indigo-600">Bagi Rata ke Semua Anggota</span>
+                <span class="text-xs font-bold text-slate-800 group-hover:text-indigo-600">Bagi Rata (Mengikuti Kuota Akun)</span>
                 <input type="radio" name="distributionMode" value="multi_all" checked class="w-4 h-4 text-indigo-600 focus:ring-indigo-600 border-slate-300">
               </div>
-              <span class="text-[11px] text-slate-500 font-medium">Jumlah orderan dibagi berkesinambungan lintas ID secara adil.</span>
-            </label>
-
-            <label class="group relative flex flex-col p-3.5 border-2 border-slate-200 rounded-2xl bg-white cursor-pointer hover:border-indigo-500 transition has-[:checked]:border-indigo-600 has-[:checked]:bg-indigo-50/30">
-              <div class="flex items-center justify-between mb-1">
-                <span class="text-xs font-bold text-slate-800 group-hover:text-indigo-600">1 Orang Max 1 ID (Anti Dobel)</span>
-                <input type="radio" name="distributionMode" value="unique_per_id" class="w-4 h-4 text-indigo-600 focus:ring-indigo-600 border-slate-300">
-              </div>
-              <span class="text-[11px] text-slate-500 font-medium">Orang yang sudah bertugas di ID sebelumnya tidak dipakai lagi di ID berikutnya.</span>
+              <span class="text-[11px] text-slate-500 font-medium">Pembagian otomatis adil dengan tetap menghormati batas maksimal kuota akun masing-masing.</span>
             </label>
 
             <label class="group relative flex flex-col p-3.5 border-2 border-slate-200 rounded-2xl bg-white cursor-pointer hover:border-indigo-500 transition has-[:checked]:border-indigo-600 has-[:checked]:bg-indigo-50/30">
@@ -256,10 +248,10 @@
       "Duwi", "Elmira", "Elok", "Endang", "Feni", "Fiafida", "Firanny", "Fdia", "Fitria", "Yani",
       "Irma", "Istidary", "Khariza", "Kholif", "Kyla", "Leha", "Lies", "Linda", "Mahmudah",
       "Mufida", "Ndang", "Novita", "Nurmina", "Puja", "Ratna", "Riri", "Sakucil", "Sanjen",
-      "Siros", "Tya", "Udin", "Kim", "Yahya", "Vina","Yosep", "Zal", "Damis", "Risda", "Niar", "Bila"
-    ].map(name => ({ name }));
+      "Siros", "Tya", "Udin", "Kim", "Yahya", "Vina", "Zal", "Damis", "Risda", "Niar", "Bila","Yosep"
+    ].map(name => ({ name, maxQuota: 99 })); // Default kuota bebas (99)
 
-    let selectedNames = [];
+    let selectedNames = []; // Berisi nama-nama yang sedang dicentang
 
     document.addEventListener("DOMContentLoaded", () => {
       renderNames();
@@ -289,19 +281,31 @@
       sorted.forEach(member => {
         const isSelected = selectedNames.includes(member.name);
 
-        const btnName = document.createElement("button");
-        btnName.type = "button";
-        btnName.className = `px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border ${isSelected
-            ? "bg-indigo-600 text-white border-indigo-600 shadow-xs"
-            : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"
-          }`;
+        const card = document.createElement("div");
+        card.className = `p-2.5 rounded-2xl border transition-all flex flex-col gap-1.5 ${
+          isSelected 
+            ? "bg-indigo-50/50 border-indigo-500 shadow-xs" 
+            : "bg-white border-slate-200 hover:border-slate-300"
+        }`;
 
-        btnName.innerHTML = isSelected
-          ? `<iconify-icon icon="heroicons:check-20-solid" class="text-sm"></iconify-icon> ${member.name}`
-          : member.name;
-        btnName.onclick = () => toggleName(member.name);
+        card.innerHTML = `
+          <div class="flex items-center justify-between cursor-pointer" onclick="toggleName('${member.name}')">
+            <span class="text-xs font-bold ${isSelected ? 'text-indigo-700' : 'text-slate-700'} flex items-center gap-1">
+              <iconify-icon icon="${isSelected ? 'heroicons:check-circle-20-solid' : 'heroicons:plus-circle-20-solid'}" class="text-sm ${isSelected ? 'text-indigo-600' : 'text-slate-400'}"></iconify-icon>
+              ${member.name}
+            </span>
+          </div>
+          ${isSelected ? `
+            <div class="flex items-center gap-1 pt-1 border-t border-indigo-100" onclick="event.stopPropagation()">
+              <span class="text-[10px] font-semibold text-slate-500">Max Akun:</span>
+              <input type="number" min="1" max="999" value="${member.maxQuota}" 
+                onchange="updateQuota('${member.name}', this.value)"
+                class="w-full p-1 text-center text-xs font-bold border border-indigo-200 rounded-lg bg-white text-indigo-700 focus:outline-none focus:ring-1 focus:ring-indigo-600">
+            </div>
+          ` : ''}
+        `;
 
-        container.appendChild(btnName);
+        container.appendChild(card);
       });
 
       document.getElementById("totalSelected").innerText = selectedNames.length;
@@ -315,6 +319,13 @@
         selectedNames.push(name);
       }
       renderNames();
+    }
+
+    function updateQuota(name, val) {
+      let member = teamMembers.find(m => m.name === name);
+      if (member) {
+        member.maxQuota = parseInt(val) || 1;
+      }
     }
 
     function selectAll() {
@@ -331,7 +342,7 @@
       const input = document.getElementById("newNameInput");
       const val = input.value.trim();
       if (val && !teamMembers.some(m => m.name.toLowerCase() === val.toLowerCase())) {
-        teamMembers.push({ name: val });
+        teamMembers.push({ name: val, maxQuota: 99 });
         selectedNames.push(val);
         input.value = "";
         renderNames();
@@ -403,7 +414,6 @@
         rawBlocks = [rawBlocks[0]];
       }
 
-      // Kumpulkan semua ID yang ada di brief
       let orderIds = [];
       rawBlocks.forEach(block => {
         const idMatch = block.match(/ID\s*:\s*([^\n\r]+)/i);
@@ -414,7 +424,6 @@
 
       let folderMap = {};
 
-      // Jika konfigurasi Google Drive diisi, panggil Apps Script untuk buat folder otomatis
       if (parentFolderId && scriptUrl && orderIds.length > 0) {
         const btnGen = document.getElementById("btnGenerateText");
         btnGen.innerText = "⏳ Sedang Membuat Folder di Drive...";
@@ -441,8 +450,6 @@
       }
 
       let finalOutput = [];
-      let globalMemberIndex = 0;
-      let alreadyAssignedIds = new Set(); // Melacak anggota yang sudah dapat job di batch ini (khusus mode unique_per_id)
 
       rawBlocks.forEach((block) => {
         const idMatch = block.match(/ID\s*:\s*([^\n\r]+)/i);
@@ -453,7 +460,7 @@
         let processedBlock = block;
         if (/Report\s*:/i.test(processedBlock)) {
           if (targetReport) {
-            processedBlock = processedBlock.replace(/Report\s*:\s*([^\n\r]*)/i, `Report : ${targetReport}`);
+            processedBlock = processedBlock.replace(/Report\s*:/i, `Report : ${targetReport}`);
           }
         } else if (targetReport) {
           processedBlock += `\nReport : ${targetReport}`;
@@ -465,41 +472,46 @@
         let blockResult = processedBlock + "\n\n";
 
         if (totalAmount > 0 && selectedNames.length > 0) {
-          let availablePool = [...selectedNames];
-
-          // Jika mode "1 Orang Max 1 ID (Anti Dobel)", saring anggota yang belum pernah dapat tugas di ID sebelumnya
-          if (mode === "unique_per_id") {
-            let filteredPool = selectedNames.filter(name => !alreadyAssignedIds.has(name));
-            // Jika semua anggota sudah pernah dipakai, reset pool supaya bisa berputar lagi
-            if (filteredPool.length > 0) {
-              availablePool = filteredPool;
-            } else {
-              alreadyAssignedIds.clear(); // Reset tracking
-            }
-          }
-
-          let teamSize = availablePool.length;
-          let baseCount = Math.floor(totalAmount / teamSize);
-          let remainder = totalAmount % teamSize;
-
-          let allocation = {};
-          availablePool.forEach(name => {
-            allocation[name] = baseCount;
+          // Ambil objek anggota yang aktif beserta kuotanya
+          let activeMembers = selectedNames.map(name => {
+            let found = teamMembers.find(m => m.name === name);
+            return { name, maxQuota: found ? found.maxQuota : 99 };
           });
 
-          for (let r = 0; r < remainder; r++) {
-            let currentMemberName = availablePool[globalMemberIndex % teamSize];
-            allocation[currentMemberName] += 1;
-            globalMemberIndex++;
+          let allocation = {};
+          activeMembers.forEach(m => allocation[m.name] = 0);
+
+          let remainingAmount = totalAmount;
+
+          // Algoritma pembagian bertahap yang menghormati max quota tiap orang
+          let loopGuard = 0;
+          while (remainingAmount > 0 && loopGuard < 1000) {
+            let distributedInThisRound = false;
+
+            for (let m of activeMembers) {
+              if (remainingAmount <= 0) break;
+              if (allocation[m.name] < m.maxQuota) {
+                allocation[m.name] += 1;
+                remainingAmount -= 1;
+                distributedInThisRound = true;
+              }
+            }
+
+            // Jika semua orang sudah mencapai batas max kuotanya tapi masih sisa tugas,
+            // paksa distribusikan ke orang pertama agar tugas tetap habis
+            if (!distributedInThisRound) {
+              allocation[activeMembers[0].name] += 1;
+              remainingAmount -= 1;
+            }
+            loopGuard++;
           }
 
           let itemIndex = 1;
-          availablePool.forEach(name => {
-            let assigned = allocation[name];
+          activeMembers.forEach(m => {
+            let assigned = allocation[m.name];
             if (assigned > 0) {
-              blockResult += `${itemIndex}. ${name} ${assigned}\n`;
+              blockResult += `${itemIndex}. ${m.name} ${assigned}\n`;
               itemIndex++;
-              alreadyAssignedIds.add(name); // Tandai bahwa orang ini sudah dapat tugas di batch ini
             }
           });
         } else {
@@ -510,7 +522,7 @@
       });
 
       document.getElementById("outputResult").value = finalOutput.join("\n====================\n\n");
-      showToast("Job berhasil di-generate sesuai mode pembagian!");
+      showToast("Job berhasil di-generate sesuai kuota akun masing-masing!");
     }
 
     function copyToClipboard() {
