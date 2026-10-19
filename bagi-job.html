@@ -131,14 +131,14 @@
             placeholder="Contoh:&#10;ID : 286023&#10;Target : https://...&#10;Jumlah : 56&#10;Report :"></textarea>
         </div>
 
-        <!-- 3. Pilih Anggota Tim & Pengaturan Otomatis Global -->
+        <!-- 3. Pilih Anggota Tim & Pengaturan Max Akun Fleksibel -->
         <div class="space-y-3 pt-3 border-t border-slate-100">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
               <label class="block text-xs font-bold text-slate-700">
-                3. Pilih Anggota Tim & Request Default Otomatis:
+                3. Pilih Anggota Tim & Atur Max Akun:
               </label>
-              <p class="text-[11px] text-slate-400 font-medium">Atur angka sekali di bawah untuk mengisi semua anggota secara otomatis.</p>
+              <p class="text-[11px] text-slate-400 font-medium">Bisa atur masal di atas, atau edit manual di kotak masing-masing nama jika ada yang berbeda.</p>
             </div>
 
             <div class="flex gap-2">
@@ -152,11 +152,11 @@
             </div>
           </div>
 
-          <!-- KOTAK PENGATURAN OTOMATIS GLOBAL (SATU KALI ISI UNTUK SEMUA) -->
+          <!-- KOTAK PENGATURAN OTOMATIS GLOBAL (MASAL) -->
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3 bg-indigo-50/80 border border-indigo-100 rounded-2xl">
             <span class="text-xs font-bold text-indigo-900 flex items-center gap-1.5">
               <iconify-icon icon="heroicons:adjustments-horizontal-20-solid" class="text-base text-indigo-600"></iconify-icon>
-              Atur Jumlah Request Masal untuk Semua Anggota:
+              Atur Masal Max Akun untuk Semua Anggota:
             </span>
             <div class="flex items-center gap-2">
               <input type="number" id="globalRequestInput" min="1" max="999" value="2"
@@ -168,9 +168,9 @@
             </div>
           </div>
 
-          <!-- Container Badge Nama -->
+          <!-- Container Badge Nama & Input Manual Per Orang -->
           <div id="nameContainer"
-            class="flex flex-wrap gap-1.5 max-h-48 overflow-y-auto p-3.5 border border-slate-200/80 rounded-2xl bg-slate-50/50">
+            class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5 max-h-56 overflow-y-auto p-3.5 border border-slate-200/80 rounded-2xl bg-slate-50/50">
           </div>
 
           <!-- Aksi Seleksi Cepat -->
@@ -198,18 +198,18 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
             <label class="group relative flex flex-col p-3.5 border-2 border-slate-200 rounded-2xl bg-white cursor-pointer hover:border-indigo-500 transition has-[:checked]:border-indigo-600 has-[:checked]:bg-indigo-50/35">
               <div class="flex items-center justify-between mb-1">
-                <span class="text-xs font-bold text-slate-800 group-hover:text-indigo-600">1. Bagi Rata (Sesuai Jumlah Request)</span>
+                <span class="text-xs font-bold text-slate-800 group-hover:text-indigo-600">1. Bagi Rata Sesuai Max Akun</span>
                 <input type="radio" name="distributionMode" value="manual_quota" checked class="w-4 h-4 text-indigo-600 focus:ring-indigo-600 border-slate-300">
               </div>
-              <span class="text-[11px] text-slate-500 font-medium">Membagi pesanan secara merata sesuai request jumlah akun masing-masing.</span>
+              <span class="text-[11px] text-slate-500 font-medium">Membagi pesanan secara merata sesuai batas max akun masing-masing.</span>
             </label>
 
             <label class="group relative flex flex-col p-3.5 border-2 border-slate-200 rounded-2xl bg-white cursor-pointer hover:border-indigo-500 transition has-[:checked]:border-indigo-600 has-[:checked]:bg-indigo-50/35">
               <div class="flex items-center justify-between mb-1">
-                <span class="text-xs font-bold text-slate-800 group-hover:text-indigo-600">2. Lintas ID (Request + Sisa Bagi Rata + Anti Dobel)</span>
+                <span class="text-xs font-bold text-slate-800 group-hover:text-indigo-600">2. Lintas ID (Anti Dobel / Akun < 2 Boleh Disebar)</span>
                 <input type="radio" name="distributionMode" value="auto_smart" class="w-4 h-4 text-indigo-600 focus:ring-indigo-600 border-slate-300">
               </div>
-              <span class="text-[11px] text-slate-500 font-medium">Orang dapat sesuai request, sisa dibagi rata ke orang baru (Anti dobel ID, kecuali akun < 2).</span>
+              <span class="text-[11px] text-slate-500 font-medium">Beda ID beda orang. Anggota dengan Max Akun < 2 boleh disebar di banyak ID (selama jumlahnya sesuai max).</span>
             </label>
           </div>
         </div>
@@ -265,7 +265,7 @@
       "Irma", "Istidary", "Khariza", "Kholif", "Kyla", "Leha", "Lies", "Linda", "Mahmudah",
       "Mufida", "Ndang", "Novita", "Nurmina", "Puja", "Ratna", "Riri", "Sakucil", "Sanjen",
       "Siros", "Tya", "Udin", "Kim", "Yahya", "Vina", "Zal", "Damis", "Risda", "Niar", "Bila"
-    ].map(name => ({ name, requestCount: 2 })); // Default request 2 akun
+    ].map(name => ({ name, maxQuota: 2 })); // Default max quota 2
 
     let selectedNames = [];
 
@@ -297,19 +297,31 @@
       sorted.forEach(member => {
         const isSelected = selectedNames.includes(member.name);
 
-        const btnName = document.createElement("button");
-        btnName.type = "button";
-        btnName.className = `px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border ${isSelected
-            ? "bg-indigo-600 text-white border-indigo-600 shadow-xs"
-            : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"
-          }`;
+        const card = document.createElement("div");
+        card.className = `p-2.5 rounded-2xl border transition-all flex flex-col gap-1.5 ${
+          isSelected 
+            ? "bg-indigo-50/50 border-indigo-500 shadow-xs" 
+            : "bg-white border-slate-200 hover:border-slate-300"
+        }`;
 
-        btnName.innerHTML = isSelected
-          ? `<iconify-icon icon="heroicons:check-20-solid" class="text-sm"></iconify-icon> ${member.name} <span class="bg-indigo-500 text-white text-[10px] px-1.5 py-0.5 rounded-md ml-1">${member.requestCount}</span>`
-          : member.name;
-        btnName.onclick = () => toggleName(member.name);
+        card.innerHTML = `
+          <div class="flex items-center justify-between cursor-pointer" onclick="toggleName('${member.name}')">
+            <span class="text-xs font-bold ${isSelected ? 'text-indigo-700' : 'text-slate-700'} flex items-center gap-1">
+              <iconify-icon icon="${isSelected ? 'heroicons:check-circle-20-solid' : 'heroicons:plus-circle-20-solid'}" class="text-sm ${isSelected ? 'text-indigo-600' : 'text-slate-400'}"></iconify-icon>
+              ${member.name}
+            </span>
+          </div>
+          ${isSelected ? `
+            <div class="flex items-center gap-1 pt-1 border-t border-indigo-100" onclick="event.stopPropagation()">
+              <span class="text-[10px] font-semibold text-slate-500">Max:</span>
+              <input type="number" min="1" max="999" value="${member.maxQuota}" 
+                onchange="updateQuota('${member.name}', this.value)"
+                class="w-full p-1 text-center text-xs font-bold border border-indigo-200 rounded-lg bg-white text-indigo-700 focus:outline-none focus:ring-1 focus:ring-indigo-600">
+            </div>
+          ` : ''}
+        `;
 
-        container.appendChild(btnName);
+        container.appendChild(card);
       });
 
       document.getElementById("totalSelected").innerText = selectedNames.length;
@@ -325,13 +337,20 @@
       renderNames();
     }
 
+    function updateQuota(name, val) {
+      let member = teamMembers.find(m => m.name === name);
+      if (member) {
+        member.maxQuota = parseInt(val) || 1;
+      }
+    }
+
     function applyGlobalRequest() {
       const val = parseInt(document.getElementById("globalRequestInput").value) || 2;
       teamMembers.forEach(m => {
-        m.requestCount = val;
+        m.maxQuota = val;
       });
       renderNames();
-      showToast(`Semua anggota berhasil diset request-nya menjadi ${val} akun!`);
+      showToast(`Semua max akun berhasil diubah menjadi ${val}!`);
     }
 
     function selectAll() {
@@ -349,7 +368,7 @@
       const val = input.value.trim();
       const globalVal = parseInt(document.getElementById("globalRequestInput").value) || 2;
       if (val && !teamMembers.some(m => m.name.toLowerCase() === val.toLowerCase())) {
-        teamMembers.push({ name: val, requestCount: globalVal });
+        teamMembers.push({ name: val, maxQuota: globalVal });
         selectedNames.push(val);
         input.value = "";
         renderNames();
@@ -478,7 +497,7 @@
         if (totalAmount > 0 && selectedNames.length > 0) {
           let activeMembers = selectedNames.map(name => {
             let found = teamMembers.find(m => m.name === name);
-            return { name, requestCount: found ? found.requestCount : 2 };
+            return { name, maxQuota: found ? found.maxQuota : 2 };
           });
 
           let currentIdTeam = [];
@@ -486,8 +505,8 @@
           if (mode === "manual_quota") {
             currentIdTeam = activeMembers;
           } else {
-            // FITUR 2: Anti dobel ID, KECUALI yang request akun < 2 boleh muncul lagi
-            let freshMembers = activeMembers.filter(m => !alreadyAssignedInBatch.has(m.name) || m.requestCount < 2);
+            // FITUR 2: Anti dobel ID, KECUALI yang maxQuota < 2 (maka boleh disebar di banyak ID sesuai max-nya)
+            let freshMembers = activeMembers.filter(m => !alreadyAssignedInBatch.has(m.name) || m.maxQuota < 2);
             
             if (freshMembers.length > 0) {
               let targetSize = Math.max(2, Math.min(freshMembers.length, Math.ceil(totalAmount / 6)));
@@ -498,18 +517,18 @@
             }
           }
 
-          // Alokasi awal sesuai request global masing-masing anggota
+          // Alokasi awal sesuai maxQuota masing-masing anggota
           let allocation = {};
           let assignedTotal = 0;
 
           currentIdTeam.forEach(m => {
-            let give = Math.min(m.requestCount, totalAmount - assignedTotal);
+            let give = Math.min(m.maxQuota, totalAmount - assignedTotal);
             if (give < 0) give = 0;
             allocation[m.name] = give;
             assignedTotal += give;
           });
 
-          // Sisa orderan langsung dibagi rata otomatis ke anggota di ID ini
+          // Sisa orderan dibagi rata secara adil ke anggota di ID ini (tanpa melampaui maxQuota mereka)
           let remainingAmount = totalAmount - assignedTotal;
           let loopGuard = 0;
 
@@ -517,11 +536,14 @@
             let distributed = false;
             for (let m of currentIdTeam) {
               if (remainingAmount <= 0) break;
-              allocation[m.name] += 1;
-              remainingAmount -= 1;
-              distributed = true;
+              // Hanya beri tambahan jika belum mencapai maxQuota-nya
+              if (allocation[m.name] < m.maxQuota) {
+                allocation[m.name] += 1;
+                remainingAmount -= 1;
+                distributed = true;
+              }
             }
-            if (!distributed) break;
+            if (!distributed) break; // Berhenti jika semua anggota di ID ini sudah mentok maxQuota-nya
             loopGuard++;
           }
 
@@ -531,7 +553,8 @@
             if (assigned > 0) {
               blockResult += `${itemIndex}. ${m.name} ${assigned}\n`;
               itemIndex++;
-              if (mode === "auto_smart" && m.requestCount >= 2) {
+              // Catat ke batch jika maxQuota >= 2 (artinya yang akunnya banyak tidak boleh dobel di ID berikutnya)
+              if (mode === "auto_smart" && m.maxQuota >= 2) {
                 alreadyAssignedInBatch.add(m.name);
               }
             }
@@ -545,7 +568,7 @@
       });
 
       document.getElementById("outputResult").value = finalOutput.join("\n====================\n\n");
-      showToast("Job berhasil di-generate secara otomatis!");
+      showToast("Job berhasil di-generate sesuai batas Max Akun!");
     }
 
     function copyToClipboard() {
