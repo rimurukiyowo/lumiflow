@@ -131,14 +131,14 @@
             placeholder="Contoh:&#10;ID : 286023&#10;Target : https://...&#10;Jumlah : 56&#10;Report :"></textarea>
         </div>
 
-        <!-- 3. Pilih Anggota Tim & Atur Kuota Akun Section -->
+        <!-- 3. Pilih Anggota Tim Section -->
         <div class="space-y-3 pt-3 border-t border-slate-100">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
               <label class="block text-xs font-bold text-slate-700">
-                3. Pilih Anggota Tim & Batas Kuota Akun:
+                3. Pilih Anggota Tim yang Bertugas:
               </label>
-              <p class="text-[11px] text-slate-400 font-medium">Klik nama untuk mengaktifkan, lalu atur batas maksimal kuota/akun jika terbatas.</p>
+              <p class="text-[11px] text-slate-400 font-medium">Klik nama untuk mencentang/membatalkan pilihan.</p>
             </div>
 
             <div class="flex gap-2">
@@ -152,9 +152,9 @@
             </div>
           </div>
 
-          <!-- Container Anggota & Pengaturan Kuota -->
+          <!-- Container Badge Nama -->
           <div id="nameContainer"
-            class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 max-h-56 overflow-y-auto p-3.5 border border-slate-200/80 rounded-2xl bg-slate-50/50">
+            class="flex flex-wrap gap-1.5 max-h-48 overflow-y-auto p-3.5 border border-slate-200/80 rounded-2xl bg-slate-50/50">
           </div>
 
           <!-- Aksi Seleksi Cepat -->
@@ -179,24 +179,16 @@
           <label class="block text-xs font-bold text-slate-700">
             4. Pilih Mode Pembagian:
           </label>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-            <label class="group relative flex flex-col p-3.5 border-2 border-slate-200 rounded-2xl bg-white cursor-pointer hover:border-indigo-500 transition has-[:checked]:border-indigo-600 has-[:checked]:bg-indigo-50/30">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <label class="group relative flex flex-col p-3.5 border-2 border-slate-200 rounded-2xl bg-white cursor-pointer hover:border-indigo-500 transition has-[:checked]:border-indigo-600 has-[:checked]:bg-indigo-50/35">
               <div class="flex items-center justify-between mb-1">
-                <span class="text-xs font-bold text-slate-800 group-hover:text-indigo-600">Bagi Rata (Ikuti Kuota)</span>
-                <input type="radio" name="distributionMode" value="multi_all" checked class="w-4 h-4 text-indigo-600 focus:ring-indigo-600 border-slate-300">
+                <span class="text-xs font-bold text-slate-800 group-hover:text-indigo-600">✨ Bagi Rata & Otomatis Rotasi Beda ID</span>
+                <input type="radio" name="distributionMode" value="smart_auto" checked class="w-4 h-4 text-indigo-600 focus:ring-indigo-600 border-slate-300">
               </div>
-              <span class="text-[11px] text-slate-500 font-medium">Pembagian adil berkesinambungan mengikuti batas kuota akun.</span>
+              <span class="text-[11px] text-slate-500 font-medium">Sistem otomatis menghitung porsi ideal & memastikan beda ID diisi oleh orang yang berbeda secara adil.</span>
             </label>
 
-            <label class="group relative flex flex-col p-3.5 border-2 border-slate-200 rounded-2xl bg-white cursor-pointer hover:border-indigo-500 transition has-[:checked]:border-indigo-600 has-[:checked]:bg-indigo-50/30">
-              <div class="flex items-center justify-between mb-1">
-                <span class="text-xs font-bold text-slate-800 group-hover:text-indigo-600">1 Orang Max 1 ID Saja</span>
-                <input type="radio" name="distributionMode" value="unique_per_id" class="w-4 h-4 text-indigo-600 focus:ring-indigo-600 border-slate-300">
-              </div>
-              <span class="text-[11px] text-slate-500 font-medium">Satu orang tidak boleh muncul di ID berbeda dalam batch yang sama (Anti Dobel ID).</span>
-            </label>
-
-            <label class="group relative flex flex-col p-3.5 border-2 border-slate-200 rounded-2xl bg-white cursor-pointer hover:border-indigo-500 transition has-[:checked]:border-indigo-600 has-[:checked]:bg-indigo-50/30">
+            <label class="group relative flex flex-col p-3.5 border-2 border-slate-200 rounded-2xl bg-white cursor-pointer hover:border-indigo-500 transition has-[:checked]:border-indigo-600 has-[:checked]:bg-indigo-50/35">
               <div class="flex items-center justify-between mb-1">
                 <span class="text-xs font-bold text-slate-800 group-hover:text-indigo-600">Khusus 1 ID Saja</span>
                 <input type="radio" name="distributionMode" value="single" class="w-4 h-4 text-indigo-600 focus:ring-indigo-600 border-slate-300">
@@ -256,8 +248,8 @@
       "Duwi", "Elmira", "Elok", "Endang", "Feni", "Fiafida", "Firanny", "Fdia", "Fitria", "Yani",
       "Irma", "Istidary", "Khariza", "Kholif", "Kyla", "Leha", "Lies", "Linda", "Mahmudah",
       "Mufida", "Ndang", "Novita", "Nurmina", "Puja", "Ratna", "Riri", "Sakucil", "Sanjen",
-      "Siros", "Tya", "Udin", "Kim", "Yahya", "Vina", "Zal", "Damis", "Risda", "Niar", "Bila", "Ayunita","Yosep"
-    ].map(name => ({ name, maxQuota: 99 }));
+      "Siros", "Tya", "Udin", "Kim", "Yahya", "Vina", "Zal", "Damis", "Risda", "Niar", "Bila"
+    ].map(name => ({ name }));
 
     let selectedNames = [];
 
@@ -289,31 +281,19 @@
       sorted.forEach(member => {
         const isSelected = selectedNames.includes(member.name);
 
-        const card = document.createElement("div");
-        card.className = `p-2.5 rounded-2xl border transition-all flex flex-col gap-1.5 ${
-          isSelected 
-            ? "bg-indigo-50/50 border-indigo-500 shadow-xs" 
-            : "bg-white border-slate-200 hover:border-slate-300"
-        }`;
+        const btnName = document.createElement("button");
+        btnName.type = "button";
+        btnName.className = `px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border ${isSelected
+            ? "bg-indigo-600 text-white border-indigo-600 shadow-xs"
+            : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"
+          }`;
 
-        card.innerHTML = `
-          <div class="flex items-center justify-between cursor-pointer" onclick="toggleName('${member.name}')">
-            <span class="text-xs font-bold ${isSelected ? 'text-indigo-700' : 'text-slate-700'} flex items-center gap-1">
-              <iconify-icon icon="${isSelected ? 'heroicons:check-circle-20-solid' : 'heroicons:plus-circle-20-solid'}" class="text-sm ${isSelected ? 'text-indigo-600' : 'text-slate-400'}"></iconify-icon>
-              ${member.name}
-            </span>
-          </div>
-          ${isSelected ? `
-            <div class="flex items-center gap-1 pt-1 border-t border-indigo-100" onclick="event.stopPropagation()">
-              <span class="text-[10px] font-semibold text-slate-500">Max Akun:</span>
-              <input type="number" min="1" max="999" value="${member.maxQuota}" 
-                onchange="updateQuota('${member.name}', this.value)"
-                class="w-full p-1 text-center text-xs font-bold border border-indigo-200 rounded-lg bg-white text-indigo-700 focus:outline-none focus:ring-1 focus:ring-indigo-600">
-            </div>
-          ` : ''}
-        `;
+        btnName.innerHTML = isSelected
+          ? `<iconify-icon icon="heroicons:check-20-solid" class="text-sm"></iconify-icon> ${member.name}`
+          : member.name;
+        btnName.onclick = () => toggleName(member.name);
 
-        container.appendChild(card);
+        container.appendChild(btnName);
       });
 
       document.getElementById("totalSelected").innerText = selectedNames.length;
@@ -327,13 +307,6 @@
         selectedNames.push(name);
       }
       renderNames();
-    }
-
-    function updateQuota(name, val) {
-      let member = teamMembers.find(m => m.name === name);
-      if (member) {
-        member.maxQuota = parseInt(val) || 1;
-      }
     }
 
     function selectAll() {
@@ -350,7 +323,7 @@
       const input = document.getElementById("newNameInput");
       const val = input.value.trim();
       if (val && !teamMembers.some(m => m.name.toLowerCase() === val.toLowerCase())) {
-        teamMembers.push({ name: val, maxQuota: 99 });
+        teamMembers.push({ name: val });
         selectedNames.push(val);
         input.value = "";
         renderNames();
@@ -399,7 +372,7 @@
       const parentFolderId = document.getElementById("parentFolderIdInput").value.trim();
       const scriptUrl = document.getElementById("scriptUrlInput").value.trim();
       const modeInput = document.querySelector('input[name="distributionMode"]:checked');
-      const mode = modeInput ? modeInput.value : "multi_all";
+      const mode = modeInput ? modeInput.value : "smart_auto";
 
       if (!rawBrief) {
         return showToast("Silakan tempel format brief terlebih dahulu!", "error");
@@ -458,8 +431,17 @@
       }
 
       let finalOutput = [];
-      let globalMemberIndex = 0;
-      let alreadyAssignedIds = new Set(); // Melacak anggota yang sudah dapat job di batch ini (untuk mode unique_per_id)
+      
+      // ALGORITMA CERDAS OTOMATIS:
+      // Kita tentukan berapa orang ideal per ID (misal maksimal 5-8 orang per ID agar akun tidak kebanyakan terpakai, atau otomatis dibagi rata tim sejumlah ID)
+      let totalMembers = selectedNames.length;
+      let totalIds = rawBlocks.length;
+
+      // Tentukan kuota max otomatis per ID: sistem otomatis menghitung agar orang tidak numpuk di satu ID
+      // Misal jika jumlah orang banyak dan ID sedikit, atau sebaliknya, kita rotasi secara adil.
+      let membersPerId = Math.max(2, Math.min(totalMembers, Math.ceil(totalMembers / Math.max(1, totalIds))));
+      
+      let memberGlobalCursor = 0; // Penunjuk urutan giliran anggota tim
 
       rawBlocks.forEach((block) => {
         const idMatch = block.match(/ID\s*:\s*([^\n\r]+)/i);
@@ -481,57 +463,38 @@
 
         let blockResult = processedBlock + "\n\n";
 
-        if (totalAmount > 0 && selectedNames.length > 0) {
-          let activeMembers = selectedNames.map(name => {
-            let found = teamMembers.find(m => m.name === name);
-            return { name, maxQuota: found ? found.maxQuota : 99 };
-          });
+        if (totalAmount > 0 && totalMembers > 0) {
+          // Ambil sekelompok orang secara bergiliran (rotasi) khusus untuk ID ini
+          // Ini memastikan BEDA ID = BEDA ORANG (atau bergantian secara adil)
+          let currentIdTeam = [];
+          let targetTeamSize = Math.min(totalMembers, Math.max(2, Math.floor(totalAmount / 10) || membersPerId));
 
-          let availablePool = [...activeMembers];
-
-          // Jika mode "1 Orang Max 1 ID Saja", saring anggota yang belum pernah dapat tugas di ID sebelumnya dalam batch ini
-          if (mode === "unique_per_id") {
-            let filteredPool = activeMembers.filter(m => !alreadyAssignedIds.has(m.name));
-            if (filteredPool.length > 0) {
-              availablePool = filteredPool;
-            } else {
-              alreadyAssignedIds.clear(); // Reset jika semua sudah pernah dipakai di ID sebelumnya
+          for (let i = 0; i < targetTeamSize; i++) {
+            let memberName = selectedNames[memberGlobalCursor % totalMembers];
+            if (!currentIdTeam.includes(memberName)) {
+              currentIdTeam.push(memberName);
+              memberGlobalCursor++;
             }
           }
 
+          // Bagi rata jumlah orderan di ID ini khusus untuk tim yang bertugas di ID ini
+          let teamSize = currentIdTeam.length;
+          let baseCount = Math.floor(totalAmount / teamSize);
+          let remainder = totalAmount % teamSize;
+
           let allocation = {};
-          availablePool.forEach(m => allocation[m.name] = 0);
+          currentIdTeam.forEach(name => allocation[name] = baseCount);
 
-          let remainingAmount = totalAmount;
-          let teamSize = availablePool.length;
-          let loopGuard = 0;
-
-          while (remainingAmount > 0 && loopGuard < 1000) {
-            let distributedInThisRound = false;
-
-            for (let m of availablePool) {
-              if (remainingAmount <= 0) break;
-              if (allocation[m.name] < m.maxQuota) {
-                allocation[m.name] += 1;
-                remainingAmount -= 1;
-                distributedInThisRound = true;
-              }
-            }
-
-            if (!distributedInThisRound) {
-              allocation[availablePool[0].name] += 1;
-              remainingAmount -= 1;
-            }
-            loopGuard++;
+          for (let r = 0; r < remainder; r++) {
+            allocation[currentIdTeam[r]] += 1;
           }
 
           let itemIndex = 1;
-          availablePool.forEach(m => {
-            let assigned = allocation[m.name];
+          currentIdTeam.forEach(name => {
+            let assigned = allocation[name];
             if (assigned > 0) {
-              blockResult += `${itemIndex}. ${m.name} ${assigned}\n`;
+              blockResult += `${itemIndex}. ${name} ${assigned}\n`;
               itemIndex++;
-              alreadyAssignedIds.add(m.name); // Tandai orang ini sudah bertugas di batch ini
             }
           });
         } else {
@@ -542,7 +505,7 @@
       });
 
       document.getElementById("outputResult").value = finalOutput.join("\n====================\n\n");
-      showToast("Job berhasil di-generate sesuai mode pembagian!");
+      showToast("Job berhasil di-generate secara otomatis & adil antar ID!");
     }
 
     function copyToClipboard() {
