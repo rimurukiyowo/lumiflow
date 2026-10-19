@@ -138,7 +138,7 @@
               <label class="block text-xs font-bold text-slate-700">
                 3. Pilih Anggota Tim & Atur Max Akun:
               </label>
-              <p class="text-[11px] text-slate-400 font-medium">Bisa atur masal di atas, atau edit manual di kotak masing-masing nama jika ada yang berbeda.</p>
+              <p class="text-[11px] text-slate-400 font-medium">Bisa atur masal di atas, atau edit manual di kotak masing-masing nama.</p>
             </div>
 
             <div class="flex gap-2">
@@ -209,7 +209,7 @@
                 <span class="text-xs font-bold text-slate-800 group-hover:text-indigo-600">2. Lintas ID (Anti Dobel / Akun < 2 Boleh Disebar)</span>
                 <input type="radio" name="distributionMode" value="auto_smart" class="w-4 h-4 text-indigo-600 focus:ring-indigo-600 border-slate-300">
               </div>
-              <span class="text-[11px] text-slate-500 font-medium">Beda ID beda orang. Anggota dengan Max Akun < 2 boleh disebar di banyak ID (selama jumlahnya sesuai max).</span>
+              <span class="text-[11px] text-slate-500 font-medium">Beda ID beda orang. Anggota dengan Max Akun < 2 boleh disebar di banyak ID.</span>
             </label>
           </div>
         </div>
@@ -265,7 +265,7 @@
       "Irma", "Istidary", "Khariza", "Kholif", "Kyla", "Leha", "Lies", "Linda", "Mahmudah",
       "Mufida", "Ndang", "Novita", "Nurmina", "Puja", "Ratna", "Riri", "Sakucil", "Sanjen",
       "Siros", "Tya", "Udin", "Kim", "Yahya", "Vina", "Zal", "Damis", "Risda", "Niar", "Bila"
-    ].map(name => ({ name, maxQuota: 2 })); // Default max quota 2
+    ].map(name => ({ name, maxQuota: 2 }));
 
     let selectedNames = [];
 
@@ -505,7 +505,7 @@
           if (mode === "manual_quota") {
             currentIdTeam = activeMembers;
           } else {
-            // FITUR 2: Anti dobel ID, KECUALI yang maxQuota < 2 (maka boleh disebar di banyak ID sesuai max-nya)
+            // FITUR 2: Anti dobel ID, KECUALI yang maxQuota < 2 (maka boleh disebar/muncul lagi)
             let freshMembers = activeMembers.filter(m => !alreadyAssignedInBatch.has(m.name) || m.maxQuota < 2);
             
             if (freshMembers.length > 0) {
@@ -517,33 +517,33 @@
             }
           }
 
-          // Alokasi awal sesuai maxQuota masing-masing anggota
+          // Alokasi awal sesuai maxQuota masing-masing anggota di ID ini
           let allocation = {};
-          let assignedTotal = 0;
+          currentIdTeam.forEach(m => allocation[m.name] = 0);
 
-          currentIdTeam.forEach(m => {
-            let give = Math.min(m.maxQuota, totalAmount - assignedTotal);
-            if (give < 0) give = 0;
-            allocation[m.name] = give;
-            assignedTotal += give;
-          });
-
-          // Sisa orderan dibagi rata secara adil ke anggota di ID ini (tanpa melampaui maxQuota mereka)
-          let remainingAmount = totalAmount - assignedTotal;
+          let remainingAmount = totalAmount;
           let loopGuard = 0;
 
-          while (remainingAmount > 0 && loopGuard < 1000) {
-            let distributed = false;
+          // PUTARAN BERULANG DARI ATAS (LOOPING SISA) HINGGA SEMUA ORDERAN HABIS TAPI TETAP PATUHI MAX QUOTA
+          while (remainingAmount > 0 && loopGuard < 5000) {
+            let distributedInThisCycle = false;
+
             for (let m of currentIdTeam) {
               if (remainingAmount <= 0) break;
-              // Hanya beri tambahan jika belum mencapai maxQuota-nya
+              // Jika jatah orang ini masih di bawah maxQuota-nya, tambahkan 1
               if (allocation[m.name] < m.maxQuota) {
                 allocation[m.name] += 1;
                 remainingAmount -= 1;
-                distributed = true;
+                distributedInThisCycle = true;
               }
             }
-            if (!distributed) break; // Berhenti jika semua anggota di ID ini sudah mentok maxQuota-nya
+
+            // Jika dalam satu putaran penuh semua anggota di tim ini sudah mentok maxQuota-nya tapi orderan masih sisa,
+            // paksa masukkan sisanya ke orang pertama dari atas secara berputar agar orderan tidak bersisa
+            if (!distributedInThisCycle) {
+              allocation[currentIdTeam[loopGuard % currentIdTeam.length].name] += 1;
+              remainingAmount -= 1;
+            }
             loopGuard++;
           }
 
@@ -568,7 +568,7 @@
       });
 
       document.getElementById("outputResult").value = finalOutput.join("\n====================\n\n");
-      showToast("Job berhasil di-generate sesuai batas Max Akun!");
+      showToast("Job berhasil di-generate secara adil dan merata!");
     }
 
     function copyToClipboard() {
