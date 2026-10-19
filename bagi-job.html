@@ -131,14 +131,14 @@
             placeholder="Contoh:&#10;ID : 286023&#10;Target : https://...&#10;Jumlah : 56&#10;Report :"></textarea>
         </div>
 
-        <!-- 3. Pilih Anggota Tim & Atur Max Akun Section -->
+        <!-- 3. Pilih Anggota Tim & Atur Request Akun Sekali Masuk -->
         <div class="space-y-3 pt-3 border-t border-slate-100">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
               <label class="block text-xs font-bold text-slate-700">
-                3. Pilih Anggota Tim & Request Max Akun:
+                3. Pilih Anggota Tim & Request Jumlah Akun (Sekali Masuk):
               </label>
-              <p class="text-[11px] text-slate-400 font-medium">Klik nama untuk mengaktifkan, lalu atur batas maksimal akun masing-masing.</p>
+              <p class="text-[11px] text-slate-400 font-medium">Atur request kuota tetap per orang. Nilai ini berlaku otomatis ke semua ID.</p>
             </div>
 
             <div class="flex gap-2">
@@ -152,7 +152,7 @@
             </div>
           </div>
 
-          <!-- Container Anggota & Pengaturan Max Akun -->
+          <!-- Container Anggota & Pengaturan Request Akun -->
           <div id="nameContainer"
             class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 max-h-56 overflow-y-auto p-3.5 border border-slate-200/80 rounded-2xl bg-slate-50/50">
           </div>
@@ -182,18 +182,18 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
             <label class="group relative flex flex-col p-3.5 border-2 border-slate-200 rounded-2xl bg-white cursor-pointer hover:border-indigo-500 transition has-[:checked]:border-indigo-600 has-[:checked]:bg-indigo-50/35">
               <div class="flex items-center justify-between mb-1">
-                <span class="text-xs font-bold text-slate-800 group-hover:text-indigo-600">1. Bagi Rata (Sesuai Request Max Akun)</span>
+                <span class="text-xs font-bold text-slate-800 group-hover:text-indigo-600">1. Bagi Rata Sesuai Request Akun</span>
                 <input type="radio" name="distributionMode" value="manual_quota" checked class="w-4 h-4 text-indigo-600 focus:ring-indigo-600 border-slate-300">
               </div>
-              <span class="text-[11px] text-slate-500 font-medium">Membagi rata pesanan dengan menghormati batas max akun yang kamu input secara manual di atas.</span>
+              <span class="text-[11px] text-slate-500 font-medium">Membagi pesanan sesuai request akun global yang kamu input sekali di awal.</span>
             </label>
 
             <label class="group relative flex flex-col p-3.5 border-2 border-slate-200 rounded-2xl bg-white cursor-pointer hover:border-indigo-500 transition has-[:checked]:border-indigo-600 has-[:checked]:bg-indigo-50/35">
               <div class="flex items-center justify-between mb-1">
-                <span class="text-xs font-bold text-slate-800 group-hover:text-indigo-600">2. Auto Lintas ID (Anti Dobel ID / Akun < 2 Boleh Sama)</span>
+                <span class="text-xs font-bold text-slate-800 group-hover:text-indigo-600">2. Lintas ID (Request + Sisa Bagi Rata + Anti Dobel)</span>
                 <input type="radio" name="distributionMode" value="auto_smart" class="w-4 h-4 text-indigo-600 focus:ring-indigo-600 border-slate-300">
               </div>
-              <span class="text-[11px] text-slate-500 font-medium">AI menentukan porsi & merotasi orang antar ID. Anggota dengan Max Akun < 2 dikecualikan dan boleh tampil di ID yang sama.</span>
+              <span class="text-[11px] text-slate-500 font-medium">Orang dapat sesuai request, sisa dibagi rata ke orang baru (Anti dobel ID, kecuali akun < 2).</span>
             </label>
           </div>
         </div>
@@ -249,7 +249,7 @@
       "Irma", "Istidary", "Khariza", "Kholif", "Kyla", "Leha", "Lies", "Linda", "Mahmudah",
       "Mufida", "Ndang", "Novita", "Nurmina", "Puja", "Ratna", "Riri", "Sakucil", "Sanjen",
       "Siros", "Tya", "Udin", "Kim", "Yahya", "Vina", "Zal", "Damis", "Risda", "Niar", "Bila"
-    ].map(name => ({ name, maxQuota: 99 })); // Default max quota bebas (99)
+    ].map(name => ({ name, requestCount: 2 })); // Default request 2 akun sekali masuk
 
     let selectedNames = [];
 
@@ -297,9 +297,9 @@
           </div>
           ${isSelected ? `
             <div class="flex items-center gap-1 pt-1 border-t border-indigo-100" onclick="event.stopPropagation()">
-              <span class="text-[10px] font-semibold text-slate-500">Max Akun:</span>
-              <input type="number" min="1" max="999" value="${member.maxQuota}" 
-                onchange="updateQuota('${member.name}', this.value)"
+              <span class="text-[10px] font-semibold text-slate-500">Request:</span>
+              <input type="number" min="1" max="999" value="${member.requestCount}" 
+                onchange="updateRequest('${member.name}', this.value)"
                 class="w-full p-1 text-center text-xs font-bold border border-indigo-200 rounded-lg bg-white text-indigo-700 focus:outline-none focus:ring-1 focus:ring-indigo-600">
             </div>
           ` : ''}
@@ -321,10 +321,10 @@
       renderNames();
     }
 
-    function updateQuota(name, val) {
+    function updateRequest(name, val) {
       let member = teamMembers.find(m => m.name === name);
       if (member) {
-        member.maxQuota = parseInt(val) || 1;
+        member.requestCount = parseInt(val) || 1;
       }
     }
 
@@ -342,7 +342,7 @@
       const input = document.getElementById("newNameInput");
       const val = input.value.trim();
       if (val && !teamMembers.some(m => m.name.toLowerCase() === val.toLowerCase())) {
-        teamMembers.push({ name: val, maxQuota: 99 });
+        teamMembers.push({ name: val, requestCount: 2 });
         selectedNames.push(val);
         input.value = "";
         renderNames();
@@ -446,7 +446,7 @@
       }
 
       let finalOutput = [];
-      let alreadyAssignedInBatch = new Set(); // Melacak siapa saja yang sudah dapat tugas di batch ini
+      let alreadyAssignedInBatch = new Set();
 
       rawBlocks.forEach((block) => {
         const idMatch = block.match(/ID\s*:\s*([^\n\r]+)/i);
@@ -469,53 +469,52 @@
         let blockResult = processedBlock + "\n\n";
 
         if (totalAmount > 0 && selectedNames.length > 0) {
-          // Ambil anggota beserta max quota nya
           let activeMembers = selectedNames.map(name => {
             let found = teamMembers.find(m => m.name === name);
-            return { name, maxQuota: found ? found.maxQuota : 99 };
+            return { name, requestCount: found ? found.requestCount : 2 };
           });
 
           let currentIdTeam = [];
 
           if (mode === "manual_quota") {
-            // FITUR 1: Bagi rata biasa dengan menghormati max quota masing-masing
             currentIdTeam = activeMembers;
           } else {
-            // FITUR 2: Auto Lintas ID (Anti Dobel ID, KECUALI Max Akun < 2 boleh muncul lagi)
-            let freshMembers = activeMembers.filter(m => !alreadyAssignedInBatch.has(m.name) || m.maxQuota < 2);
+            // FITUR 2: Anti dobel ID, KECUALI yang request akun < 2 boleh muncul lagi
+            let freshMembers = activeMembers.filter(m => !alreadyAssignedInBatch.has(m.name) || m.requestCount < 2);
             
             if (freshMembers.length > 0) {
-              // Ambil sekelompok anggota secara otomatis untuk ID ini (misal maksimal 5-8 orang per ID agar adil dan berotasi)
-              let targetSize = Math.max(2, Math.min(freshMembers.length, Math.ceil(totalAmount / 8)));
+              let targetSize = Math.max(2, Math.min(freshMembers.length, Math.ceil(totalAmount / 6)));
               currentIdTeam = freshMembers.slice(0, targetSize);
             } else {
-              // Jika semua sudah kepakai dan tidak ada yang < 2, reset tracking agar rotasi berputar lagi
               alreadyAssignedInBatch.clear();
-              currentIdTeam = activeMembers.slice(0, Math.max(2, Math.ceil(totalAmount / 8)));
+              currentIdTeam = activeMembers.slice(0, Math.max(2, Math.ceil(totalAmount / 6)));
             }
           }
 
-          // Lakukan alokasi dan pembagian tugas
+          // Alokasi awal sesuai request global masing-masing anggota
           let allocation = {};
-          currentIdTeam.forEach(m => allocation[m.name] = 0);
+          let assignedTotal = 0;
 
-          let remainingAmount = totalAmount;
+          currentIdTeam.forEach(m => {
+            let give = Math.min(m.requestCount, totalAmount - assignedTotal);
+            if (give < 0) give = 0;
+            allocation[m.name] = give;
+            assignedTotal += give;
+          });
+
+          // Sisa orderan langsung dibagi rata otomatis ke anggota di ID ini
+          let remainingAmount = totalAmount - assignedTotal;
           let loopGuard = 0;
 
           while (remainingAmount > 0 && loopGuard < 1000) {
             let distributed = false;
             for (let m of currentIdTeam) {
               if (remainingAmount <= 0) break;
-              if (allocation[m.name] < m.maxQuota) {
-                allocation[m.name] += 1;
-                remainingAmount -= 1;
-                distributed = true;
-              }
-            }
-            if (!distributed) {
-              allocation[currentIdTeam[0].name] += 1;
+              allocation[m.name] += 1;
               remainingAmount -= 1;
+              distributed = true;
             }
+            if (!distributed) break;
             loopGuard++;
           }
 
@@ -525,8 +524,8 @@
             if (assigned > 0) {
               blockResult += `${itemIndex}. ${m.name} ${assigned}\n`;
               itemIndex++;
-              // Catat ke batch jika maxQuota >= 2 (artinya yang akunnya banyak tidak boleh dobel di ID berikutnya)
-              if (mode === "auto_smart" && m.maxQuota >= 2) {
+              // Catat ke batch jika requestCount >= 2 (artinya yang akunnya banyak tidak boleh dobel di ID berikutnya)
+              if (mode === "auto_smart" && m.requestCount >= 2) {
                 alreadyAssignedInBatch.add(m.name);
               }
             }
@@ -540,7 +539,7 @@
       });
 
       document.getElementById("outputResult").value = finalOutput.join("\n====================\n\n");
-      showToast("Job berhasil di-generate sesuai fitur yang dipilih!");
+      showToast("Job berhasil di-generate sesuai request global & sisa dibagi rata!");
     }
 
     function copyToClipboard() {
