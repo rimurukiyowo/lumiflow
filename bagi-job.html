@@ -3,12 +3,10 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport"
-    content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bagi Job & Drive - Kimi Team</title>
 
   <link rel="icon" type="image/png" href="./logo.png">
-  <link rel="manifest" href="./manifest.json">
   <meta name="theme-color" content="#0f172a">
 
   <!-- Google Fonts: Plus Jakarta Sans -->
@@ -20,9 +18,6 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://code.iconify.design/iconify-icon/1.0.8/iconify-icon.min.js"></script>
 
-  <!-- PANGGIL FILE LAYOUT DI SINI -->
-  <script src="./layout.js"></script>
-
   <style>
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
@@ -32,232 +27,186 @@
     }
 
     ::-webkit-scrollbar {
-      width: 5px;
-      height: 5px;
+      width: 4px;
+      height: 4px;
     }
 
     ::-webkit-scrollbar-thumb {
       background: #cbd5e1;
       border-radius: 10px;
     }
-
-    /* Custom Notification Toast */
-    .toast-notification {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      z-index: 9999;
-      animation: slideInUp 0.3s ease forwards;
-    }
-    @keyframes slideInUp {
-      from { transform: translateY(100px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
   </style>
 </head>
 
-<body class="text-slate-700 antialiased min-h-screen flex overflow-x-hidden">
+<body class="text-slate-700 antialiased min-h-screen flex flex-col">
 
-  <!-- SIDEBAR OTOMATIS TERPASANG -->
-  <div id="app-sidebar"></div>
-
-  <!-- WRAPPER KONTEN -->
-  <div class="flex-1 flex flex-col min-w-0">
-
-    <!-- NAVBAR ATAS OTOMATIS TERPASANG -->
-    <div id="app-navbar"></div>
-
-    <!-- KONTEN UTAMA -->
-    <main class="p-4 sm:p-6 md:p-8 max-w-4xl w-full mx-auto space-y-5 sm:space-y-6">
-
-      <!-- Header Banner -->
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200/80">
-        <div>
-          <h1 class="text-xl font-extrabold text-slate-900 tracking-tight">Pembagian Job & Struktur Folder</h1>
-          <p class="text-xs text-slate-500 mt-0.5">Tempel format brief pesanan dan tentukan anggota yang bertugas secara instan</p>
-        </div>
-        <span class="inline-flex items-center gap-1.5 text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-100 px-3 py-1.5 rounded-full w-fit">
-          <span class="w-1.5 h-1.5 rounded-full bg-indigo-600"></span>
-          Modul Bagi Job (Lintas ID Adil)
-        </span>
+  <!-- NAVBAR ATAS -->
+  <header
+    class="bg-white border-b border-slate-200 sticky top-0 z-20 px-6 py-3.5 flex items-center justify-between shadow-2xs">
+    <div class="flex items-center gap-3">
+      <div
+        class="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center text-white font-extrabold text-sm shadow-sm">
+        K</div>
+      <div>
+        <h1 class="text-xs font-extrabold text-slate-900 tracking-tight">Kimi Suite v3.0</h1>
+        <p class="text-[10px] text-slate-400">Modul Pembagian Job Otomatis</p>
       </div>
+    </div>
+    <span class="text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-100 px-3 py-1 rounded-full">
+      Multi-Opsi Pembagian
+    </span>
+  </header>
 
-      <!-- Main Card Container -->
-      <div class="bg-white/90 backdrop-blur-md rounded-3xl border border-slate-200/85 shadow-sm p-4 sm:p-7 space-y-5">
+  <!-- KONTEN UTAMA -->
+  <main class="flex-1 p-4 sm:p-6 max-w-5xl w-full mx-auto space-y-6 my-auto">
 
-        <!-- 1. PENGATURAN GOOGLE DRIVE API & FOLDER INDUK -->
-        <div class="space-y-3 bg-slate-50/90 p-4 rounded-2xl border border-slate-200/80">
+    <!-- Grid Layout Utama (2 Kolom) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+      <!-- KOLOM KIRI: INPUT DATA & OPSI (7 Kolom) -->
+      <div class="lg:col-span-7 space-y-5">
+
+        <!-- 1. Link Folder Induk -->
+        <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs space-y-2">
           <div class="flex items-center justify-between">
-            <label class="block text-xs font-bold text-slate-700 flex items-center gap-1.5">
+            <label class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
               <iconify-icon icon="heroicons:folder-open-20-solid" class="text-indigo-600 text-base"></iconify-icon>
-              1. Pengaturan Google Drive Otomatis:
+              Link Google Drive Induk (Opsional)
             </label>
-            <span id="folderStatusBadge" class="text-[10px] font-bold bg-slate-200 text-slate-700 px-2.5 py-1 rounded-lg">Belum Disimpan</span>
+            <span id="folderStatusBadge"
+              class="text-[10px] font-bold bg-slate-100 text-slate-600 px-2 py-0.5 rounded">Belum Dikunci</span>
           </div>
-          
-          <div class="space-y-2">
-            <div>
-              <label class="block text-[11px] font-semibold text-slate-600 mb-1">ID Folder Induk Google Drive:</label>
-              <input type="text" id="parentFolderIdInput"
-                class="w-full p-2.5 text-xs border border-slate-200 rounded-xl bg-white text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-600 font-medium"
-                placeholder="Contoh: 1B2C3D4E5F6G7H8I9J0K...">
-            </div>
-            <div>
-              <label class="block text-[11px] font-semibold text-slate-600 mb-1">Web App URL (Google Apps Script):</label>
-              <input type="text" id="scriptUrlInput"
-                class="w-full p-2.5 text-xs border border-slate-200 rounded-xl bg-white text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-600 font-medium"
-                placeholder="https://script.google.com/macros/s/.../exec">
-            </div>
-          </div>
-
-          <div class="flex justify-end pt-1">
-            <button onclick="saveDriveConfig()"
-              class="inline-flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs px-4 py-2 rounded-xl font-bold transition shadow-sm">
-              <iconify-icon icon="heroicons:check-badge-20-solid" class="text-base"></iconify-icon> Simpan Konfigurasi Drive
+          <div class="flex gap-2">
+            <input type="text" id="folderLinkInput"
+              class="w-full p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-600"
+              placeholder="https://drive.google.com/...">
+            <button id="btnLockFolder" onclick="toggleLockFolder()"
+              class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs px-3.5 py-2.5 rounded-xl font-bold transition shrink-0">
+              <span id="btnLockFolderText">Kunci</span>
             </button>
           </div>
         </div>
 
-        <!-- 2. Input Brief Section -->
-        <div class="space-y-1.5">
-          <div class="flex items-center justify-between">
-            <label class="block text-xs font-bold text-slate-700">
-              2. Tempel Format Brief Pesanan:
-            </label>
-            <span class="text-[11px] text-slate-400 font-medium">Mendukung 1 ID atau banyak ID sekaligus</span>
-          </div>
-          <textarea id="briefInput"
-            class="w-full h-32 p-3.5 text-xs border border-slate-200 rounded-2xl bg-slate-50/85 font-mono text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-600 transition resize-y leading-relaxed"
-            placeholder="Contoh:&#10;ID : 286023&#10;Target : https://...&#10;Jumlah : 56&#10;Report :"></textarea>
-        </div>
-
-        <!-- 3. Pilih Anggota Tim & Pengaturan Max Akun Fleksibel -->
-        <div class="space-y-3 pt-3 border-t border-slate-100">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <div>
-              <label class="block text-xs font-bold text-slate-700">
-                3. Pilih Anggota Tim & Atur Max Akun:
-              </label>
-              <p class="text-[11px] text-slate-400 font-medium">Bisa atur masal di atas, atau edit manual di kotak masing-masing nama.</p>
-            </div>
-
-            <div class="flex gap-2">
-              <input type="text" id="newNameInput"
-                class="p-2.5 px-3 text-xs border border-slate-200 rounded-2xl bg-slate-50/85 focus:outline-none focus:ring-2 focus:ring-indigo-600 font-medium"
-                placeholder="Tambah nama baru..." onkeydown="if(event.key === 'Enter') addName()">
-              <button onclick="addName()"
-                class="inline-flex items-center gap-1 bg-slate-900 hover:bg-slate-800 active:scale-95 text-white text-xs px-4 py-2.5 rounded-2xl font-bold transition shadow-sm shrink-0">
-                <iconify-icon icon="heroicons:plus-20-solid" class="text-base"></iconify-icon> Tambah
-              </button>
-            </div>
-          </div>
-
-          <!-- KOTAK PENGATURAN OTOMATIS GLOBAL (MASAL) -->
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3 bg-indigo-50/80 border border-indigo-100 rounded-2xl">
-            <span class="text-xs font-bold text-indigo-900 flex items-center gap-1.5">
-              <iconify-icon icon="heroicons:adjustments-horizontal-20-solid" class="text-base text-indigo-600"></iconify-icon>
-              Atur Masal Max Akun untuk Semua Anggota:
-            </span>
-            <div class="flex items-center gap-2">
-              <input type="number" id="globalRequestInput" min="1" max="999" value="2"
-                class="w-20 p-2 text-center text-xs font-extrabold border border-indigo-200 rounded-xl bg-white text-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-600">
-              <button onclick="applyGlobalRequest()"
-                class="bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white text-xs font-bold px-3 py-2 rounded-xl transition shadow-xs">
-                Terapkan ke Semua
-              </button>
-            </div>
-          </div>
-
-          <!-- Container Badge Nama & Input Manual Per Orang -->
-          <div id="nameContainer"
-            class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5 max-h-56 overflow-y-auto p-3.5 border border-slate-200/80 rounded-2xl bg-slate-50/50">
-          </div>
-
-          <!-- Aksi Seleksi Cepat -->
-          <div class="flex justify-between items-center text-xs px-1">
-            <div class="flex items-center gap-3">
-              <button onclick="selectAll()"
-                class="text-indigo-600 hover:text-indigo-700 font-bold hover:underline inline-flex items-center gap-1">
-                <iconify-icon icon="heroicons:check-badge-20-solid" class="text-sm"></iconify-icon> Pilih Semua
-              </button>
-              <button onclick="deselectAll()" class="text-slate-400 hover:text-slate-600 font-semibold hover:underline">
-                Batal Semua
-              </button>
-            </div>
-            <span class="bg-indigo-50 text-indigo-700 border border-indigo-100 px-3 py-1 rounded-full text-[11px] font-bold">
-              Terpilih: <strong id="totalSelected" class="font-extrabold">0</strong> Orang
-            </span>
-          </div>
-        </div>
-
-        <!-- 4. 2 FITUR PILIHAN MODE PEMBAGIAN -->
-        <div class="space-y-2.5 pt-3 border-t border-slate-100">
-          <label class="block text-xs font-bold text-slate-700">
-            4. Pilih Fitur Mode Pembagian:
+        <!-- 2. Brief Pesanan -->
+        <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs space-y-2">
+          <label class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+            <iconify-icon icon="heroicons:document-text-20-solid" class="text-indigo-600 text-base"></iconify-icon>
+            Format Brief Pesanan (Bisa Banyak ID Sekaligus)
           </label>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-            <label class="group relative flex flex-col p-3.5 border-2 border-slate-200 rounded-2xl bg-white cursor-pointer hover:border-indigo-500 transition has-[:checked]:border-indigo-600 has-[:checked]:bg-indigo-50/35">
-              <div class="flex items-center justify-between mb-1">
-                <span class="text-xs font-bold text-slate-800 group-hover:text-indigo-600">1. Bagi Rata Sesuai Max Akun</span>
-                <input type="radio" name="distributionMode" value="manual_quota" checked class="w-4 h-4 text-indigo-600 focus:ring-indigo-600 border-slate-300">
-              </div>
-              <span class="text-[11px] text-slate-500 font-medium">Membagi pesanan secara merata sesuai batas max akun masing-masing.</span>
-            </label>
+          <textarea id="briefInput"
+            class="w-full h-36 p-3 text-xs border border-slate-200 rounded-xl bg-slate-50 font-mono text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-600 resize-y leading-relaxed"
+            placeholder="ID : 287345&#10;Target : https://...&#10;Jumlah : 50&#10;Report :"></textarea>
+        </div>
 
-            <label class="group relative flex flex-col p-3.5 border-2 border-slate-200 rounded-2xl bg-white cursor-pointer hover:border-indigo-500 transition has-[:checked]:border-indigo-600 has-[:checked]:bg-indigo-50/35">
-              <div class="flex items-center justify-between mb-1">
-                <span class="text-xs font-bold text-slate-800 group-hover:text-indigo-600">2. Lintas ID (Anti Dobel / Akun < 2 Boleh Disebar)</span>
-                <input type="radio" name="distributionMode" value="auto_smart" class="w-4 h-4 text-indigo-600 focus:ring-indigo-600 border-slate-300">
+        <!-- 3. PILIH OPSI PEMBAGIAN -->
+        <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs space-y-2.5">
+          <label class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+            <iconify-icon icon="heroicons:adjustments-horizontal-20-solid"
+              class="text-indigo-600 text-base"></iconify-icon>
+            Pilih Metode Pembagian Job
+          </label>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <label
+              class="flex items-start gap-2.5 p-3 rounded-xl border border-slate-200 bg-slate-50/50 cursor-pointer hover:border-indigo-400 transition">
+              <input type="radio" name="optionMode" value="1" checked
+                class="mt-0.5 text-indigo-600 focus:ring-indigo-500">
+              <div>
+                <span class="text-xs font-extrabold text-slate-800 block">Opsi 1: Semua Kebagian Semua ID</span>
+                <span class="text-[10px] text-slate-500 block">Semua talent ikut mengerjakan di setiap ID yang
+                  masuk.</span>
               </div>
-              <span class="text-[11px] text-slate-500 font-medium">Beda ID beda orang. Anggota dengan Max Akun < 2 boleh disebar di banyak ID.</span>
+            </label>
+            <label
+              class="flex items-start gap-2.5 p-3 rounded-xl border border-slate-200 bg-slate-50/50 cursor-pointer hover:border-indigo-400 transition">
+              <input type="radio" name="optionMode" value="2" class="mt-0.5 text-indigo-600 focus:ring-indigo-500">
+              <div>
+                <span class="text-xs font-extrabold text-slate-800 block">Opsi 2: Rotasi / ID Berbeda</span>
+                <span class="text-[10px] text-slate-500 block">ID disebar bergantian, per ID orangnya tidak boleh
+                  sama.</span>
+              </div>
             </label>
           </div>
         </div>
 
-        <!-- Tombol Aksi Utama -->
-        <div class="flex flex-col sm:flex-row gap-2.5 pt-3 border-t border-slate-100">
-          <button id="btnGenerate" onclick="generateJob()"
-            class="flex-1 inline-flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 active:scale-95 text-white text-xs py-3.5 px-6 rounded-2xl font-bold shadow-md shadow-slate-900/10 transition">
-            <iconify-icon icon="heroicons:sparkles-20-solid" class="text-base"></iconify-icon>
-            <span id="btnGenerateText">✨ Generate & Buat Folder Otomatis</span>
+        <!-- 4. Pilih Anggota Tim -->
+        <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs space-y-3">
+          <div class="flex items-center justify-between">
+            <label class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+              <iconify-icon icon="heroicons:users-20-solid" class="text-indigo-600 text-base"></iconify-icon>
+              Pilih Anggota Tim Tugas Hari Ini
+            </label>
+            <div class="flex gap-2 text-[11px] font-bold">
+              <button onclick="selectAll()" class="text-indigo-600 hover:underline">Semua</button>
+              <span class="text-slate-300">|</span>
+              <button onclick="deselectAll()" class="text-slate-400 hover:text-slate-600">Batal</button>
+            </div>
+          </div>
+
+          <!-- Daftar Badge Nama -->
+          <div id="nameContainer"
+            class="flex flex-wrap gap-1.5 max-h-40 overflow-y-auto p-2.5 border border-slate-100 rounded-xl bg-slate-50">
+          </div>
+
+          <div class="flex items-center justify-between text-xs pt-1">
+            <span class="text-slate-400 font-medium">Terpilih: <strong id="totalSelected"
+                class="text-slate-800">0</strong> Orang</span>
+            <div class="flex gap-1.5">
+              <input type="text" id="newNameInput"
+                class="p-1.5 px-2.5 text-xs border border-slate-200 rounded-lg bg-white" placeholder="Tambah nama..."
+                onkeydown="if(event.key === 'Enter') addName()">
+              <button onclick="addName()"
+                class="bg-slate-900 hover:bg-slate-800 text-white text-xs px-3 py-1.5 rounded-lg font-bold">Tambah</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tombol Eksekusi -->
+        <div class="flex gap-2 pt-1">
+          <button onclick="generateJob()"
+            class="flex-1 bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white text-xs py-3.5 px-4 rounded-xl font-bold shadow-sm transition flex items-center justify-center gap-1.5">
+            <iconify-icon icon="heroicons:sparkles-20-solid" class="text-base"></iconify-icon> Generate Pembagian Job
           </button>
           <button onclick="clearAll()"
-            class="inline-flex items-center justify-center gap-1.5 px-6 bg-slate-100 hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 text-slate-600 text-xs py-3.5 rounded-2xl font-bold border border-slate-200 active:scale-95 transition">
-            <iconify-icon icon="heroicons:arrow-path-20-solid" class="text-base"></iconify-icon> Reset
-          </button>
-        </div>
-
-        <!-- 5. Hasil Rekap Output -->
-        <div class="space-y-2.5 pt-3 border-t border-slate-100">
-          <div class="flex justify-between items-center">
-            <label class="block text-xs font-bold text-slate-700">
-              5. Hasil Rekap Output (Report Otomatis Terisi Link Drive Asli):
-            </label>
-            <span class="text-[11px] text-slate-400 font-medium">Siap disalin ke WhatsApp</span>
-          </div>
-
-          <textarea id="outputResult" readonly
-            class="w-full h-52 p-4 text-xs border border-slate-200 rounded-2xl bg-slate-900 text-indigo-300 font-mono focus:outline-none shadow-inner resize-y leading-relaxed"
-            placeholder="# Hasil rekap pembagian job akan muncul di sini..."></textarea>
-
-          <button id="btnCopy" onclick="copyToClipboard()"
-            class="w-full inline-flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white text-xs py-3 rounded-2xl font-bold transition shadow-sm">
-            <iconify-icon icon="heroicons:clipboard-document-check-20-solid" class="text-base"></iconify-icon>
-            <span id="btnCopyText">Salin Teks Hasil</span>
+            class="bg-slate-100 hover:bg-rose-50 hover:text-rose-600 text-slate-600 text-xs py-3.5 px-4 rounded-xl font-bold border border-slate-200 transition">
+            Reset
           </button>
         </div>
 
       </div>
 
-      <!-- FOOTER OTOMATIS TERPASANG -->
-      <div id="app-footer"></div>
-    </main>
-  </div>
+      <!-- KOLOM KANAN: HASIL REKAP OUTPUT (5 Kolom) -->
+      <div class="lg:col-span-5 flex flex-col">
+        <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs flex-1 flex flex-col space-y-3">
+          <div class="flex items-center justify-between">
+            <label class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+              <iconify-icon icon="heroicons:clipboard-document-list-20-solid"
+                class="text-indigo-600 text-base"></iconify-icon>
+              Hasil Rekap Output
+            </label>
+            <span class="text-[10px] font-bold bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded">Siap Kirim WA</span>
+          </div>
 
-  <!-- CUSTOM MODAL / TOAST CONTAINER -->
-  <div id="toastContainer"></div>
+          <textarea id="outputResult" readonly
+            class="w-full flex-1 min-h-[320px] p-3.5 text-xs border border-slate-800 rounded-xl bg-slate-900 text-indigo-300 font-mono focus:outline-none leading-relaxed resize-y"
+            placeholder="# Hasil rekap akan muncul di sini..."></textarea>
 
-  <!-- SCRIPT LOGIKA UTAMA -->
+          <button onclick="copyToClipboard()"
+            class="w-full bg-slate-900 hover:bg-slate-800 active:scale-95 text-white text-xs py-3 rounded-xl font-bold transition flex items-center justify-center gap-1.5 shadow-xs">
+            <iconify-icon icon="heroicons:clipboard-document-check-20-solid" class="text-base"></iconify-icon>
+            <span id="btnCopyText">Salin Teks Rekapan</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="text-center py-4 text-xs text-slate-400 border-t border-slate-200 mt-6">
+    Kedai Liliviè &copy; 2026 - Kimi Team Automation
+  </footer>
+
+  <!-- SCRIPT LOGIKA -->
   <script>
     let teamMembers = [
       "Amelie", "Ami", "Ana", "Novi", "Ann", "Ria", "Dastan", "Desi", "Difarani",
@@ -265,92 +214,45 @@
       "Irma", "Istidary", "Khariza", "Kholif", "Kyla", "Leha", "Lies", "Linda", "Mahmudah",
       "Mufida", "Ndang", "Novita", "Nurmina", "Puja", "Ratna", "Riri", "Sakucil", "Sanjen",
       "Siros", "Tya", "Udin", "Kim", "Yahya", "Vina", "Zal", "Damis", "Risda", "Niar", "Bila"
-    ].map(name => ({ name, maxQuota: 2 }));
+    ].map(name => ({ name }));
 
     let selectedNames = [];
+    let isFolderLocked = false;
 
     document.addEventListener("DOMContentLoaded", () => {
       renderNames();
-      loadDriveConfig();
+      loadLockedFolder();
     });
-
-    function showToast(message, type = 'success') {
-      const container = document.getElementById("toastContainer");
-      const toast = document.createElement("div");
-      toast.className = `toast-notification flex items-center gap-2 px-4 py-3 rounded-2xl text-xs font-bold text-white shadow-xl transition-all ${
-        type === 'error' ? 'bg-rose-600' : 'bg-slate-900 border border-slate-700'
-      }`;
-      toast.innerHTML = `<iconify-icon icon="${type === 'error' ? 'heroicons:exclamation-circle-20-solid' : 'heroicons:check-circle-20-solid'}" class="text-base text-emerald-400"></iconify-icon> ${message}`;
-      container.appendChild(toast);
-      setTimeout(() => {
-        toast.style.opacity = '0';
-        setTimeout(() => toast.remove(), 300);
-      }, 3000);
-    }
 
     function renderNames() {
       const container = document.getElementById("nameContainer");
+      if (!container) return;
       container.innerHTML = "";
 
       const sorted = [...teamMembers].sort((a, b) => a.name.localeCompare(b.name, 'id', { sensitivity: 'base' }));
 
       sorted.forEach(member => {
         const isSelected = selectedNames.includes(member.name);
-
-        const card = document.createElement("div");
-        card.className = `p-2.5 rounded-2xl border transition-all flex flex-col gap-1.5 ${
-          isSelected 
-            ? "bg-indigo-50/50 border-indigo-500 shadow-xs" 
-            : "bg-white border-slate-200 hover:border-slate-300"
-        }`;
-
-        card.innerHTML = `
-          <div class="flex items-center justify-between cursor-pointer" onclick="toggleName('${member.name}')">
-            <span class="text-xs font-bold ${isSelected ? 'text-indigo-700' : 'text-slate-700'} flex items-center gap-1">
-              <iconify-icon icon="${isSelected ? 'heroicons:check-circle-20-solid' : 'heroicons:plus-circle-20-solid'}" class="text-sm ${isSelected ? 'text-indigo-600' : 'text-slate-400'}"></iconify-icon>
-              ${member.name}
-            </span>
-          </div>
-          ${isSelected ? `
-            <div class="flex items-center gap-1 pt-1 border-t border-indigo-100" onclick="event.stopPropagation()">
-              <span class="text-[10px] font-semibold text-slate-500">Max:</span>
-              <input type="number" min="1" max="999" value="${member.maxQuota}" 
-                onchange="updateQuota('${member.name}', this.value)"
-                class="w-full p-1 text-center text-xs font-bold border border-indigo-200 rounded-lg bg-white text-indigo-700 focus:outline-none focus:ring-1 focus:ring-indigo-600">
-            </div>
-          ` : ''}
-        `;
-
-        container.appendChild(card);
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = `px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1 border ${isSelected
+            ? "bg-indigo-600 text-white border-indigo-600 shadow-2xs"
+            : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"
+          }`;
+        btn.innerHTML = isSelected ? `<iconify-icon icon="heroicons:check-20-solid" class="text-xs"></iconify-icon> ${member.name}` : member.name;
+        btn.onclick = () => toggleName(member.name);
+        container.appendChild(btn);
       });
 
-      document.getElementById("totalSelected").innerText = selectedNames.length;
+      const totalEl = document.getElementById("totalSelected");
+      if (totalEl) totalEl.innerText = selectedNames.length;
     }
 
     function toggleName(name) {
       const idx = selectedNames.indexOf(name);
-      if (idx > -1) {
-        selectedNames.splice(idx, 1);
-      } else {
-        selectedNames.push(name);
-      }
+      if (idx > -1) selectedNames.splice(idx, 1);
+      else selectedNames.push(name);
       renderNames();
-    }
-
-    function updateQuota(name, val) {
-      let member = teamMembers.find(m => m.name === name);
-      if (member) {
-        member.maxQuota = parseInt(val) || 1;
-      }
-    }
-
-    function applyGlobalRequest() {
-      const val = parseInt(document.getElementById("globalRequestInput").value) || 2;
-      teamMembers.forEach(m => {
-        m.maxQuota = val;
-      });
-      renderNames();
-      showToast(`Semua max akun berhasil diubah menjadi ${val}!`);
     }
 
     function selectAll() {
@@ -365,225 +267,200 @@
 
     function addName() {
       const input = document.getElementById("newNameInput");
+      if (!input) return;
       const val = input.value.trim();
-      const globalVal = parseInt(document.getElementById("globalRequestInput").value) || 2;
       if (val && !teamMembers.some(m => m.name.toLowerCase() === val.toLowerCase())) {
-        teamMembers.push({ name: val, maxQuota: globalVal });
+        teamMembers.push({ name: val });
         selectedNames.push(val);
         input.value = "";
         renderNames();
-        showToast(`Berhasil menambahkan ${val} ke daftar tim.`);
       }
     }
 
     function clearAll() {
       selectedNames = [];
-      document.getElementById("briefInput").value = "";
-      document.getElementById("outputResult").value = "";
+      const briefEl = document.getElementById("briefInput");
+      const outEl = document.getElementById("outputResult");
+      if (briefEl) briefEl.value = "";
+      if (outEl) outEl.value = "";
       renderNames();
-      showToast("Form berhasil direset.");
     }
 
-    function saveDriveConfig() {
-      const parentId = document.getElementById("parentFolderIdInput").value.trim();
-      const scriptUrl = document.getElementById("scriptUrlInput").value.trim();
-
-      if (!parentId || !scriptUrl) {
-        return showToast("Mohon isi ID Folder Induk dan Web App URL dengan lengkap!", "error");
-      }
-
-      localStorage.setItem("kimi_parent_folder_id", parentId);
-      localStorage.setItem("kimi_script_url", scriptUrl);
-
-      document.getElementById("folderStatusBadge").className = "text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-lg";
-      document.getElementById("folderStatusBadge").innerText = "Tersimpan";
-      showToast("Konfigurasi Drive berhasil disimpan!");
-    }
-
-    function loadDriveConfig() {
-      const savedId = localStorage.getItem("kimi_parent_folder_id");
-      const savedUrl = localStorage.getItem("kimi_script_url");
-
-      if (savedId && savedUrl) {
-        document.getElementById("parentFolderIdInput").value = savedId;
-        document.getElementById("scriptUrlInput").value = savedUrl;
-        document.getElementById("folderStatusBadge").className = "text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-lg";
-        document.getElementById("folderStatusBadge").innerText = "Tersimpan";
+    function toggleLockFolder() {
+      const input = document.getElementById("folderLinkInput");
+      if (!input) return;
+      const val = input.value.trim();
+      if (!isFolderLocked) {
+        if (!val) return alert("Masukkan link folder induk dulu!");
+        localStorage.setItem("kimi_locked_folder_induk", val);
+        isFolderLocked = true;
+        applyFolderLockUI(true);
+      } else {
+        localStorage.removeItem("kimi_locked_folder_induk");
+        isFolderLocked = false;
+        applyFolderLockUI(false);
       }
     }
 
-    async function generateJob() {
-      const rawBrief = document.getElementById("briefInput").value.trim();
-      const parentFolderId = document.getElementById("parentFolderIdInput").value.trim();
-      const scriptUrl = document.getElementById("scriptUrlInput").value.trim();
-      const modeInput = document.querySelector('input[name="distributionMode"]:checked');
-      const mode = modeInput ? modeInput.value : "manual_quota";
-
-      if (!rawBrief) {
-        return showToast("Silakan tempel format brief terlebih dahulu!", "error");
+    function loadLockedFolder() {
+      const savedFolder = localStorage.getItem("kimi_locked_folder_induk");
+      if (savedFolder) {
+        const input = document.getElementById("folderLinkInput");
+        if (input) input.value = savedFolder;
+        isFolderLocked = true;
+        applyFolderLockUI(true);
       }
+    }
 
-      if (selectedNames.length === 0) {
-        return showToast("Pilih minimal satu anggota tim yang bertugas!", "error");
+    function applyFolderLockUI(locked) {
+      const input = document.getElementById("folderLinkInput");
+      const badge = document.getElementById("folderStatusBadge");
+      const btnText = document.getElementById("btnLockFolderText");
+      const btnEl = document.getElementById("btnLockFolder");
+      if (!input) return;
+      input.disabled = locked;
+      if (locked) {
+        input.classList.add("bg-slate-100");
+        if (badge) {
+          badge.className = "text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded";
+          badge.innerText = "Terkunci";
+        }
+        if (btnText) btnText.innerText = "Buka";
+        if (btnEl) btnEl.className = "bg-amber-600 hover:bg-amber-700 text-white text-xs px-3.5 py-2.5 rounded-xl font-bold transition shrink-0";
+      } else {
+        input.classList.remove("bg-slate-100");
+        if (badge) {
+          badge.className = "text-[10px] font-bold bg-slate-100 text-slate-600 px-2 py-0.5 rounded";
+          badge.innerText = "Belum Dikunci";
+        }
+        if (btnText) btnText.innerText = "Kunci";
+        if (btnEl) btnEl.className = "bg-emerald-600 hover:bg-emerald-700 text-white text-xs px-3.5 py-2.5 rounded-xl font-bold transition shrink-0";
       }
+    }
+
+    // --- LOGIKA UTAMA (Mendukung Opsi 1 & Opsi 2) ---
+    function generateJob() {
+      const briefEl = document.getElementById("briefInput");
+      const folderEl = document.getElementById("folderLinkInput");
+      const outEl = document.getElementById("outputResult");
+      const modeRadio = document.querySelector('input[name="optionMode"]:checked');
+      const mode = modeRadio ? modeRadio.value : "1";
+
+      if (!briefEl || !outEl) return;
+      const rawBrief = briefEl.value.trim();
+      const folderLink = folderEl ? folderEl.value.trim() : "";
+
+      if (!rawBrief) return alert("Silakan tempel format brief pesanan terlebih dahulu!");
+      if (selectedNames.length === 0) return alert("Pilih minimal satu anggota tim!");
 
       let rawBlocks = rawBrief
         .split(/(?=ID\s*:\s*\d+)/i)
         .map(b => b.trim())
         .filter(b => b.length > 0 && /ID\s*:/i.test(b));
 
-      if (rawBlocks.length === 0) {
-        rawBlocks = [rawBrief];
-      }
-
-      let orderIds = [];
-      rawBlocks.forEach(block => {
-        const idMatch = block.match(/ID\s*:\s*([^\n\r]+)/i);
-        if (idMatch) {
-          orderIds.push(idMatch[1].trim());
-        }
-      });
-
-      let folderMap = {};
-
-      if (parentFolderId && scriptUrl && orderIds.length > 0) {
-        const btnGen = document.getElementById("btnGenerateText");
-        btnGen.innerText = "⏳ Sedang Membuat Folder di Drive...";
-
-        try {
-          let response = await fetch(scriptUrl, {
-            method: "POST",
-            body: JSON.stringify({ parentFolderId: parentFolderId, orderIds: orderIds })
-          });
-          let result = await response.json();
-
-          if (result.status === "success") {
-            result.folders.forEach(f => {
-              folderMap[f.id] = f.url;
-            });
-          } else {
-            showToast("Gagal membuat folder otomatis: " + result.message, "error");
-          }
-        } catch (err) {
-          console.error(err);
-          showToast("Terjadi kesalahan koneksi saat membuat folder di Drive.", "error");
-        }
-        btnGen.innerText = "✨ Generate & Buat Folder Otomatis";
-      }
+      if (rawBlocks.length === 0) rawBlocks = [rawBrief];
 
       let finalOutput = [];
-      let alreadyAssignedInBatch = new Set();
 
-      rawBlocks.forEach((block) => {
-        const idMatch = block.match(/ID\s*:\s*([^\n\r]+)/i);
-        let orderId = idMatch ? idMatch[1].trim() : "Tanpa_ID";
+      if (mode === "1") {
+        // --- OPSI 1: SEMUA KEBAGIAN DI SETIAP ID ---
+        rawBlocks.forEach((block) => {
+          const idMatch = block.match(/ID\s*:\s*([^\n\r]+)/i);
+          let orderId = idMatch ? idMatch[1].trim() : "Tanpa_ID";
 
-        let targetReport = folderMap[orderId] || "";
+          let targetReport = folderLink ? `${folderLink.replace(/\/$/, "")}/${orderId}` : "";
+          let processedBlock = block;
 
-        let processedBlock = block;
-        if (/Report\s*:/i.test(processedBlock)) {
-          if (targetReport) {
-            processedBlock = processedBlock.replace(/Report\s*:/i, `Report : ${targetReport}`);
+          if (/Report\s*:/i.test(processedBlock)) {
+            if (targetReport) processedBlock = processedBlock.replace(/Report\s*:/i, `Report : ${targetReport}`);
+          } else if (targetReport) {
+            processedBlock += `\nReport : ${targetReport}`;
           }
-        } else if (targetReport) {
-          processedBlock += `\nReport : ${targetReport}`;
-        }
 
-        const jumlahMatch = processedBlock.match(/Jumlah\s*:\s*(\d+)/i);
-        let totalAmount = jumlahMatch ? parseInt(jumlahMatch[1], 10) : 0;
+          const jumlahMatch = processedBlock.match(/Jumlah\s*:\s*(\d+)/i);
+          let totalAmount = jumlahMatch ? parseInt(jumlahMatch[1], 10) : 0;
 
-        let blockResult = processedBlock + "\n\n";
+          let blockResult = processedBlock + "\n\n";
 
-        if (totalAmount > 0 && selectedNames.length > 0) {
-          let activeMembers = selectedNames.map(name => {
-            let found = teamMembers.find(m => m.name === name);
-            return { name, maxQuota: found ? found.maxQuota : 2 };
-          });
+          if (totalAmount > 0 && selectedNames.length > 0) {
+            let baseCount = Math.floor(totalAmount / selectedNames.length);
+            let remainder = totalAmount % selectedNames.length;
 
-          let currentIdTeam = [];
-
-          if (mode === "manual_quota") {
-            currentIdTeam = activeMembers;
+            selectedNames.forEach((name, i) => {
+              let assigned = baseCount + (i < remainder ? 1 : 0);
+              if (assigned > 0) {
+                blockResult += `${i + 1}. ${name} : ${assigned}\n`;
+              }
+            });
           } else {
-            // FITUR 2: Anti dobel ID, KECUALI yang maxQuota < 2 (maka boleh disebar/muncul lagi)
-            let freshMembers = activeMembers.filter(m => !alreadyAssignedInBatch.has(m.name) || m.maxQuota < 2);
-            
-            if (freshMembers.length > 0) {
-              let targetSize = Math.max(2, Math.min(freshMembers.length, Math.ceil(totalAmount / 6)));
-              currentIdTeam = freshMembers.slice(0, targetSize);
-            } else {
-              alreadyAssignedInBatch.clear();
-              currentIdTeam = activeMembers.slice(0, Math.max(2, Math.ceil(totalAmount / 6)));
-            }
+            blockResult += `(Jumlah orderan tidak terdeteksi)\n`;
           }
 
-          // Alokasi awal sesuai maxQuota masing-masing anggota di ID ini
-          let allocation = {};
-          currentIdTeam.forEach(m => allocation[m.name] = 0);
+          finalOutput.push(blockResult);
+        });
 
-          let remainingAmount = totalAmount;
-          let loopGuard = 0;
+      } else {
+        // --- OPSI 2: ROTASI / ORANG BERBEDA PER ID (TIDAK TUMPANG TINDIH JIKA MEMUNGKINKAN) ---
+        let memberPointer = 0; // Penanda urutan giliran talent
 
-          // PUTARAN BERULANG DARI ATAS (LOOPING SISA) HINGGA SEMUA ORDERAN HABIS TAPI TETAP PATUHI MAX QUOTA
-          while (remainingAmount > 0 && loopGuard < 5000) {
-            let distributedInThisCycle = false;
+        rawBlocks.forEach((block) => {
+          const idMatch = block.match(/ID\s*:\s*([^\n\r]+)/i);
+          let orderId = idMatch ? idMatch[1].trim() : "Tanpa_ID";
 
-            for (let m of currentIdTeam) {
-              if (remainingAmount <= 0) break;
-              // Jika jatah orang ini masih di bawah maxQuota-nya, tambahkan 1
-              if (allocation[m.name] < m.maxQuota) {
-                allocation[m.name] += 1;
-                remainingAmount -= 1;
-                distributedInThisCycle = true;
-              }
-            }
+          let targetReport = folderLink ? `${folderLink.replace(/\/$/, "")}/${orderId}` : "";
+          let processedBlock = block;
 
-            // Jika dalam satu putaran penuh semua anggota di tim ini sudah mentok maxQuota-nya tapi orderan masih sisa,
-            // paksa masukkan sisanya ke orang pertama dari atas secara berputar agar orderan tidak bersisa
-            if (!distributedInThisCycle) {
-              allocation[currentIdTeam[loopGuard % currentIdTeam.length].name] += 1;
-              remainingAmount -= 1;
-            }
-            loopGuard++;
+          if (/Report\s*:/i.test(processedBlock)) {
+            if (targetReport) processedBlock = processedBlock.replace(/Report\s*:/i, `Report : ${targetReport}`);
+          } else if (targetReport) {
+            processedBlock += `\nReport : ${targetReport}`;
           }
 
-          let itemIndex = 1;
-          currentIdTeam.forEach(m => {
-            let assigned = allocation[m.name];
-            if (assigned > 0) {
-              blockResult += `${itemIndex}. ${m.name} ${assigned}\n`;
-              itemIndex++;
-              // Catat ke batch jika maxQuota >= 2 (artinya yang akunnya banyak tidak boleh dobel di ID berikutnya)
-              if (mode === "auto_smart" && m.maxQuota >= 2) {
-                alreadyAssignedInBatch.add(m.name);
-              }
+          const jumlahMatch = processedBlock.match(/Jumlah\s*:\s*(\d+)/i);
+          let totalAmount = jumlahMatch ? parseInt(jumlahMatch[1], 10) : 0;
+
+          let blockResult = processedBlock + "\n\n";
+
+          if (totalAmount > 0 && selectedNames.length > 0) {
+            // Tentukan berapa orang yang akan memegang ID ini (misal maksimal 2-3 orang atau dibagi secukupnya agar tidak semua orang masuk ke ID yang sama)
+            let peopleCountForThisID = Math.min(selectedNames.length, Math.max(1, Math.ceil(totalAmount / 20)));
+            let assignedGroup = [];
+
+            for (let i = 0; i < peopleCountForThisID; i++) {
+              assignedGroup.push(selectedNames[memberPointer % selectedNames.length]);
+              memberPointer++;
             }
-          });
 
-        } else {
-          blockResult += `(Jumlah orderan tidak terdeteksi atau anggota kosong)\n`;
-        }
+            let baseCount = Math.floor(totalAmount / assignedGroup.length);
+            let remainder = totalAmount % assignedGroup.length;
 
-        finalOutput.push(blockResult);
-      });
+            assignedGroup.forEach((name, i) => {
+              let assigned = baseCount + (i < remainder ? 1 : 0);
+              if (assigned > 0) {
+                blockResult += `${i + 1}. ${name} : ${assigned}\n`;
+              }
+            });
+          } else {
+            blockResult += `(Jumlah orderan tidak terdeteksi)\n`;
+          }
 
-      document.getElementById("outputResult").value = finalOutput.join("\n====================\n\n");
-      showToast("Job berhasil di-generate secara adil dan merata!");
+          finalOutput.push(blockResult);
+        });
+      }
+
+      outEl.value = finalOutput.join("\n====================\n\n");
     }
 
     function copyToClipboard() {
       const output = document.getElementById("outputResult");
-      if (!output || !output.value.trim()) {
-        return showToast("Teks hasil masih kosong!", "error");
-      }
-
-      navigator.clipboard.writeText(output.value)
-        .then(() => showToast("Berhasil disalin ke clipboard!"))
-        .catch(() => {
-          output.select();
-          document.execCommand('copy');
-          showToast("Berhasil disalin!");
-        });
+      if (!output || !output.value.trim()) return alert("Belum ada teks untuk disalin!");
+      navigator.clipboard.writeText(output.value).then(() => {
+        const btnText = document.getElementById("btnCopyText");
+        if (btnText) {
+          btnText.innerText = "Berhasil Disalin!";
+          setTimeout(() => { btnText.innerText = "Salin Teks Rekapan"; }, 2000);
+        }
+      });
     }
   </script>
 </body>
