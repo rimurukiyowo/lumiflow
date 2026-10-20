@@ -455,7 +455,7 @@
       <div class="grid">
         <div class="stat-box">
           <div id="totalFoldersCount" class="stat-val">0</div>
-          <div class="stat-lbl">Total Subfolder</div>
+          <div class="stat-lbl">Total Item / Folder</div>
         </div>
         <div class="stat-box">
           <div id="totalImagesCount" class="stat-val highlight-image">0</div>
@@ -469,7 +469,7 @@
 
       <div class="table-tools">
         <button class="btn-secondary" type="button" onclick="copyAllData()">📋 Salin Semua ke Excel</button>
-        <input type="text" id="searchBox" placeholder="🔍 Cari nama folder..." oninput="handleSearch()"
+        <input type="text" id="searchBox" placeholder="🔍 Cari nama folder/file..." oninput="handleSearch()"
           style="width: 240px; padding: 10px 14px; font-size: 13px; border-radius: 8px; border: 2px solid var(--border); background: #fff; box-shadow: 2px 2px 0px #cbd5e1; outline: none;">
       </div>
 
@@ -477,7 +477,7 @@
         <table>
           <thead>
             <tr>
-              <th onclick="changeSort('name')">Nama Folder <span id="sort-name">▲</span></th>
+              <th onclick="changeSort('name')">Nama <span id="sort-name">▲</span></th>
               <th onclick="changeSort('imageCount')">Jumlah Gambar <span id="sort-imageCount"></span></th>
               <th onclick="changeSort('otherCount')">File Lain <span id="sort-otherCount"></span></th>
               <th onclick="changeSort('imageSize')">Ukuran <span id="sort-imageSize"></span></th>
@@ -552,9 +552,9 @@
     }
 
     function cleanFolderName(name) {
-      if (!name || name.includes('(Root')) return name;
-      // Hanya mengambil kata pertama sebelum spasi (membuang angka/huruf kata kedua)
-      return name.split(' ')[0].trim();
+      if (!name) return name;
+      // Menghilangkan angka di belakang nama, baik dengan spasi maupun nempel langsung (misal: "Tya9" atau "Tya 9" -> "Tya")
+      return name.replace(/\s*\d+$/, '').trim();
     }
 
     function formatBytes(bytes) {
@@ -644,16 +644,16 @@
 
         globalReports = [];
 
-        if (rootImages.length > 0 || rootOtherFiles.length > 0) {
+        rootImages.forEach(file => {
           globalReports.push({
-            name: '(Root / Luar Subfolder)',
-            isRoot: true,
-            imageCount: rootImages.length,
-            otherCount: rootOtherFiles.length,
-            imageSize: rootImgSize,
-            link: `https://drive.google.com/drive/folders/${rootFolderId}`
+            name: file.name,
+            isRoot: false,
+            imageCount: 1,
+            otherCount: 0,
+            imageSize: Number(file.size) || 0,
+            link: file.webViewLink || `https://drive.google.com/file/d/${file.id}/view`
           });
-        }
+        });
 
         let overallImages = rootImages.length;
         let overallSize = rootImgSize;
@@ -701,7 +701,7 @@
         document.getElementById('sumDriveCreated').innerText = driveCreatedTime;
         document.getElementById('briefSummary').style.display = 'grid';
 
-        document.getElementById('totalFoldersCount').innerText = subfolders.length.toLocaleString('id-ID');
+        document.getElementById('totalFoldersCount').innerText = globalReports.length.toLocaleString('id-ID');
         document.getElementById('totalImagesCount').innerText = overallImages.toLocaleString('id-ID');
         document.getElementById('totalSizeCount').innerText = formatBytes(overallSize);
 
@@ -718,9 +718,6 @@
 
     function sortData() {
       globalReports.sort((a, b) => {
-        if (a.isRoot) return -1;
-        if (b.isRoot) return 1;
-
         let result = 0;
         if (currentSort.key === 'name') {
           result = a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' });
@@ -763,7 +760,7 @@
       tbody.innerHTML = '';
 
       if (reports.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 24px;">🚫 Gak ada subfolder yang ketemu.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 24px;">🚫 Gak ada item yang ketemu.</td></tr>`;
         return;
       }
 
