@@ -552,8 +552,9 @@
     }
 
     function cleanFolderName(name) {
-      if (name.includes('(Root')) return name;
-      return name.replace(/\s+\d+$/, '').trim();
+      if (!name || name.includes('(Root')) return name;
+      // Hanya mengambil kata pertama sebelum spasi (membuang angka/huruf kata kedua)
+      return name.split(' ')[0].trim();
     }
 
     function formatBytes(bytes) {
