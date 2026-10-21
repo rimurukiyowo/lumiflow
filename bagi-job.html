@@ -49,11 +49,11 @@
         K</div>
       <div>
         <h1 class="text-xs font-extrabold text-slate-900 tracking-tight">Kimi Suite v3.0</h1>
-        <p class="text-[10px] text-slate-400">Modul Pembagian Job Otomatis</p>
+        <p class="text-[10px] text-slate-400">Modul Pembagian Job & Auto Drive</p>
       </div>
     </div>
     <span class="text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-100 px-3 py-1 rounded-full">
-      Multi-Opsi Pembagian
+      Terhubung ke Apps Script
     </span>
   </header>
 
@@ -71,14 +71,15 @@
           <div class="flex items-center justify-between">
             <label class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
               <iconify-icon icon="heroicons:folder-open-20-solid" class="text-indigo-600 text-base"></iconify-icon>
-              Link Google Drive Induk (Opsional)
+              Link Google Drive Induk
             </label>
             <span id="folderStatusBadge"
-              class="text-[10px] font-bold bg-slate-100 text-slate-600 px-2 py-0.5 rounded">Belum Dikunci</span>
+              class="text-[10px] font-bold bg-slate-100 text-slate-600 px-2 py-0.5 rounded">Tersimpan</span>
           </div>
           <div class="flex gap-2">
             <input type="text" id="folderLinkInput"
               class="w-full p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-600"
+              value="https://drive.google.com/drive/folders/1TjxgPJp_lW1YEaRmseO_UX7K-jifhO-c"
               placeholder="https://drive.google.com/...">
             <button id="btnLockFolder" onclick="toggleLockFolder()"
               class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs px-3.5 py-2.5 rounded-xl font-bold transition shrink-0">
@@ -112,8 +113,7 @@
                 class="mt-0.5 text-indigo-600 focus:ring-indigo-500">
               <div>
                 <span class="text-xs font-extrabold text-slate-800 block">Opsi 1: Semua Kebagian Semua ID</span>
-                <span class="text-[10px] text-slate-500 block">Semua talent ikut mengerjakan di setiap ID yang
-                  masuk.</span>
+                <span class="text-[10px] text-slate-500 block">Semua talent ikut mengerjakan di setiap ID.</span>
               </div>
             </label>
             <label
@@ -121,8 +121,7 @@
               <input type="radio" name="optionMode" value="2" class="mt-0.5 text-indigo-600 focus:ring-indigo-500">
               <div>
                 <span class="text-xs font-extrabold text-slate-800 block">Opsi 2: Rotasi / ID Berbeda</span>
-                <span class="text-[10px] text-slate-500 block">ID disebar bergantian, per ID orangnya tidak boleh
-                  sama.</span>
+                <span class="text-[10px] text-slate-500 block">ID disebar bergantian per talent.</span>
               </div>
             </label>
           </div>
@@ -162,9 +161,9 @@
 
         <!-- Tombol Eksekusi -->
         <div class="flex gap-2 pt-1">
-          <button onclick="generateJob()"
+          <button id="btnGenerate" onclick="generateJob()"
             class="flex-1 bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white text-xs py-3.5 px-4 rounded-xl font-bold shadow-sm transition flex items-center justify-center gap-1.5">
-            <iconify-icon icon="heroicons:sparkles-20-solid" class="text-base"></iconify-icon> Generate Pembagian Job
+            <iconify-icon icon="heroicons:sparkles-20-solid" class="text-base"></iconify-icon> <span id="btnGenText">Generate Job & Buat Folder Drive</span>
           </button>
           <button onclick="clearAll()"
             class="bg-slate-100 hover:bg-rose-50 hover:text-rose-600 text-slate-600 text-xs py-3.5 px-4 rounded-xl font-bold border border-slate-200 transition">
@@ -183,7 +182,7 @@
                 class="text-indigo-600 text-base"></iconify-icon>
               Hasil Rekap Output
             </label>
-            <span class="text-[10px] font-bold bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded">Siap Kirim WA</span>
+            <span id="driveStatusInfo" class="text-[10px] font-bold bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded">Siap Kirim WA</span>
           </div>
 
           <textarea id="outputResult" readonly
@@ -208,6 +207,8 @@
 
   <!-- SCRIPT LOGIKA -->
   <script>
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbw7aDexM1_pH3Dh0Aillu3WLptv9TLQ-hDjas77aLFwbyxNck58k05tYSEsxouwnj4z/exec";
+
     let teamMembers = [
       "Amelie", "Ami", "Ana", "Novi", "Ann", "Ria", "Dastan", "Desi", "Difarani",
       "Duwi", "Elmira", "Elok", "Endang", "Feni", "Fiafida", "Firanny", "Fdia", "Fitria", "Yani",
@@ -303,7 +304,7 @@
     }
 
     function loadLockedFolder() {
-      const savedFolder = localStorage.getItem("kimi_locked_folder_induk");
+      const savedFolder = localStorage.getItem("kimi_locked_folder_induk") || document.getElementById("folderLinkInput").value;
       if (savedFolder) {
         const input = document.getElementById("folderLinkInput");
         if (input) input.value = savedFolder;
@@ -338,13 +339,15 @@
       }
     }
 
-    // --- LOGIKA UTAMA (Mendukung Opsi 1 & Opsi 2) ---
-    function generateJob() {
+    // --- LOGIKA UTAMA & INTEGRASI GOOGLE APPS SCRIPT ---
+    async function generateJob() {
       const briefEl = document.getElementById("briefInput");
       const folderEl = document.getElementById("folderLinkInput");
       const outEl = document.getElementById("outputResult");
       const modeRadio = document.querySelector('input[name="optionMode"]:checked');
       const mode = modeRadio ? modeRadio.value : "1";
+      const btnGenText = document.getElementById("btnGenText");
+      const btnGenerate = document.getElementById("btnGenerate");
 
       if (!briefEl || !outEl) return;
       const rawBrief = briefEl.value.trim();
@@ -359,6 +362,33 @@
         .filter(b => b.length > 0 && /ID\s*:/i.test(b));
 
       if (rawBlocks.length === 0) rawBlocks = [rawBrief];
+
+      let orderIds = [];
+      rawBlocks.forEach(block => {
+        const idMatch = block.match(/ID\s*:\s*([^\n\r]+)/i);
+        if (idMatch) orderIds.push(idMatch[1].trim());
+      });
+
+      // Tampilkan status loading saat menghubungi Google Apps Script
+      if (btnGenText) btnGenText.innerText = "Membuat Folder di Drive...";
+      if (btnGenerate) btnGenerate.disabled = true;
+
+      // Kirim request ke Google Apps Script Web App untuk membuat folder secara otomatis
+      if (folderLink && orderIds.length > 0) {
+        try {
+          await fetch(GAS_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify({ parentFolderUrl: folderLink, ids: orderIds })
+          });
+        } catch (err) {
+          console.error("Gagal terhubung ke Apps Script:", err);
+        }
+      }
+
+      if (btnGenText) btnGenText.innerText = "Generate Job & Buat Folder Drive";
+      if (btnGenerate) btnGenerate.disabled = false;
 
       let finalOutput = [];
 
@@ -400,8 +430,8 @@
         });
 
       } else {
-        // --- OPSI 2: ROTASI / ORANG BERBEDA PER ID (TIDAK TUMPANG TINDIH JIKA MEMUNGKINKAN) ---
-        let memberPointer = 0; // Penanda urutan giliran talent
+        // --- OPSI 2: ROTASI / ORANG BERBEDA PER ID ---
+        let memberPointer = 0;
 
         rawBlocks.forEach((block) => {
           const idMatch = block.match(/ID\s*:\s*([^\n\r]+)/i);
@@ -422,7 +452,6 @@
           let blockResult = processedBlock + "\n\n";
 
           if (totalAmount > 0 && selectedNames.length > 0) {
-            // Tentukan berapa orang yang akan memegang ID ini (misal maksimal 2-3 orang atau dibagi secukupnya agar tidak semua orang masuk ke ID yang sama)
             let peopleCountForThisID = Math.min(selectedNames.length, Math.max(1, Math.ceil(totalAmount / 20)));
             let assignedGroup = [];
 
