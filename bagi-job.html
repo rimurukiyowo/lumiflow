@@ -52,8 +52,8 @@
         <p class="text-[10px] text-slate-400">Modul Pembagian Job & Auto Drive</p>
       </div>
     </div>
-    <span class="text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-100 px-3 py-1 rounded-full">
-      Terhubung ke Apps Script
+    <span class="text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 px-3 py-1 rounded-full flex items-center gap-1">
+      <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Auto Drive Aktif
     </span>
   </header>
 
@@ -66,25 +66,19 @@
       <!-- KOLOM KIRI: INPUT DATA & OPSI (7 Kolom) -->
       <div class="lg:col-span-7 space-y-5">
 
-        <!-- 1. Link Folder Induk -->
+        <!-- 1. Link Folder Induk (Permanen / Paten) -->
         <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs space-y-2">
           <div class="flex items-center justify-between">
             <label class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
               <iconify-icon icon="heroicons:folder-open-20-solid" class="text-indigo-600 text-base"></iconify-icon>
-              Link Google Drive Induk
+              Google Drive Induk (Permanen)
             </label>
-            <span id="folderStatusBadge"
-              class="text-[10px] font-bold bg-slate-100 text-slate-600 px-2 py-0.5 rounded">Tersimpan</span>
+            <span class="text-[10px] font-bold bg-indigo-100 text-indigo-800 px-2.5 py-0.5 rounded-full">Paten Terkunci</span>
           </div>
-          <div class="flex gap-2">
-            <input type="text" id="folderLinkInput"
-              class="w-full p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-600"
-              value="https://drive.google.com/drive/folders/1TjxgPJp_lW1YEaRmseO_UX7K-jifhO-c"
-              placeholder="https://drive.google.com/...">
-            <button id="btnLockFolder" onclick="toggleLockFolder()"
-              class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs px-3.5 py-2.5 rounded-xl font-bold transition shrink-0">
-              <span id="btnLockFolderText">Kunci</span>
-            </button>
+          <div>
+            <input type="text" id="folderLinkInput" readonly
+              class="w-full p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-100 text-slate-600 font-mono focus:outline-none cursor-not-allowed"
+              value="https://drive.google.com/drive/folders/1TjxgPJp_lW1YEaRmseO_UX7K-jifhO-c">
           </div>
         </div>
 
@@ -182,7 +176,7 @@
                 class="text-indigo-600 text-base"></iconify-icon>
               Hasil Rekap Output
             </label>
-            <span id="driveStatusInfo" class="text-[10px] font-bold bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded">Siap Kirim WA</span>
+            <span class="text-[10px] font-bold bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded">Siap Kirim WA</span>
           </div>
 
           <textarea id="outputResult" readonly
@@ -207,8 +201,7 @@
 
   <!-- SCRIPT LOGIKA -->
   <script>
-    // URL Google Apps Script Web App terbaru Anda
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbw7aDexM1_pH3Dh0Aillu3WLptv9TLQ-hDjas77aLFwbyxNck58k05tYSEsxouwnj4z/exec";
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbxg9-ZZG1BzOJOf5_DclT6ziY7Gz6A7N1GJqWbJZI8YSAxuHOvdXAOXFM93mk6kk1bFsQ/exec";
 
     let teamMembers = [
       "Amelie", "Ami", "Ana", "Novi", "Ann", "Ria", "Dastan", "Desi", "Difarani",
@@ -219,11 +212,9 @@
     ].map(name => ({ name }));
 
     let selectedNames = [];
-    let isFolderLocked = false;
 
     document.addEventListener("DOMContentLoaded", () => {
       renderNames();
-      loadLockedFolder();
     });
 
     function renderNames() {
@@ -288,59 +279,7 @@
       renderNames();
     }
 
-    function toggleLockFolder() {
-      const input = document.getElementById("folderLinkInput");
-      if (!input) return;
-      const val = input.value.trim();
-      if (!isFolderLocked) {
-        if (!val) return alert("Masukkan link folder induk dulu!");
-        localStorage.setItem("kimi_locked_folder_induk", val);
-        isFolderLocked = true;
-        applyFolderLockUI(true);
-      } else {
-        localStorage.removeItem("kimi_locked_folder_induk");
-        isFolderLocked = false;
-        applyFolderLockUI(false);
-      }
-    }
-
-    function loadLockedFolder() {
-      const savedFolder = localStorage.getItem("kimi_locked_folder_induk") || document.getElementById("folderLinkInput").value;
-      if (savedFolder) {
-        const input = document.getElementById("folderLinkInput");
-        if (input) input.value = savedFolder;
-        isFolderLocked = true;
-        applyFolderLockUI(true);
-      }
-    }
-
-    function applyFolderLockUI(locked) {
-      const input = document.getElementById("folderLinkInput");
-      const badge = document.getElementById("folderStatusBadge");
-      const btnText = document.getElementById("btnLockFolderText");
-      const btnEl = document.getElementById("btnLockFolder");
-      if (!input) return;
-      input.disabled = locked;
-      if (locked) {
-        input.classList.add("bg-slate-100");
-        if (badge) {
-          badge.className = "text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded";
-          badge.innerText = "Terkunci";
-        }
-        if (btnText) btnText.innerText = "Buka";
-        if (btnEl) btnEl.className = "bg-amber-600 hover:bg-amber-700 text-white text-xs px-3.5 py-2.5 rounded-xl font-bold transition shrink-0";
-      } else {
-        input.classList.remove("bg-slate-100");
-        if (badge) {
-          badge.className = "text-[10px] font-bold bg-slate-100 text-slate-600 px-2 py-0.5 rounded";
-          badge.innerText = "Belum Dikunci";
-        }
-        if (btnText) btnText.innerText = "Kunci";
-        if (btnEl) btnEl.className = "bg-emerald-600 hover:bg-emerald-700 text-white text-xs px-3.5 py-2.5 rounded-xl font-bold transition shrink-0";
-      }
-    }
-
-    // --- LOGIKA UTAMA & INTEGRASI GOOGLE APPS SCRIPT ---
+    // --- LOGIKA UTAMA & PEMBUATAN FOLDER GOOGLE DRIVE OTOMATIS ---
     async function generateJob() {
       const briefEl = document.getElementById("briefInput");
       const folderEl = document.getElementById("folderLinkInput");
@@ -370,21 +309,19 @@
         if (idMatch) orderIds.push(idMatch[1].trim());
       });
 
-      // Indikator Loading Saat Membuat Folder Google Drive
-      if (btnGenText) btnGenText.innerText = "Membuat Folder di Drive...";
+      // Ubah tombol jadi loading
+      if (btnGenText) btnGenText.innerText = "Membuat Folder di Google Drive...";
       if (btnGenerate) btnGenerate.disabled = true;
 
-      // Kirim request ke Google Apps Script untuk membuat folder secara otomatis di background
+      // Panggil Apps Script otomatis menggunakan metode GET (menembus CORS browser dengan aman)
       if (folderLink && orderIds.length > 0) {
         try {
-          await fetch(GAS_URL, {
-            method: "POST",
-            mode: "no-cors",
-            headers: { "Content-Type": "text/plain;charset=utf-8" },
-            body: JSON.stringify({ parentFolderUrl: folderLink, ids: orderIds })
-          });
+          const targetUrl = `${GAS_URL}?folderUrl=${encodeURIComponent(folderLink)}&ids=${encodeURIComponent(orderIds.join(","))}`;
+          // Menggunakan teknik pemanggilan background via Image/fetch no-cors
+          await fetch(targetUrl, { mode: 'no-cors' });
+          await new Promise(resolve => setTimeout(resolve, 1200)); // Jeda agar Google Drive selesai membuat folder
         } catch (err) {
-          console.error("Gagal terhubung ke Apps Script:", err);
+          console.error("Gagal membuat folder otomatis:", err);
         }
       }
 
@@ -456,7 +393,7 @@
             let peopleCountForThisID = Math.min(selectedNames.length, Math.max(1, Math.ceil(totalAmount / 20)));
             let assignedGroup = [];
 
-            for (let i = 0; i < peopleCountForThisID; i++) {
+            for (let i = 0; i < peopleCountForthisID; i++) {
               assignedGroup.push(selectedNames[memberPointer % selectedNames.length]);
               memberPointer++;
             }
@@ -478,7 +415,7 @@
         });
       }
 
-      outEl.value = finalOutput.join("\n====================\n\n");
+      outEl.value = finalOutput.join("\n﹌﹌﹌﹌﹌﹌﹌﹌\n\n");
     }
 
     function copyToClipboard() {
