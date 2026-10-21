@@ -201,7 +201,7 @@
 
   <!-- SCRIPT LOGIKA -->
   <script>
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbz6byEszJCXCRH_VCyMNPk7Hp08ft9pu-Obvqn5ZH-RMh4UniymQOjKxxCj9LDbZiGX/exec";
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbwEIsw1coXzdjL_LlQIn7hyVK4UDo1zmy7_kj72bJ-UixbjGdoZAand5NjVzWCtN6n-/exec";
 
     let teamMembers = [
       "Amelie", "Ami", "Ana", "Novi", "Ann", "Ria", "Dastan", "Desi", "Difarani",
@@ -351,7 +351,6 @@
           const idMatch = block.match(/ID\s*:\s*([^\n\r]+)/i);
           let orderId = idMatch ? idMatch[1].trim() : "Tanpa_ID";
 
-          // Ambil URL asli dari Google Drive, fallback ke manual jika gagal
           let targetReport = folderMap[orderId] || (folderLink ? `${folderLink.replace(/\/$/, "")}/${orderId}` : "");
           let processedBlock = block;
 
@@ -384,55 +383,70 @@
         });
 
       } else {
-        // --- OPSI 2: ROTASI / ORANG BERBEDA PER ID ---
-        let memberPointer = 0;
-
+        // --- OPSI 2: GRAND TOTAL DIBAGI RATA, SISA DIBAGIKAN DARI AWAL ---
+        let grandTotal = 0;
         rawBlocks.forEach((block) => {
-          const idMatch = block.match(/ID\s*:\s*([^\n\r]+)/i);
-          let orderId = idMatch ? idMatch[1].trim() : "Tanpa_ID";
-
-          // Ambil URL asli dari Google Drive, fallback ke manual jika gagal
-          let targetReport = folderMap[orderId] || (folderLink ? `${folderLink.replace(/\/$/, "")}/${orderId}` : "");
-          let processedBlock = block;
-
-          if (/Report\s*:/i.test(processedBlock)) {
-            if (targetReport) processedBlock = processedBlock.replace(/Report\s*:/i, `Report : ${targetReport}`);
-          } else if (targetReport) {
-            processedBlock += `\nReport : ${targetReport}`;
+          const jumlahMatch = block.match(/Jumlah\s*:\s*(\d+)/i);
+          if (jumlahMatch) {
+            grandTotal += parseInt(jumlahMatch[1], 10);
           }
+        });
 
-          const jumlahMatch = processedBlock.match(/Jumlah\s*:\s*(\d+)/i);
-          let totalAmount = jumlahMatch ? parseInt(jumlahMatch[1], 10) : 0;
+        if (grandTotal > 0 && selectedNames.length > 0) {
+          let basePerPerson = Math.floor(grandTotal / selectedNames.length);
+          let remainder = grandTotal % selectedNames.length;
 
-          let blockResult = processedBlock + "\n\n";
+          let personQuota = {};
+          selectedNames.forEach((name, i) => {
+            personQuota[name] = basePerPerson + (i < remainder ? 1 : 0);
+          });
 
-          if (totalAmount > 0 && selectedNames.length > 0) {
-            let peopleCountForThisID = Math.min(selectedNames.length, Math.max(1, Math.ceil(totalAmount / 20)));
-            let assignedGroup = [];
+          rawBlocks.forEach((block) => {
+            const idMatch = block.match(/ID\s*:\s*([^\n\r]+)/i);
+            let orderId = idMatch ? idMatch[1].trim() : "Tanpa_ID";
 
-            for (let i = 0; i < peopleCountForThisID; i++) {
-              assignedGroup.push(selectedNames[memberPointer % selectedNames.length]);
-              memberPointer++;
+            let targetReport = folderMap[orderId] || (folderLink ? `${folderLink.replace(/\/$/, "")}/${orderId}` : "");
+            let processedBlock = block;
+
+            if (/Report\s*:/i.test(processedBlock)) {
+              if (targetReport) processedBlock = processedBlock.replace(/Report\s*:/i, `Report : ${targetReport}`);
+            } else if (targetReport) {
+              processedBlock += `\nReport : ${targetReport}`;
             }
 
-            let baseCount = Math.floor(totalAmount / assignedGroup.length);
-            let remainder = totalAmount % assignedGroup.length;
+            const jumlahMatch = processedBlock.match(/Jumlah\s*:\s*(\d+)/i);
+            let blockAmount = jumlahMatch ? parseInt(jumlahMatch[1], 10) : 0;
 
-            assignedGroup.forEach((name, i) => {
-              let assigned = baseCount + (i < remainder ? 1 : 0);
-              if (assigned > 0) {
-                blockResult += `${i + 1}. ${name} : ${assigned}\n`;
-              }
-            });
-          } else {
-            blockResult += `(Jumlah orderan tidak terdeteksi)\n`;
-          }
+            let blockResult = processedBlock + "\n\n";
 
-          finalOutput.push(blockResult);
-        });
+            if (blockAmount > 0) {
+              let assignedCount = 1;
+              selectedNames.forEach((name) => {
+                if (personQuota[name] > 0) {
+                  let takeForThisID = Math.min(personQuota[name], blockAmount);
+                  if (takeForThisID > 0) {
+                    blockResult += `${assignedCount}. ${name} : ${takeForThisID}\n`;
+                    personQuota[name] -= takeForThisID;
+                    blockAmount -= takeForThisID;
+                    assignedCount++;
+                  }
+                }
+              });
+            } else {
+              blockResult += `(Jumlah orderan tidak terdeteksi)\n`;
+            }
+
+            finalOutput.push(blockResult);
+          });
+
+        } else {
+          rawBlocks.forEach((block) => {
+            finalOutput.push(block + "\n\n(Jumlah orderan tidak terdeteksi)\n");
+          });
+        }
       }
 
-      outEl.value = finalOutput.join("\n𖦹﹌﹌﹌﹌﹌﹌﹌﹌﹌﹌﹌﹌﹌𖦹\n\n");
+      outEl.value = finalOutput.join("\n𖦹 ﹌﹌﹌﹌﹌﹌﹌﹌﹌﹌𓂃🪶\n\n");
     }
 
     function copyToClipboard() {
