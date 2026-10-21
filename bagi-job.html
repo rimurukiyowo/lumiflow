@@ -201,7 +201,7 @@
 
   <!-- SCRIPT LOGIKA -->
   <script>
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbyULxsewquyCys91Bp24xRFaR2WZrXchzdD_DEhyTNd04q1Ir3wTpppXiuLJ9Qx1FtQ/exec";
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbz6byEszJCXCRH_VCyMNPk7Hp08ft9pu-Obvqn5ZH-RMh4UniymQOjKxxCj9LDbZiGX/exec";
 
     let teamMembers = [
       "Amelie", "Ami", "Ana", "Novi", "Ann", "Ria", "Dastan", "Desi", "Difarani",
@@ -313,32 +313,30 @@
       if (btnGenText) btnGenText.innerText = "Membuat Folder di Google Drive...";
       if (btnGenerate) btnGenerate.disabled = true;
 
-      // Ambil ID dari Link Folder Induk (Contoh: mengambil string setelah /folders/)
+      // Ambil ID dari Link Folder Induk
       let parentFolderId = "";
       const matchFolderId = folderLink.match(/\/folders\/([a-zA-Z0-9-_]+)/);
       if (matchFolderId) {
         parentFolderId = matchFolderId[1];
       } else {
-        parentFolderId = folderLink.trim(); // Fallback jika langsung diisi ID-nya
+        parentFolderId = folderLink.trim();
       }
 
-      // Panggil Apps Script menggunakan metode POST JSON
+      // Panggil Apps Script dan ambil balasan URL folder aslinya
+      let folderMap = {};
       if (parentFolderId && orderIds.length > 0) {
         try {
-          await fetch(GAS_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              parentFolderId: parentFolderId,
-              orderIds: orderIds
-            })
-          });
-          await new Promise(resolve => setTimeout(resolve, 2000)); // Jeda 2 detik agar Google Drive selesai membuat folder
+          const targetUrl = `${GAS_URL}?parentFolderId=${encodeURIComponent(parentFolderId)}&ids=${encodeURIComponent(orderIds.join(","))}`;
+          const response = await fetch(targetUrl);
+          const result = await response.json();
+          
+          if (result.status === "success" && result.folders) {
+            result.folders.forEach(f => {
+              folderMap[f.id] = f.url;
+            });
+          }
         } catch (err) {
-          console.error("Gagal membuat folder otomatis:", err);
+          console.error("Gagal mengambil URL folder otomatis:", err);
         }
       }
 
@@ -353,7 +351,8 @@
           const idMatch = block.match(/ID\s*:\s*([^\n\r]+)/i);
           let orderId = idMatch ? idMatch[1].trim() : "Tanpa_ID";
 
-          let targetReport = folderLink ? `${folderLink.replace(/\/$/, "")}/${orderId}` : "";
+          // Ambil URL asli dari Google Drive, fallback ke manual jika gagal
+          let targetReport = folderMap[orderId] || (folderLink ? `${folderLink.replace(/\/$/, "")}/${orderId}` : "");
           let processedBlock = block;
 
           if (/Report\s*:/i.test(processedBlock)) {
@@ -392,7 +391,8 @@
           const idMatch = block.match(/ID\s*:\s*([^\n\r]+)/i);
           let orderId = idMatch ? idMatch[1].trim() : "Tanpa_ID";
 
-          let targetReport = folderLink ? `${folderLink.replace(/\/$/, "")}/${orderId}` : "";
+          // Ambil URL asli dari Google Drive, fallback ke manual jika gagal
+          let targetReport = folderMap[orderId] || (folderLink ? `${folderLink.replace(/\/$/, "")}/${orderId}` : "");
           let processedBlock = block;
 
           if (/Report\s*:/i.test(processedBlock)) {
@@ -432,7 +432,7 @@
         });
       }
 
-      outEl.value = finalOutput.join("\n﹌﹌﹌﹌﹌﹌﹌﹌\n\n");
+      outEl.value = finalOutput.join("\n𖦹﹌﹌﹌﹌﹌﹌﹌﹌﹌﹌﹌﹌﹌𖦹\n\n");
     }
 
     function copyToClipboard() {
