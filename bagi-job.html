@@ -207,6 +207,7 @@
 
   <!-- SCRIPT LOGIKA -->
   <script>
+    // URL Google Apps Script Web App terbaru Anda
     const GAS_URL = "https://script.google.com/macros/s/AKfycbw7aDexM1_pH3Dh0Aillu3WLptv9TLQ-hDjas77aLFwbyxNck58k05tYSEsxouwnj4z/exec";
 
     let teamMembers = [
@@ -369,11 +370,11 @@
         if (idMatch) orderIds.push(idMatch[1].trim());
       });
 
-      // Tampilkan status loading saat menghubungi Google Apps Script
+      // Indikator Loading Saat Membuat Folder Google Drive
       if (btnGenText) btnGenText.innerText = "Membuat Folder di Drive...";
       if (btnGenerate) btnGenerate.disabled = true;
 
-      // Kirim request ke Google Apps Script Web App untuk membuat folder secara otomatis
+      // Kirim request ke Google Apps Script untuk membuat folder secara otomatis di background
       if (folderLink && orderIds.length > 0) {
         try {
           await fetch(GAS_URL, {
