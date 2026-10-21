@@ -313,13 +313,30 @@
       if (btnGenText) btnGenText.innerText = "Membuat Folder di Google Drive...";
       if (btnGenerate) btnGenerate.disabled = true;
 
-      // Panggil Apps Script otomatis menggunakan metode GET (menembus CORS browser dengan aman)
-      if (folderLink && orderIds.length > 0) {
+      // Ambil ID dari Link Folder Induk (Contoh: mengambil string setelah /folders/)
+      let parentFolderId = "";
+      const matchFolderId = folderLink.match(/\/folders\/([a-zA-Z0-9-_]+)/);
+      if (matchFolderId) {
+        parentFolderId = matchFolderId[1];
+      } else {
+        parentFolderId = folderLink.trim(); // Fallback jika langsung diisi ID-nya
+      }
+
+      // Panggil Apps Script menggunakan metode POST JSON
+      if (parentFolderId && orderIds.length > 0) {
         try {
-          const targetUrl = `${GAS_URL}?folderUrl=${encodeURIComponent(folderLink)}&ids=${encodeURIComponent(orderIds.join(","))}`;
-          // Menggunakan teknik pemanggilan background via Image/fetch no-cors
-          await fetch(targetUrl, { mode: 'no-cors' });
-          await new Promise(resolve => setTimeout(resolve, 1200)); // Jeda agar Google Drive selesai membuat folder
+          await fetch(GAS_URL, {
+            method: 'POST',
+            mode: 'no-cors', // Catatan: mode no-cors membuat response.json() tidak bisa dibaca langsung, tapi request tetap sampai ke Apps Script
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              parentFolderId: parentFolderId,
+              orderIds: orderIds
+            })
+          });
+          await new Promise(resolve => setTimeout(resolve, 2000); // Beri jeda 2 detik agar Google Drive selesai membuat folder
         } catch (err) {
           console.error("Gagal membuat folder otomatis:", err);
         }
