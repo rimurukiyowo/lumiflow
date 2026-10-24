@@ -537,10 +537,11 @@
       const lower = url.toLowerCase();
       if (lower.includes('threads')) return 'Threads';
       if (lower.includes('instagram')) return 'Instagram';
-      if (lower.includes('x.com') || lower.includes('twitter')) return 'X (Twitter)';
+      if (lower.includes('x.com') || lower.includes('twitter')) return 'X';
       if (lower.includes('tiktok')) return 'TikTok';
-      if (lower.includes('facebook') || lower.includes('fb.')) return 'Facebook Page';
+      if (lower.includes('facebook') || lower.includes('fb.')) return 'Facebook';
       if (lower.includes('youtube') || lower.includes('youtu.be')) return 'YouTube';
+      if (lower.includes('shp') || lower.includes('id.shp.ee')) return 'Shopee';
       return 'Web / Lainnya';
     }
 
