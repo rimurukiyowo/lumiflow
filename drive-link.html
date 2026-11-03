@@ -3,333 +3,458 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>SORA WINTER - Drive Link Extractor</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bagi Job & Drive - Kimi Team</title>
 
-  <!-- Favicon & PWA Config -->
   <link rel="icon" type="image/png" href="./logo.png">
-  <link rel="apple-touch-icon" href="./logo.png">
-  <link rel="manifest" href="./manifest.json">
-  <meta name="theme-color" content="#c2410c">
+  <meta name="theme-color" content="#0f172a">
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
 
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://code.iconify.design/iconify-icon/1.0.8/iconify-icon.min.js"></script>
+
   <style>
-    * {
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    #snowCanvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    /* Gradient Orange Gelap / Burnt Orange */
     body {
-      margin: 0;
-      background: linear-gradient(135deg, #431407, #7c2d12, #9a3412, #c2410c);
-      background-size: 300% 300%;
-      animation: gradientMove 12s ease infinite;
-      font-family: sans-serif;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #f8fafc;
+      background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+      background-size: 24px 24px;
     }
 
-    @keyframes gradientMove {
-      0% {
-        background-position: 0% 50%;
-      }
-
-      50% {
-        background-position: 100% 50%;
-      }
-
-      100% {
-        background-position: 0% 50%;
-      }
+    ::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
     }
 
-    .glass-card-dark-orange {
-      background: rgba(255, 255, 255, 0.94);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 10px;
     }
   </style>
 </head>
 
-<body class="min-h-screen p-3 sm:p-5 text-orange-950 flex flex-col justify-between relative overflow-x-hidden">
+<body class="text-slate-700 antialiased min-h-screen flex flex-col">
 
-  <!-- Canvas Animasi Salju -->
-  <canvas id="snowCanvas"></canvas>
-
-  <textarea id="hiddenClipboard" class="sr-only" aria-hidden="true"></textarea>
-
-  <!-- Container Utama -->
-  <div class="max-w-md mx-auto w-full my-auto space-y-3 relative z-10">
-
-    <!-- Tombol Navigasi Kembali Ke Menu Utama -->
-    <div class="flex items-center justify-between px-1">
-      <a href="./index"
-        class="inline-flex items-center gap-2 text-xs font-bold text-orange-200 hover:text-white bg-white/10 hover:bg-white/20 px-3.5 py-2 rounded-xl backdrop-blur-md border border-white/20 transition duration-300 shadow-md group">
-        <span class="group-hover:-translate-x-1 transition-transform duration-200">←</span>
-        <span>Kembali ke Menu Utama</span>
-      </a>
-      <span
-        class="text-[11px] font-semibold text-orange-200 bg-orange-950/60 px-2.5 py-1 rounded-lg border border-orange-400/30">
-        🔗 Sora Winter
-      </span>
+  <!-- NAVBAR ATAS -->
+  <header
+    class="bg-white border-b border-slate-200 sticky top-0 z-20 px-6 py-3.5 flex items-center justify-between shadow-2xs">
+    <div class="flex items-center gap-3">
+      <div
+        class="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center text-white font-extrabold text-sm shadow-sm">
+        K</div>
+      <div>
+        <h1 class="text-xs font-extrabold text-slate-900 tracking-tight">Kimi Suite v3.0</h1>
+        <p class="text-[10px] text-slate-400">Modul Pembagian Job & Auto Drive</p>
+      </div>
     </div>
+    <span class="text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 px-3 py-1 rounded-full flex items-center gap-1">
+      <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Auto Drive Aktif
+    </span>
+  </header>
 
-    <!-- Card Panel Utama -->
-    <div class="glass-card-dark-orange rounded-3xl p-4 sm:p-5 shadow-2xl border border-orange-200/50 space-y-4">
+  <!-- KONTEN UTAMA -->
+  <main class="flex-1 p-4 sm:p-6 max-w-5xl w-full mx-auto space-y-6 my-auto">
 
-      <!-- Header Section -->
-      <div class="text-center space-y-1">
-        <h1 class="text-xl font-extrabold tracking-wide text-orange-950 drop-shadow-sm">SORA WINTER</h1>
-        <p class="text-xs text-orange-700 font-medium">💞💞</p>
+    <!-- Grid Layout Utama (2 Kolom) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-        <!-- Syarat Penggunaan -->
-        <div
-          class="mt-3 p-3 rounded-xl bg-orange-50/80 text-left text-xs leading-relaxed text-orange-950 border border-orange-200 space-y-1 shadow-inner">
-          <strong class="block text-orange-900 font-bold">📢 Syarat Penggunaan:</strong>
-          <p>• Link ini hanya untuk penggunaan pribadi.</p>
-          <p>• Dilarang membagikan link kepada siapa pun.</p>
-          <p>• Dilarang membantu orang lain mengakses atau mengisi Drive tanpa izin.</p>
-          <p>• Jika syarat dilanggar, link akan dihapus sehingga semua pengguna kehilangan akses.</p>
+      <!-- KOLOM KIRI: INPUT DATA & OPSI (7 Kolom) -->
+      <div class="lg:col-span-7 space-y-5">
+
+        <!-- 1. Link Folder Induk (Permanen / Paten) -->
+        <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs space-y-2">
+          <div class="flex items-center justify-between">
+            <label class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+              <iconify-icon icon="heroicons:folder-open-20-solid" class="text-indigo-600 text-base"></iconify-icon>
+              Google Drive Induk (Permanen)
+            </label>
+            <span class="text-[10px] font-bold bg-indigo-100 text-indigo-800 px-2.5 py-0.5 rounded-full">Paten Terkunci</span>
+          </div>
+          <div>
+            <input type="text" id="folderLinkInput" readonly
+              class="w-full p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-100 text-slate-600 font-mono focus:outline-none cursor-not-allowed"
+              value="https://drive.google.com/drive/folders/1TjxgPJp_lW1YEaRmseO_UX7K-jifhO-c">
+          </div>
         </div>
+
+        <!-- 2. Brief Pesanan -->
+        <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs space-y-2">
+          <label class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+            <iconify-icon icon="heroicons:document-text-20-solid" class="text-indigo-600 text-base"></iconify-icon>
+            Format Brief Pesanan (Bisa Banyak ID Sekaligus)
+          </label>
+          <textarea id="briefInput"
+            class="w-full h-36 p-3 text-xs border border-slate-200 rounded-xl bg-slate-50 font-mono text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-600 resize-y leading-relaxed"
+            placeholder="ID : 287345&#10;Target : https://...&#10;Jumlah : 50&#10;Report :"></textarea>
+        </div>
+
+        <!-- 3. PILIH OPSI PEMBAGIAN -->
+        <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs space-y-2.5">
+          <label class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+            <iconify-icon icon="heroicons:adjustments-horizontal-20-solid"
+              class="text-indigo-600 text-base"></iconify-icon>
+            Pilih Metode Pembagian Job
+          </label>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <label
+              class="flex items-start gap-2.5 p-3 rounded-xl border border-slate-200 bg-slate-50/50 cursor-pointer hover:border-indigo-400 transition">
+              <input type="radio" name="optionMode" value="1" checked
+                class="mt-0.5 text-indigo-600 focus:ring-indigo-500">
+              <div>
+                <span class="text-xs font-extrabold text-slate-800 block">Opsi 1: Semua Kebagian Semua ID</span>
+                <span class="text-[10px] text-slate-500 block">Semua talent ikut mengerjakan di setiap ID.</span>
+              </div>
+            </label>
+            <label
+              class="flex items-start gap-2.5 p-3 rounded-xl border border-slate-200 bg-slate-50/50 cursor-pointer hover:border-indigo-400 transition">
+              <input type="radio" name="optionMode" value="2" class="mt-0.5 text-indigo-600 focus:ring-indigo-500">
+              <div>
+                <span class="text-xs font-extrabold text-slate-800 block">Opsi 2: Rotasi / ID Berbeda</span>
+                <span class="text-[10px] text-slate-500 block">ID disebar bergantian per talent.</span>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- 4. Pilih Anggota Tim -->
+        <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs space-y-3">
+          <div class="flex items-center justify-between">
+            <label class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+              <iconify-icon icon="heroicons:users-20-solid" class="text-indigo-600 text-base"></iconify-icon>
+              Pilih Anggota Tim Tugas Hari Ini
+            </label>
+            <div class="flex gap-2 text-[11px] font-bold">
+              <button onclick="selectAll()" class="text-indigo-600 hover:underline">Semua</button>
+              <span class="text-slate-300">|</span>
+              <button onclick="deselectAll()" class="text-slate-400 hover:text-slate-600">Batal</button>
+            </div>
+          </div>
+
+          <!-- Daftar Badge Nama -->
+          <div id="nameContainer"
+            class="flex flex-wrap gap-1.5 max-h-40 overflow-y-auto p-2.5 border border-slate-100 rounded-xl bg-slate-50">
+          </div>
+
+          <div class="flex items-center justify-between text-xs pt-1">
+            <span class="text-slate-400 font-medium">Terpilih: <strong id="totalSelected"
+                class="text-slate-800">0</strong> Orang</span>
+            <div class="flex gap-1.5">
+              <input type="text" id="newNameInput"
+                class="p-1.5 px-2.5 text-xs border border-slate-200 rounded-lg bg-white" placeholder="Tambah nama..."
+                onkeydown="if(event.key === 'Enter') addName()">
+              <button onclick="addName()"
+                class="bg-slate-900 hover:bg-slate-800 text-white text-xs px-3 py-1.5 rounded-lg font-bold">Tambah</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tombol Eksekusi -->
+        <div class="flex gap-2 pt-1">
+          <button id="btnGenerate" onclick="generateJob()"
+            class="flex-1 bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white text-xs py-3.5 px-4 rounded-xl font-bold shadow-sm transition flex items-center justify-center gap-1.5">
+            <iconify-icon icon="heroicons:sparkles-20-solid" class="text-base"></iconify-icon> <span id="btnGenText">Generate Job & Buat Folder Drive</span>
+          </button>
+          <button onclick="clearAll()"
+            class="bg-slate-100 hover:bg-rose-50 hover:text-rose-600 text-slate-600 text-xs py-3.5 px-4 rounded-xl font-bold border border-slate-200 transition">
+            Reset
+          </button>
+        </div>
+
       </div>
 
-      <!-- Input Folder (API Key Otomatis) -->
-      <div class="space-y-2">
-        <input id="userApiKey" type="hidden" value="AIzaSyD71nWVbtMxWK4T05Ty4qMuIRTP4ij2i48" />
+      <!-- KOLOM KANAN: HASIL REKAP OUTPUT (5 Kolom) -->
+      <div class="lg:col-span-5 flex flex-col">
+        <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs flex-1 flex flex-col space-y-3">
+          <div class="flex items-center justify-between">
+            <label class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+              <iconify-icon icon="heroicons:clipboard-document-list-20-solid"
+                class="text-indigo-600 text-base"></iconify-icon>
+              Hasil Rekap Output
+            </label>
+            <span class="text-[10px] font-bold bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded">Siap Kirim WA</span>
+          </div>
 
-        <div class="flex gap-2">
-          <input id="folderInput" type="text"
-            class="flex-1 p-3 text-xs rounded-xl border border-orange-200 focus:outline-none focus:ring-2 focus:ring-orange-600 bg-orange-50/40 text-orange-950 placeholder-orange-400 shadow-sm"
-            placeholder="Paste link / ID folder Google Drive..." />
-          <button onclick="fetchFiles()" id="btnFetch"
-            class="bg-orange-800 hover:bg-orange-900 active:bg-black text-white text-xs px-4 rounded-xl font-bold transition shadow-md active:scale-95">
-            Ambil
+          <textarea id="outputResult" readonly
+            class="w-full flex-1 min-h-[320px] p-3.5 text-xs border border-slate-800 rounded-xl bg-slate-900 text-indigo-300 font-mono focus:outline-none leading-relaxed resize-y"
+            placeholder="# Hasil rekap akan muncul di sini..."></textarea>
+
+          <button onclick="copyToClipboard()"
+            class="w-full bg-slate-900 hover:bg-slate-800 active:scale-95 text-white text-xs py-3 rounded-xl font-bold transition flex items-center justify-center gap-1.5 shadow-xs">
+            <iconify-icon icon="heroicons:clipboard-document-check-20-solid" class="text-base"></iconify-icon>
+            <span id="btnCopyText">Salin Teks Rekapan</span>
           </button>
         </div>
-      </div>
-
-      <!-- Error Box -->
-      <div id="driveError"
-        class="text-xs font-bold text-rose-900 bg-rose-100 p-2.5 rounded-xl border border-rose-200 hidden"></div>
-
-      <!-- Action Buttons & Result List -->
-      <div id="driveResultContainer" class="hidden space-y-3">
-        <div class="grid grid-cols-3 gap-2">
-          <button onclick="copyNames()"
-            class="bg-orange-700 hover:bg-orange-800 active:bg-orange-900 text-white text-xs py-2 rounded-xl font-bold transition shadow-sm active:scale-95">
-            Nama
-          </button>
-          <button onclick="copyAll()"
-            class="bg-orange-900 hover:bg-black active:bg-orange-950 text-white text-xs py-2 rounded-xl font-bold transition shadow-sm active:scale-95">
-            Semua
-          </button>
-          <button onclick="copyLinks()"
-            class="bg-orange-700 hover:bg-orange-800 active:bg-orange-900 text-white text-xs py-2 rounded-xl font-bold transition shadow-sm active:scale-95">
-            Link
-          </button>
-        </div>
-
-        <div class="text-xs font-bold text-orange-950">
-          Total: <span id="driveTotal" class="text-orange-700 font-extrabold">0</span>
-        </div>
-
-        <!-- Scrollable List File -->
-        <div id="driveFileList" class="max-h-60 overflow-y-auto space-y-2 pr-1"></div>
-      </div>
-
-      <!-- Watermark @kimii_team -->
-      <div class="pt-2 flex items-center justify-between text-xs text-orange-800 border-t border-orange-100">
-        <div
-          class="flex items-center gap-2 bg-gradient-to-r from-orange-100 to-orange-50 border border-orange-200 px-3 py-1 rounded-full shadow-sm">
-          <span class="w-2 h-2 rounded-full bg-orange-700 animate-ping"></span>
-          <span class="font-bold tracking-wide text-orange-950">@kimii_team</span>
-        </div>
-        <span class="text-[11px] font-medium text-orange-400">Parsed & Verified ✨</span>
       </div>
 
     </div>
+  </main>
 
-  </div>
-
-  <!-- Footer -->
-  <footer class="mt-6 text-center text-[11px] text-orange-200 pb-2 relative z-10">
-    Sora Winter v2.0 | Dioptimalkan untuk Kimi Team | © 2026
+  <!-- FOOTER -->
+  <footer class="text-center py-4 text-xs text-slate-400 border-t border-slate-200 mt-6">
+    Kedai Liliviè &copy; 2026 - Kimi Team Automation
   </footer>
 
+  <!-- SCRIPT LOGIKA -->
   <script>
-    // --- ANIMASI SALJU ---
-    const canvas = document.getElementById("snowCanvas");
-    const ctx = canvas.getContext("2d");
-    let width = canvas.width = window.innerWidth;
-    let height = canvas.height = window.innerHeight;
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbwEIsw1coXzdjL_LlQIn7hyVK4UDo1zmy7_kj72bJ-UixbjGdoZAand5NjVzWCtN6n-/exec";
 
-    window.addEventListener("resize", () => {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
+    let teamMembers = [
+      "Amelie", "Ana", "Novi", "Ann", "Ria", "Dastan", "Desi", "Difarani",
+      "Duwi", "Elmira", "Elok", "Endang", "Feni", "Fiafida", "Firanny", "Fdia", "Fitria", "Yani",
+      "Irma", "Istidary", "Khariza", "Kholif", "Kyla", "Leha", "Lies", "Linda", "Mahmudah",
+      "Mufida", "Ndang", "Novita", "Nurmina", "Puja", "Ratna", "Riri", "Sakucil", "Sanjen",
+      "Siros", "Tya", "Udin", "Kim", "Yahya", "Vina", "Zal", "Damis", "Risda", "Niar", "Bila","Yosep","Karin","Ayunita","Verrafeb","Vera","Septiadi"
+    ].map(name => ({ name }));
+
+    let selectedNames = [];
+
+    document.addEventListener("DOMContentLoaded", () => {
+      renderNames();
     });
 
-    const flakes = [];
-    for (let i = 0; i < 60; i++) {
-      flakes.push({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        radius: Math.random() * 3 + 1,
-        speedY: Math.random() * 1 + 0.5,
-        speedX: Math.random() * 0.5 - 0.25,
-        opacity: Math.random() * 0.7 + 0.3
+    function renderNames() {
+      const container = document.getElementById("nameContainer");
+      if (!container) return;
+      container.innerHTML = "";
+
+      const sorted = [...teamMembers].sort((a, b) => a.name.localeCompare(b.name, 'id', { sensitivity: 'base' }));
+
+      sorted.forEach(member => {
+        const isSelected = selectedNames.includes(member.name);
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = `px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1 border ${isSelected
+            ? "bg-indigo-600 text-white border-indigo-600 shadow-2xs"
+            : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"
+          }`;
+        btn.innerHTML = isSelected ? `<iconify-icon icon="heroicons:check-20-solid" class="text-xs"></iconify-icon> ${member.name}` : member.name;
+        btn.onclick = () => toggleName(member.name);
+        container.appendChild(btn);
       });
+
+      const totalEl = document.getElementById("totalSelected");
+      if (totalEl) totalEl.innerText = selectedNames.length;
     }
 
-    function renderSnow() {
-      ctx.clearRect(0, 0, width, height);
-      for (let i = 0; i < flakes.length; i++) {
-        const flake = flakes[i];
-        ctx.beginPath();
-        ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255, 255, 255, ${flake.opacity})`;
-        ctx.fill();
-        flake.y += flake.speedY;
-        flake.x += flake.speedX;
-        if (flake.y > height) {
-          flake.y = -5;
-          flake.x = Math.random() * width;
-        }
+    function toggleName(name) {
+      const idx = selectedNames.indexOf(name);
+      if (idx > -1) selectedNames.splice(idx, 1);
+      else selectedNames.push(name);
+      renderNames();
+    }
+
+    function selectAll() {
+      selectedNames = teamMembers.map(m => m.name);
+      renderNames();
+    }
+
+    function deselectAll() {
+      selectedNames = [];
+      renderNames();
+    }
+
+    function addName() {
+      const input = document.getElementById("newNameInput");
+      if (!input) return;
+      const val = input.value.trim();
+      if (val && !teamMembers.some(m => m.name.toLowerCase() === val.toLowerCase())) {
+        teamMembers.push({ name: val });
+        selectedNames.push(val);
+        input.value = "";
+        renderNames();
       }
-      requestAnimationFrame(renderSnow);
     }
-    renderSnow();
 
-    // --- UNIVERSAL COPY FUNCTION ---
-    function copyTextToClipboard(text, msg) {
-      if (!text || !text.trim()) return alert("Tidak ada data untuk disalin!");
+    function clearAll() {
+      selectedNames = [];
+      const briefEl = document.getElementById("briefInput");
+      const outEl = document.getElementById("outputResult");
+      if (briefEl) briefEl.value = "";
+      if (outEl) outEl.value = "";
+      renderNames();
+    }
 
-      if (navigator.clipboard && window.isSecureContext) {
-        navigator.clipboard.writeText(text)
-          .then(() => alert(msg))
-          .catch(() => fallbackCopy(text, msg));
+    // --- LOGIKA UTAMA & PEMBUATAN FOLDER GOOGLE DRIVE OTOMATIS ---
+    async function generateJob() {
+      const briefEl = document.getElementById("briefInput");
+      const folderEl = document.getElementById("folderLinkInput");
+      const outEl = document.getElementById("outputResult");
+      const modeRadio = document.querySelector('input[name="optionMode"]:checked');
+      const mode = modeRadio ? modeRadio.value : "1";
+      const btnGenText = document.getElementById("btnGenText");
+      const btnGenerate = document.getElementById("btnGenerate");
+
+      if (!briefEl || !outEl) return;
+      const rawBrief = briefEl.value.trim();
+      const folderLink = folderEl ? folderEl.value.trim() : "";
+
+      if (!rawBrief) return alert("Silakan tempel format brief pesanan terlebih dahulu!");
+      if (selectedNames.length === 0) return alert("Pilih minimal satu anggota tim!");
+
+      let rawBlocks = rawBrief
+        .split(/(?=ID\s*:\s*\d+)/i)
+        .map(b => b.trim())
+        .filter(b => b.length > 0 && /ID\s*:/i.test(b));
+
+      if (rawBlocks.length === 0) rawBlocks = [rawBrief];
+
+      let orderIds = [];
+      rawBlocks.forEach(block => {
+        const idMatch = block.match(/ID\s*:\s*([^\n\r]+)/i);
+        if (idMatch) orderIds.push(idMatch[1].trim());
+      });
+
+      // Ubah tombol jadi loading
+      if (btnGenText) btnGenText.innerText = "Membuat Folder di Google Drive...";
+      if (btnGenerate) btnGenerate.disabled = true;
+
+      // Ambil ID dari Link Folder Induk
+      let parentFolderId = "";
+      const matchFolderId = folderLink.match(/\/folders\/([a-zA-Z0-9-_]+)/);
+      if (matchFolderId) {
+        parentFolderId = matchFolderId[1];
       } else {
-        fallbackCopy(text, msg);
-      }
-    }
-
-    function fallbackCopy(text, msg) {
-      const hiddenArea = document.getElementById('hiddenClipboard');
-      hiddenArea.value = text;
-      hiddenArea.select();
-      hiddenArea.setSelectionRange(0, 99999);
-      try {
-        document.execCommand('copy');
-        alert(msg);
-      } catch (err) {
-        alert("Gagal menyalin otomatis. Silakan salin manual.");
-      }
-    }
-
-    // --- LOGIKA UTAMA SORA WINTER ---
-    let files = [];
-    const DEFAULT_API_KEY = "AIzaSyD71nWV";
-
-    const extractFolderId = (input) => {
-      const match = input.match(/[-\w]{25,}/);
-      return match ? match[0] : "";
-    };
-
-    async function fetchFiles() {
-      const folderInput = document.getElementById("folderInput").value.trim();
-      const userKey = document.getElementById("userApiKey").value.trim();
-      const apiKey = userKey || DEFAULT_API_KEY;
-
-      const folderId = extractFolderId(folderInput);
-      const errEl = document.getElementById("driveError");
-      const resContainer = document.getElementById("driveResultContainer");
-      const btnFetch = document.getElementById("btnFetch");
-
-      if (!folderId) {
-        errEl.innerText = "Masukkan link Google Drive yang valid!";
-        errEl.classList.remove("hidden");
-        resContainer.classList.add("hidden");
-        return;
+        parentFolderId = folderLink.trim();
       }
 
-      errEl.classList.add("hidden");
-      btnFetch.innerText = "...";
-      btnFetch.disabled = true;
-
-      try {
-        const query = encodeURIComponent(`'${folderId}' in parents`);
-        const url = `https://www.googleapis.com/drive/v3/files?q=${query}&fields=files(id,name)&key=${apiKey}`;
-
-        const res = await fetch(url);
-        const data = await res.json();
-
-        if (!res.ok || data.error) {
-          throw new Error(data?.error?.message || "Gagal mengambil data.");
+      // Panggil Apps Script dan ambil balasan URL folder aslinya (tetap dipanggil untuk backend jika dibutuhkan)
+      let folderMap = {};
+      if (parentFolderId && orderIds.length > 0) {
+        try {
+          const targetUrl = `${GAS_URL}?parentFolderId=${encodeURIComponent(parentFolderId)}&ids=${encodeURIComponent(orderIds.join(","))}`;
+          const response = await fetch(targetUrl);
+          const result = await response.json();
+          
+          if (result.status === "success" && result.folders) {
+            result.folders.forEach(f => {
+              folderMap[f.id] = f.url;
+            });
+          }
+        } catch (err) {
+          console.error("Gagal mengambil URL folder otomatis:", err);
         }
+      }
 
-        files = (data.files || [])
-          .map((f) => ({
-            id: f.id,
-            name: f.name,
-            link: `https://drive.google.com/file/d/${f.id}/view?utm_source=sorasora&utm_medium=web_usp=drivesdk`,
-          }))
-          .sort((a, b) =>
-            a.name.localeCompare(b.name, undefined, {
-              numeric: true,
-              sensitivity: "base",
-            })
-          );
+      if (btnGenText) btnGenText.innerText = "Generate Job & Buat Folder Drive";
+      if (btnGenerate) btnGenerate.disabled = false;
 
-        document.getElementById("driveTotal").innerText = files.length;
-        const listEl = document.getElementById("driveFileList");
-        listEl.innerHTML = "";
+      let finalOutput = [];
 
-        files.forEach((f, i) => {
-          listEl.innerHTML += `
-            <div class="p-2.5 bg-orange-50/60 rounded-xl text-xs flex justify-between items-center border border-orange-100 shadow-sm">
-              <span class="font-bold text-orange-950 truncate max-w-[210px]">#${i + 1} ${f.name}</span>
-              <a href="${f.link}" target="_blank" rel="noreferrer" class="text-white font-bold underline bg-orange-700 px-2 py-1 rounded-lg text-[11px] hover:bg-orange-800 transition">
-                Buka File
-              </a>
-            </div>`;
+      if (mode === "1") {
+        // --- OPSI 1: SEMUA KEBAGIAN DI SETIAP ID ---
+        rawBlocks.forEach((block) => {
+          let processedBlock = block;
+          
+          // Pastikan baris Report : tetap ada apa adanya tanpa diisi URL otomatis
+          if (!/Report\s*:/i.test(processedBlock)) {
+            processedBlock += "\nReport :";
+          }
+
+          const jumlahMatch = processedBlock.match(/Jumlah\s*:\s*(\d+)/i);
+          let totalAmount = jumlahMatch ? parseInt(jumlahMatch[1], 10) : 0;
+
+          let blockResult = processedBlock + "\n\n";
+
+          if (totalAmount > 0 && selectedNames.length > 0) {
+            let baseCount = Math.floor(totalAmount / selectedNames.length);
+            let remainder = totalAmount % selectedNames.length;
+
+            selectedNames.forEach((name, i) => {
+              let assigned = baseCount + (i < remainder ? 1 : 0);
+              if (assigned > 0) {
+                blockResult += `${i + 1}. ${name} : ${assigned}\n`;
+              }
+            });
+          } else {
+            blockResult += `(Jumlah orderan tidak terdeteksi)\n`;
+          }
+
+          blockResult += `\n**DRIVE (BUAT SESUAI ID)**`;
+          finalOutput.push(blockResult);
         });
 
-        resContainer.classList.remove("hidden");
-      } catch (err) {
-        errEl.innerText = err.message || "Terjadi kesalahan.";
-        errEl.classList.remove("hidden");
-        resContainer.classList.add("hidden");
-      } finally {
-        btnFetch.innerText = "Ambil";
-        btnFetch.disabled = false;
+      } else {
+        // --- OPSI 2: GRAND TOTAL DIBAGI RATA, SISA DIBAGIKAN DARI AWAL ---
+        let grandTotal = 0;
+        rawBlocks.forEach((block) => {
+          const jumlahMatch = block.match(/Jumlah\s*:\s*(\d+)/i);
+          if (jumlahMatch) {
+            grandTotal += parseInt(jumlahMatch[1], 10);
+          }
+        });
+
+        if (grandTotal > 0 && selectedNames.length > 0) {
+          let basePerPerson = Math.floor(grandTotal / selectedNames.length);
+          let remainder = grandTotal % selectedNames.length;
+
+          let personQuota = {};
+          selectedNames.forEach((name, i) => {
+            personQuota[name] = basePerPerson + (i < remainder ? 1 : 0);
+          });
+
+          rawBlocks.forEach((block) => {
+            let processedBlock = block;
+
+            if (!/Report\s*:/i.test(processedBlock)) {
+              processedBlock += "\nReport :";
+            }
+
+            const jumlahMatch = processedBlock.match(/Jumlah\s*:\s*(\d+)/i);
+            let blockAmount = jumlahMatch ? parseInt(jumlahMatch[1], 10) : 0;
+
+            let blockResult = processedBlock + "\n\n";
+
+            if (blockAmount > 0) {
+              let assignedCount = 1;
+              selectedNames.forEach((name) => {
+                if (personQuota[name] > 0) {
+                  let takeForThisID = Math.min(personQuota[name], blockAmount);
+                  if (takeForThisID > 0) {
+                    blockResult += `${assignedCount}. ${name} : ${takeForThisID}\n`;
+                    personQuota[name] -= takeForThisID;
+                    blockAmount -= takeForThisID;
+                    assignedCount++;
+                  }
+                }
+              });
+            } else {
+              blockResult += `(Jumlah orderan tidak terdeteksi)\n`;
+            }
+
+            blockResult += `\n**DRIVE (BUAT SESUAI ID)**`;
+            finalOutput.push(blockResult);
+          });
+
+        } else {
+          rawBlocks.forEach((block) => {
+            let processedBlock = block;
+            if (!/Report\s*:/i.test(processedBlock)) {
+              processedBlock += "\nReport :";
+            }
+            let blockResult = processedBlock + "\n\n(Jumlah orderan tidak terdeteksi)\n\n**DRIVE (BUAT SESUAI ID)**";
+            finalOutput.push(blockResult);
+          });
+        }
       }
+
+      outEl.value = finalOutput.join("\n\n𖦹 ﹌﹌﹌﹌﹌﹌﹌﹌﹌﹌𓂃🪶\n\n");
     }
 
-    function copyNames() {
-      if (!files.length) return alert("Tidak ada data!");
-      copyTextToClipboard(files.map((f) => f.name).join("\n"), "Nama disalin!");
-    }
-
-    function copyLinks() {
-      if (!files.length) return alert("Tidak ada data!");
-      copyTextToClipboard(files.map((f) => f.link).join("\n"), "Link disalin!");
-    }
-
-    function copyAll() {
-      if (!files.length) return alert("Tidak ada data!");
-      copyTextToClipboard(files.map((f) => `${f.name} ${f.link}`).join("\n"), "Semua disalin!");
-    }
-
-    // --- PWA INTEGRATION SCRIPT ---
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./sw.js');
+    function copyToClipboard() {
+      const output = document.getElementById("outputResult");
+      if (!output || !output.value.trim()) return alert("Belum ada teks untuk disalin!");
+      navigator.clipboard.writeText(output.value).then(() => {
+        const btnText = document.getElementById("btnCopyText");
+        if (btnText) {
+          btnText.innerText = "Berhasil Disalin!";
+          setTimeout(() => { btnText.innerText = "Salin Teks Rekapan"; }, 2000);
+        }
+      });
     }
   </script>
 </body>
