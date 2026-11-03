@@ -86,6 +86,23 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         </a>
 
+                <!-- 1. Bagi Job -->
+        <a href="./drive-link" class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl ${
+          currentPath.includes("bagi")
+            ? "bg-blue-50 text-blue-900 font-semibold shadow-sm shadow-blue-900/10 border border-blue-200/50"
+            : "text-slate-600 hover:text-blue-900 hover:bg-slate-50 font-medium hover:translate-x-1"
+        } text-xs transition-all duration-200">
+          <div class="flex items-center gap-3">
+            <iconify-icon icon="heroicons:clipboard-document-list" class="text-base ${currentPath.includes("bagi-job") ? "text-blue-900" : "text-slate-400 group-hover:text-blue-900"}"></iconify-icon>
+            <span>Bagi Job</span>
+          </div>
+          ${
+            currentPath.includes("bagi-job")
+              ? '<span class="text-[10px] bg-blue-100 text-blue-900 px-2 py-0.5 rounded-md font-bold">Aktif</span>'
+              : ""
+          }
+        </a>
+
         <!-- 2. Pisah Job -->
         <a href="./brief-parser" class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl ${
           currentPath.includes("brief-parser")
