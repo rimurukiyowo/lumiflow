@@ -1,17 +1,14 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="scroll-smooth">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport"
-    content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-  <title>Drive Tools - Kimi Team</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>Kimi Team Tools - Pink Fanta Suite v3.0</title>
 
   <!-- Favicon & PWA Config -->
   <link rel="icon" type="image/png" href="./logo.png">
-  <link rel="apple-touch-icon" href="./logo.png">
-  <link rel="manifest" href="./manifest.json">
-  <meta name="theme-color" content="#0f172a">
+  <meta name="theme-color" content="#db2777">
 
   <!-- Google Fonts: Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,254 +20,1362 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://code.iconify.design/iconify-icon/1.0.8/iconify-icon.min.js"></script>
 
-  <!-- Template Layout Otomatis (Sidebar, Navbar, Footer) -->
-  <script src="./layout.js"></script>
-
   <style>
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      background-color: #f8fafc;
-      background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+      background-color: #fdf2f8;
+      background-image: radial-gradient(#f472b6 1.2px, transparent 1.2px);
       background-size: 24px 24px;
+      overflow-x: hidden;
+      position: relative;
     }
 
+    /* Custom Scrollbar */
     ::-webkit-scrollbar {
       width: 5px;
       height: 5px;
     }
-
     ::-webkit-scrollbar-thumb {
-      background: #cbd5e1;
+      background: #f472b6;
       border-radius: 10px;
+    }
+
+    /* Smooth View Animations */
+    .view-section {
+      display: none;
+      animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .view-section.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ================= ANIMASI BUNGA MEKAR & JATUH ================= */
+    .flower-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 999;
+      overflow: hidden;
+    }
+
+    .falling-flower {
+      position: absolute;
+      top: -10%;
+      animation: fallAndBloom linear infinite;
+      opacity: 0.8;
+    }
+
+    @keyframes fallAndBloom {
+      0% {
+        transform: translateY(-10vh) translateX(0) rotate(0deg) scale(0.6);
+        opacity: 0;
+      }
+      20% {
+        opacity: 0.9;
+        transform: translateY(20vh) translateX(25px) rotate(90deg) scale(1);
+      }
+      50% {
+        transform: translateY(50vh) translateX(-25px) rotate(180deg) scale(1.1);
+      }
+      80% {
+        opacity: 0.8;
+        transform: translateY(80vh) translateX(20px) rotate(270deg) scale(1);
+      }
+      100% {
+        transform: translateY(110vh) translateX(-15px) rotate(360deg) scale(0.7);
+        opacity: 0;
+      }
+    }
+
+    /* ================= ANIMASI AIR TERJUN (GLOW CASCADING) ================= */
+    .waterfall-effect {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(244,114,182,0.15) 50%, rgba(255,255,255,0) 100%);
+      background-size: 100% 200%;
+      animation: waterfallFlow 4s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes waterfallFlow {
+      0% { background-position: 0% 0%; }
+      100% { background-position: 0% 200%; }
     }
   </style>
 </head>
 
-<body class="text-slate-700 antialiased min-h-screen flex overflow-x-hidden">
+<body class="text-slate-700 antialiased min-h-screen flex flex-col selection:bg-pink-600 selection:text-white">
 
-  <!-- SIDEBAR OTOMATIS -->
-  <div id="app-sidebar"></div>
+  <!-- BACKGROUND FLOATING FLOWERS (BUNGA MEKAR & JATUH) -->
+  <div class="flower-container" aria-hidden="true">
+    <div class="falling-flower" style="left: 5%; animation-duration: 9s; animation-delay: 0s; font-size: 18px;">🌸</div>
+    <div class="falling-flower" style="left: 18%; animation-duration: 12s; animation-delay: 2s; font-size: 14px;">💮</div>
+    <div class="falling-flower" style="left: 35%; animation-duration: 10s; animation-delay: 1s; font-size: 22px;">🌺</div>
+    <div class="falling-flower" style="left: 52%; animation-duration: 14s; animation-delay: 4s; font-size: 16px;">🌸</div>
+    <div class="falling-flower" style="left: 68%; animation-duration: 11s; animation-delay: 3s; font-size: 20px;">💮</div>
+    <div class="falling-flower" style="left: 85%; animation-duration: 13s; animation-delay: 0.5s; font-size: 15px;">🌺</div>
+    <div class="falling-flower" style="left: 92%; animation-duration: 8s; animation-delay: 5s; font-size: 19px;">🌸</div>
+  </div>
 
-  <!-- MAIN WRAPPER -->
-  <div class="flex-1 flex flex-col min-w-0">
+  <!-- NAVBAR UTAMA / HEADER SWITCHER -->
+  <header class="bg-white/85 backdrop-blur-md border-b border-pink-200 sticky top-0 z-30 px-4 sm:px-8 py-3.5 flex items-center justify-between shadow-xs">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-pink-600 to-rose-500 flex items-center justify-center text-white font-extrabold text-base shadow-md shadow-pink-600/30">
+        K
+      </div>
+      <div>
+        <h1 class="text-xs sm:text-sm font-extrabold text-slate-900 tracking-tight">Kimi Team Suite</h1>
+        <p class="text-[10px] text-pink-600 font-semibold">Pink Fanta Edition v3.0</p>
+      </div>
+    </div>
 
-    <!-- NAVBAR ATAS OTOMATIS -->
-    <div id="app-navbar"></div>
+    <!-- Navigasi Tab Single Page (5 Menu: Dashboard, Bagi Job, Brief Parser, Cek Drive, Duplicate) -->
+    <nav class="hidden lg:flex items-center gap-1 bg-pink-50/80 p-1 rounded-2xl border border-pink-200">
+      <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn px-3 py-2 rounded-xl text-xs font-bold transition-all text-slate-600 hover:text-pink-600 cursor-pointer">Dashboard</button>
+      <button onclick="switchTab('bagijob')" id="nav-bagijob" class="nav-btn px-3 py-2 rounded-xl text-xs font-bold transition-all text-slate-600 hover:text-pink-600 cursor-pointer">Bagi Job</button>
+      <button onclick="switchTab('briefparser')" id="nav-briefparser" class="nav-btn px-3 py-2 rounded-xl text-xs font-bold transition-all text-slate-600 hover:text-pink-600 cursor-pointer">Brief Parser</button>
+      <button onclick="switchTab('cekdrive')" id="nav-cekdrive" class="nav-btn px-3 py-2 rounded-xl text-xs font-bold transition-all text-slate-600 hover:text-pink-600 cursor-pointer">Cek Drive</button>
+      <button onclick="switchTab('duplicate')" id="nav-duplicate" class="nav-btn px-3 py-2 rounded-xl text-xs font-bold transition-all text-slate-600 hover:text-pink-600 cursor-pointer">Duplicate & Upload</button>
+    </nav>
 
-    <!-- CONTENT BODY -->
-    <main class="p-4 sm:p-6 md:p-8 max-w-4xl w-full mx-auto space-y-5 sm:space-y-6">
+    <!-- Mobile / Tablet Menu Selector -->
+    <div class="flex lg:hidden items-center gap-2">
+      <select id="mobileMenuSelect" onchange="switchTab(this.value)" class="bg-pink-50 border border-pink-200 text-xs font-bold rounded-xl px-3 py-2 text-pink-700 focus:outline-none">
+        <option value="dashboard">📊 Dashboard</option>
+        <option value="bagijob">👥 Bagi Job</option>
+        <option value="briefparser">📝 Brief Parser</option>
+        <option value="cekdrive">📂 Cek Drive</option>
+        <option value="duplicate">🚀 Duplicate & Upload</option>
+      </select>
+    </div>
+  </header>
 
-      <!-- HEADER INFO -->
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-200/80">
-        <div>
-          <h1 class="text-xl font-extrabold text-slate-900 tracking-tight">Manajemen & Upload Google Drive</h1>
-          <p class="text-xs text-slate-500 mt-0.5">Penggandaan berkas instan dan upload massal berurutan A-Z ke folder
-            custom</p>
+  <!-- KONTEN UTAMA (SPA VIEWS) -->
+  <main class="flex-1 p-4 sm:p-6 max-w-6xl w-full mx-auto relative z-10">
+
+    <!-- ================= 1. VIEW: DASHBOARD ================= -->
+    <div id="view-dashboard" class="view-section space-y-6">
+      <div class="bg-gradient-to-r from-pink-900 via-rose-900 to-pink-950 text-white rounded-3xl p-5 sm:p-8 flex flex-col md:flex-row items-center justify-between shadow-xl relative overflow-hidden border border-pink-800">
+        <div class="waterfall-effect"></div>
+        <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-pink-500/20 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="space-y-3 z-10 max-w-lg text-center md:text-left">
+          <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-pink-300 text-[11px] font-bold tracking-wide uppercase">
+            <span>✨ Pink Fanta Workspace v3.0</span>
+          </div>
+          <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight text-white">Kimi Team Tools</h2>
+          <p class="text-xs md:text-sm text-pink-100 leading-relaxed">
+            Pusat automasi kerja tim serba pink. Ekstraksi Google Drive, pembagian job, parser brief, hingga duplikasi berkas instan.
+          </p>
+          <div class="pt-2 flex flex-wrap justify-center md:justify-start gap-2.5">
+            <button onclick="switchTab('bagijob')" class="inline-flex items-center gap-2 bg-pink-600 hover:bg-pink-500 active:scale-95 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition shadow-lg shadow-pink-600/30 cursor-pointer">
+              <span>Bagi Job Tim</span>
+              <iconify-icon icon="heroicons:arrow-right-20-solid"></iconify-icon>
+            </button>
+            <button onclick="switchTab('duplicate')" class="inline-flex items-center gap-1.5 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white font-semibold text-xs px-4 py-2.5 rounded-xl transition border border-white/15 cursor-pointer">
+              <span>Duplicate & Upload</span>
+            </button>
+          </div>
         </div>
-        <span
-          class="inline-flex items-center gap-1.5 text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-100 px-3 py-1.5 rounded-full w-fit">
-          <span class="w-1.5 h-1.5 rounded-full bg-indigo-600"></span>
+        <div class="mt-6 md:mt-0 flex justify-center shrink-0 z-10">
+          <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-3xl bg-gradient-to-br from-pink-500/30 to-rose-500/30 backdrop-blur-xl flex items-center justify-center border border-white/20 shadow-2xl rotate-3 hover:rotate-0 transition duration-300">
+            <iconify-icon icon="fluent-emoji:sparkles" class="text-5xl sm:text-6xl drop-shadow-md"></iconify-icon>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Extractor Widget -->
+      <div class="bg-white/95 backdrop-blur-md rounded-3xl border border-pink-200/80 shadow-sm p-4 sm:p-7 space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-pink-100">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-2xl bg-pink-50 border border-pink-200 text-pink-600 flex items-center justify-center text-xl shadow-xs shrink-0">
+              <iconify-icon icon="heroicons:link-solid"></iconify-icon>
+            </div>
+            <div>
+              <h3 class="text-sm font-bold text-slate-900 tracking-tight">Google Drive Link Extractor</h3>
+              <p class="text-[11px] text-slate-400 font-medium">Ekstraksi berkas folder Google Drive kilat</p>
+            </div>
+          </div>
+          <span class="self-start sm:self-auto text-[11px] font-bold bg-pink-50 text-pink-700 border border-pink-200 px-3 py-1 rounded-full flex items-center gap-1">
+            ⚡ Quick Tool
+          </span>
+        </div>
+
+        <div class="space-y-2">
+          <input id="userApiKey" type="hidden" value="AIzaSyD71nWVbtMxWK4T05Ty4qMuIRTP4ij2i48" />
+          <div class="flex flex-col sm:flex-row gap-2.5">
+            <input id="folderInputDash" type="text" class="flex-1 p-3.5 text-xs rounded-2xl border border-pink-200 focus:outline-none focus:ring-2 focus:ring-pink-600 bg-pink-50/30 text-slate-800 placeholder-slate-400 font-medium" placeholder="Tempel link atau ID folder Google Drive di sini..." />
+            <button onclick="fetchFilesDash()" id="btnFetchDash" class="bg-pink-600 hover:bg-pink-500 active:scale-95 text-white text-xs px-6 py-3.5 rounded-2xl font-bold transition shadow-md shadow-pink-600/20 flex items-center justify-center gap-1.5 shrink-0 cursor-pointer">
+              <span>Ambil Berkas</span>
+              <iconify-icon icon="heroicons:arrow-down-tray-20-solid"></iconify-icon>
+            </button>
+          </div>
+        </div>
+
+        <div id="driveErrorDash" class="text-xs font-semibold text-rose-700 bg-rose-50 p-3.5 rounded-2xl border border-rose-200 hidden"></div>
+
+        <div id="driveResultContainerDash" class="hidden space-y-3 pt-3 border-t border-pink-100">
+          <div class="grid grid-cols-3 gap-2">
+            <button onclick="copyNamesDash()" class="bg-pink-50/50 hover:bg-pink-100 text-pink-700 text-xs py-2.5 rounded-xl font-semibold transition border border-pink-200 cursor-pointer">📋 Salin Nama</button>
+            <button onclick="copyLinksDash()" class="bg-pink-50/50 hover:bg-pink-100 text-pink-700 text-xs py-2.5 rounded-xl font-semibold transition border border-pink-200 cursor-pointer">🔗 Salin Link</button>
+            <button onclick="copyAllDash()" class="bg-pink-600 hover:bg-pink-500 text-white text-xs py-2.5 rounded-xl font-bold transition cursor-pointer">✨ Salin Semua</button>
+          </div>
+          <div class="text-xs font-semibold text-slate-500 flex justify-between items-center px-1">
+            <span>Daftar Berkas:</span>
+            <span>Total: <strong id="driveTotalDash" class="text-pink-600 font-bold">0</strong> File</span>
+          </div>
+          <div id="driveFileListDash" class="max-h-60 overflow-y-auto space-y-1.5 pr-1"></div>
+        </div>
+      </div>
+
+      <!-- Navigation Cards Grid (4 Cards) -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div onclick="switchTab('bagijob')" class="bg-white/95 backdrop-blur-md p-5 rounded-3xl border border-pink-200/80 shadow-sm hover:border-pink-500 hover:shadow-md transition-all group cursor-pointer relative overflow-hidden">
+          <div class="flex items-center justify-between">
+            <div class="w-10 h-10 rounded-2xl bg-pink-50 text-pink-600 flex items-center justify-center text-lg border border-pink-200 group-hover:bg-pink-600 group-hover:text-white transition">
+              <iconify-icon icon="heroicons:user-group-solid"></iconify-icon>
+            </div>
+            <iconify-icon icon="heroicons:arrow-up-right-20-solid" class="text-slate-400 group-hover:text-pink-600 transition"></iconify-icon>
+          </div>
+          <div class="mt-4">
+            <span class="text-[10px] font-bold text-pink-500 uppercase tracking-wider">Modul #1</span>
+            <h3 class="text-sm font-bold text-slate-900 group-hover:text-pink-600 transition mt-0.5">Bagi Job</h3>
+            <p class="text-[11px] text-slate-500 font-medium mt-0.5">Pembagian task & folder tim</p>
+          </div>
+        </div>
+
+        <div onclick="switchTab('briefparser')" class="bg-white/95 backdrop-blur-md p-5 rounded-3xl border border-pink-200/80 shadow-sm hover:border-pink-500 hover:shadow-md transition-all group cursor-pointer relative overflow-hidden">
+          <div class="flex items-center justify-between">
+            <div class="w-10 h-10 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-lg border border-rose-200 group-hover:bg-rose-600 group-hover:text-white transition">
+              <iconify-icon icon="heroicons:document-text-solid"></iconify-icon>
+            </div>
+            <iconify-icon icon="heroicons:arrow-up-right-20-solid" class="text-slate-400 group-hover:text-rose-600 transition"></iconify-icon>
+          </div>
+          <div class="mt-4">
+            <span class="text-[10px] font-bold text-rose-500 uppercase tracking-wider">Modul #2</span>
+            <h3 class="text-sm font-bold text-slate-900 group-hover:text-rose-600 transition mt-0.5">Brief Splitter</h3>
+            <p class="text-[11px] text-slate-500 font-medium mt-0.5">Parser format WhatsApp otomatis</p>
+          </div>
+        </div>
+
+        <div onclick="switchTab('cekdrive')" class="bg-white/95 backdrop-blur-md p-5 rounded-3xl border border-pink-200/80 shadow-sm hover:border-pink-500 hover:shadow-md transition-all group cursor-pointer relative overflow-hidden">
+          <div class="flex items-center justify-between">
+            <div class="w-10 h-10 rounded-2xl bg-fuchsia-50 text-fuchsia-600 flex items-center justify-center text-lg border border-fuchsia-200 group-hover:bg-fuchsia-600 group-hover:text-white transition">
+              <iconify-icon icon="heroicons:folder-arrow-down-solid"></iconify-icon>
+            </div>
+            <iconify-icon icon="heroicons:arrow-up-right-20-solid" class="text-slate-400 group-hover:text-fuchsia-600 transition"></iconify-icon>
+          </div>
+          <div class="mt-4">
+            <span class="text-[10px] font-bold text-fuchsia-500 uppercase tracking-wider">Modul #3</span>
+            <h3 class="text-sm font-bold text-slate-900 group-hover:text-fuchsia-600 transition mt-0.5">Cek Drive</h3>
+            <p class="text-[11px] text-slate-500 font-medium mt-0.5">Scan jumlah gambar gass</p>
+          </div>
+        </div>
+
+        <div onclick="switchTab('duplicate')" class="bg-white/95 backdrop-blur-md p-5 rounded-3xl border border-pink-200/80 shadow-sm hover:border-pink-500 hover:shadow-md transition-all group cursor-pointer relative overflow-hidden">
+          <div class="flex items-center justify-between">
+            <div class="w-10 h-10 rounded-2xl bg-pink-100 text-pink-700 flex items-center justify-center text-lg border border-pink-300 group-hover:bg-pink-600 group-hover:text-white transition">
+              <iconify-icon icon="heroicons:document-duplicate-solid"></iconify-icon>
+            </div>
+            <iconify-icon icon="heroicons:arrow-up-right-20-solid" class="text-slate-400 group-hover:text-pink-600 transition"></iconify-icon>
+          </div>
+          <div class="mt-4">
+            <span class="text-[10px] font-bold text-pink-600 uppercase tracking-wider">Modul #4</span>
+            <h3 class="text-sm font-bold text-slate-900 group-hover:text-pink-600 transition mt-0.5">Duplicate & Upload</h3>
+            <p class="text-[11px] text-slate-500 font-medium mt-0.5">Gandakan file & upload massal A-Z</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ================= 2. VIEW: BAGI JOB ================= -->
+    <div id="view-bagijob" class="view-section space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div>
+          <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Modul Pembagian Job</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Distribusikan task tim otomatis dengan koneksi Google Drive</p>
+        </div>
+        <span class="inline-flex items-center gap-1.5 text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 px-3 py-1.5 rounded-full w-fit">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Auto Drive Aktif
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div class="lg:col-span-7 space-y-5">
+          <div class="bg-white p-4 rounded-2xl border border-pink-200/80 shadow-xs space-y-2">
+            <div class="flex items-center justify-between">
+              <label class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+                <iconify-icon icon="heroicons:folder-open-20-solid" class="text-pink-600 text-base"></iconify-icon>
+                Google Drive Induk (Permanen)
+              </label>
+              <span class="text-[10px] font-bold bg-pink-100 text-pink-800 px-2.5 py-0.5 rounded-full">Terkunci</span>
+            </div>
+            <input type="text" id="folderLinkInput" readonly class="w-full p-2.5 text-xs border border-pink-200 rounded-xl bg-pink-50/50 text-slate-600 font-mono cursor-not-allowed" value="https://drive.google.com/drive/folders/1TjxgPJp_lW1YEaRmseO_UX7K-jifhO-c">
+          </div>
+
+          <div class="bg-white p-4 rounded-2xl border border-pink-200/80 shadow-xs space-y-2">
+            <label class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+              <iconify-icon icon="heroicons:document-text-20-solid" class="text-pink-600 text-base"></iconify-icon>
+              Format Brief Pesanan (Bisa Banyak ID Sekaligus)
+            </label>
+            <textarea id="briefInput" class="w-full h-36 p-3 text-xs border border-pink-200 rounded-xl bg-pink-50/20 font-mono text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-pink-600 resize-y leading-relaxed" placeholder="ID : 287345&#10;Target : https://...&#10;Jumlah : 50&#10;Report :"></textarea>
+          </div>
+
+          <div class="bg-white p-4 rounded-2xl border border-pink-200/80 shadow-xs space-y-2.5">
+            <label class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+              <iconify-icon icon="heroicons:adjustments-horizontal-20-solid" class="text-pink-600 text-base"></iconify-icon>
+              Pilih Metode Pembagian Job
+            </label>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <label class="flex items-start gap-2.5 p-3 rounded-xl border border-pink-200 bg-pink-50/30 cursor-pointer hover:border-pink-400 transition">
+                <input type="radio" name="optionMode" value="1" checked class="mt-0.5 text-pink-600 focus:ring-pink-500">
+                <div>
+                  <span class="text-xs font-extrabold text-slate-800 block">Opsi 1: Semua Kebagian</span>
+                  <span class="text-[10px] text-slate-500 block">Semua talent ikut mengerjakan di setiap ID.</span>
+                </div>
+              </label>
+              <label class="flex items-start gap-2.5 p-3 rounded-xl border border-pink-200 bg-pink-50/30 cursor-pointer hover:border-pink-400 transition">
+                <input type="radio" name="optionMode" value="2" class="mt-0.5 text-pink-600 focus:ring-pink-500">
+                <div>
+                  <span class="text-xs font-extrabold text-slate-800 block">Opsi 2: Rotasi / ID Berbeda</span>
+                  <span class="text-[10px] text-slate-500 block">ID disebar bergantian per talent.</span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="bg-white p-4 rounded-2xl border border-pink-200/80 shadow-xs space-y-3">
+            <div class="flex items-center justify-between">
+              <label class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+                <iconify-icon icon="heroicons:users-20-solid" class="text-pink-600 text-base"></iconify-icon>
+                Pilih Anggota Tim Tugas Hari Ini
+              </label>
+              <div class="flex gap-2 text-[11px] font-bold">
+                <button onclick="selectAllNames()" class="text-pink-600 hover:underline cursor-pointer">Semua</button>
+                <span class="text-slate-300">|</span>
+                <button onclick="deselectAllNames()" class="text-slate-400 hover:text-slate-600 cursor-pointer">Batal</button>
+              </div>
+            </div>
+            <div id="nameContainer" class="flex flex-wrap gap-1.5 max-h-40 overflow-y-auto p-2.5 border border-pink-100 rounded-xl bg-pink-50/20"></div>
+            <div class="flex items-center justify-between text-xs pt-1">
+              <span class="text-slate-400 font-medium">Terpilih: <strong id="totalSelectedNames" class="text-slate-800">0</strong> Orang</span>
+              <div class="flex gap-1.5">
+                <input type="text" id="newNameInput" class="p-1.5 px-2.5 text-xs border border-pink-200 rounded-lg bg-white" placeholder="Tambah nama..." onkeydown="if(event.key === 'Enter') addNewName()">
+                <button onclick="addNewName()" class="bg-pink-600 hover:bg-pink-500 text-white text-xs px-3 py-1.5 rounded-lg font-bold cursor-pointer">Tambah</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex gap-2 pt-1">
+            <button id="btnGenerateJob" onclick="generateJob()" class="flex-1 bg-pink-600 hover:bg-pink-500 active:scale-95 text-white text-xs py-3.5 px-4 rounded-xl font-bold shadow-sm transition flex items-center justify-center gap-1.5 cursor-pointer">
+              <iconify-icon icon="heroicons:sparkles-20-solid" class="text-base"></iconify-icon> 
+              <span id="btnGenText">Generate Job & Buat Folder Drive</span>
+            </button>
+            <button onclick="clearJobForm()" class="bg-pink-50 hover:bg-rose-50 hover:text-rose-600 text-slate-600 text-xs py-3.5 px-4 rounded-xl font-bold border border-pink-200 transition cursor-pointer">Reset</button>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5 flex flex-col">
+          <div class="bg-white p-4 rounded-2xl border border-pink-200/80 shadow-xs flex-1 flex flex-col space-y-3">
+            <div class="flex items-center justify-between">
+              <label class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+                <iconify-icon icon="heroicons:clipboard-document-list-20-solid" class="text-pink-600 text-base"></iconify-icon>
+                Hasil Rekap Output
+              </label>
+              <span class="text-[10px] font-bold bg-pink-100 text-pink-700 px-2 py-0.5 rounded">Siap Kirim WA</span>
+            </div>
+            <textarea id="outputResultJob" readonly class="w-full flex-1 min-h-[320px] p-3.5 text-xs border border-pink-900 rounded-xl bg-slate-900 text-pink-300 font-mono focus:outline-none leading-relaxed resize-y" placeholder="# Hasil rekap akan muncul di sini..."></textarea>
+            <button onclick="copyJobResult()" class="w-full bg-pink-600 hover:bg-pink-500 active:scale-95 text-white text-xs py-3 rounded-xl font-bold transition flex items-center justify-center gap-1.5 shadow-xs cursor-pointer">
+              <iconify-icon icon="heroicons:clipboard-document-check-20-solid" class="text-base"></iconify-icon>
+              <span id="btnCopyTextJob">Salin Teks Rekapan</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ================= 3. VIEW: BRIEF PARSER ================= -->
+    <div id="view-briefparser" class="view-section space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div>
+          <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Brief List Parser</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Konversi teks brief mentah pesanan WhatsApp ke format tabel rekap</p>
+        </div>
+        <span class="inline-flex items-center gap-1.5 text-xs font-bold bg-pink-50 text-pink-700 border border-pink-200 px-3 py-1.5 rounded-full w-fit">
+          <span class="w-1.5 h-1.5 rounded-full bg-pink-600"></span> Modul Format Brief
+        </span>
+      </div>
+
+      <div class="bg-white/95 backdrop-blur-md rounded-3xl border border-pink-200/80 shadow-sm p-4 sm:p-6 space-y-4">
+        <div class="space-y-1.5">
+          <label for="inputBriefParser" class="block text-xs font-bold text-slate-700">Tempel Brief di sini:</label>
+          <textarea id="inputBriefParser" rows="5" class="w-full p-3.5 text-xs border border-pink-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-pink-600 bg-pink-50/20 text-slate-800 font-mono transition resize-y placeholder-slate-400 font-medium" placeholder="Salin & tempel brief dari WhatsApp di sini (memuat ID, Orderan, Target, dsb)..."></textarea>
+        </div>
+
+        <div class="grid grid-cols-3 gap-2 pt-1">
+          <button onclick="parseBriefData()" class="flex items-center justify-center gap-1.5 bg-pink-600 hover:bg-pink-500 active:scale-95 text-white font-bold py-3 px-3 rounded-2xl text-xs shadow-md transition cursor-pointer">
+            <iconify-icon icon="heroicons:cog-6-tooth-solid" class="text-sm"></iconify-icon>
+            <span>Generate</span>
+          </button>
+          <button onclick="copyBriefResult()" class="flex items-center justify-center gap-1.5 bg-rose-600 hover:bg-rose-500 active:scale-95 text-white font-bold py-3 px-3 rounded-2xl text-xs shadow-sm transition cursor-pointer">
+            <iconify-icon icon="heroicons:clipboard-document-solid" class="text-sm"></iconify-icon>
+            <span>Salin Tabel</span>
+          </button>
+          <button onclick="clearBriefParser()" class="flex items-center justify-center gap-1.5 bg-pink-50 hover:bg-rose-50 hover:text-rose-600 text-slate-600 font-semibold py-3 px-3 rounded-2xl text-xs border border-pink-200 transition cursor-pointer">
+            <iconify-icon icon="heroicons:trash-solid" class="text-sm"></iconify-icon>
+            <span>Reset</span>
+          </button>
+        </div>
+
+        <div id="copyStatusBrief" class="text-xs font-bold text-pink-700 bg-pink-50 border border-pink-200 px-3.5 py-2.5 rounded-2xl text-center hidden transition">
+          ✨ Berhasil disalin ke clipboard! Siap ditempel ke Google Sheets / Excel.
+        </div>
+
+        <div class="space-y-2 pt-3 border-t border-pink-100">
+          <div class="flex items-center justify-between">
+            <label class="block text-xs font-bold text-slate-700">Hasil Rekap Tabel:</label>
+            <span class="text-[11px] text-slate-400 font-medium">Otomatis deteksi platform & ID pesanan</span>
+          </div>
+          <div class="overflow-x-auto border border-pink-200/80 rounded-2xl bg-white shadow-inner max-h-[360px]">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr class="bg-pink-50 text-pink-900 sticky top-0 z-10 border-b border-pink-200 text-[11px] uppercase tracking-wider">
+                  <th class="p-3 font-bold">Nama</th>
+                  <th class="p-3 font-bold text-center">Jumlah</th>
+                  <th class="p-3 font-bold">ID</th>
+                  <th class="p-3 font-bold">Orderan</th>
+                </tr>
+              </thead>
+              <tbody id="tableBodyParser" class="divide-y divide-slate-100">
+                <tr>
+                  <td colspan="4" class="p-8 text-center text-slate-400 italic">Belum ada data. Tempel brief WhatsApp di atas lalu klik "Generate".</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ================= 4. VIEW: CEK DRIVE & SUBFOLDER ================= -->
+    <div id="view-cekdrive" class="view-section space-y-6">
+      <div class="bg-white rounded-3xl border border-pink-200 p-5 sm:p-6 shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+          <h2 class="text-xl font-extrabold text-pink-600 tracking-tight">🚀 Subfolder Counter & Brief Parser</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Auto-rekap jumlah aset gambar Google Drive tanpa ribet.</p>
+        </div>
+        <span class="bg-pink-50 text-pink-600 border border-pink-200 px-3 py-1 rounded-full text-xs font-bold">✨ Pink Fanta Edition</span>
+      </div>
+
+      <div class="bg-white rounded-3xl border border-pink-200 p-5 sm:p-6 shadow-sm">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="space-y-2">
+            <label for="briefInputCek" class="text-xs font-bold text-slate-700">💬 Paste Brief / Pesan WhatsApp (Opsional)</label>
+            <textarea id="briefInputCek" placeholder="Tempel format pesan lengkap di sini (ID, Target, Jumlah, Orderan, Link Drive)..." oninput="parseBriefCek()" class="w-full p-3.5 text-xs rounded-2xl border border-pink-200 bg-pink-50/30 font-medium focus:ring-2 focus:ring-pink-600"></textarea>
+          </div>
+          <div class="space-y-4">
+            <div class="space-y-2">
+              <label for="folderInputCek" class="text-xs font-bold text-slate-700">📂 Link atau ID Folder Utama Google Drive</label>
+              <input type="text" id="folderInputCek" placeholder="Auto-fill dari brief atau paste manual..." class="w-full p-3.5 text-xs rounded-2xl border border-pink-200 bg-pink-50/30 font-medium focus:ring-2 focus:ring-pink-600">
+            </div>
+            <button id="scanBtnCek" type="button" onclick="startScanCek()" class="w-full bg-pink-600 hover:bg-pink-500 text-white font-bold py-3.5 rounded-2xl text-xs shadow-md transition cursor-pointer">🔥 Mulai Hitung Gambar</button>
+            <div id="statusCek" class="text-xs font-bold text-pink-600"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="resultsCek" class="bg-white rounded-3xl border border-pink-200 p-5 sm:p-6 shadow-sm space-y-6" style="display: none;">
+        <div id="briefSummaryCek" class="bg-pink-50/50 border border-pink-200 rounded-2xl p-4 text-xs grid grid-cols-2 sm:grid-cols-3 gap-3 font-medium">
+          <div>📌 ID Brief: <span id="sumIdCek" class="font-bold text-pink-600">-</span></div>
+          <div>🌐 Platform: <span id="sumPlatformCek" class="font-bold text-pink-600">-</span></div>
+          <div>🛒 Orderan: <span id="sumOrderCek" class="font-bold text-pink-600">-</span></div>
+          <div>🎯 Target Qty: <span id="sumTargetCek" class="font-bold text-pink-600">-</span></div>
+          <div>📅 Tgl Share: <span id="sumDateCek" class="font-bold text-pink-600">-</span></div>
+          <div>🕒 Dibuat: <span id="sumDriveCreatedCek" class="font-bold text-pink-600">-</span></div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div class="bg-pink-50/30 border border-pink-200 p-4 rounded-2xl">
+            <div id="totalFoldersCountCek" class="text-xl font-extrabold text-pink-600">0</div>
+            <div class="text-[10px] font-bold text-slate-400 uppercase mt-1">Total Item / Folder</div>
+          </div>
+          <div class="bg-pink-50/30 border border-pink-200 p-4 rounded-2xl">
+            <div id="totalImagesCountCek" class="text-xl font-extrabold text-rose-500">0</div>
+            <div class="text-[10px] font-bold text-slate-400 uppercase mt-1">Total Gambar</div>
+          </div>
+          <div class="bg-pink-50/30 border border-pink-200 p-4 rounded-2xl">
+            <div id="totalSizeCountCek" class="text-xl font-extrabold text-slate-800">0 MB</div>
+            <div class="text-[10px] font-bold text-slate-400 uppercase mt-1">Total Ukuran</div>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row justify-between items-center gap-3">
+          <button class="bg-pink-100 text-pink-800 hover:bg-pink-600 hover:text-white border border-pink-300 px-4 py-2.5 rounded-xl font-bold text-xs transition cursor-pointer" type="button" onclick="copyAllDataCek()">📋 Salin Semua ke Excel</button>
+          <input type="text" id="searchBoxCek" placeholder="🔍 Cari nama folder/file..." oninput="handleSearchCek()" class="w-full sm:w-64 p-2.5 text-xs rounded-xl border border-pink-200 bg-pink-50/30 focus:outline-none">
+        </div>
+
+        <div class="overflow-x-auto border border-pink-200 rounded-2xl max-h-[450px]">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="bg-pink-100 text-pink-900 sticky top-0 uppercase text-[11px] font-extrabold">
+                <th onclick="changeSortCek('name')" class="p-3 cursor-pointer">Nama <span id="sort-name-cek">▲</span></th>
+                <th onclick="changeSortCek('imageCount')" class="p-3 cursor-pointer">Jumlah Gambar <span id="sort-imageCount-cek"></span></th>
+                <th onclick="changeSortCek('otherCount')" class="p-3 cursor-pointer">File Lain <span id="sort-otherCount-cek"></span></th>
+                <th onclick="changeSortCek('imageSize')" class="p-3 cursor-pointer">Ukuran <span id="sort-imageSize-cek"></span></th>
+                <th class="p-3">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="folderTableBodyCek" class="divide-y divide-pink-100"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ================= 5. VIEW: DUPLICATE & BATCH UPLOAD ================= -->
+    <div id="view-duplicate" class="view-section space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-pink-200 rounded-2xl p-4 bg-white/70 backdrop-blur-md shadow-xs">
+        <div>
+          <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Manajemen & Upload Google Drive</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Penggandaan berkas instan dan upload massal berurutan A-Z ke folder custom</p>
+        </div>
+        <span class="inline-flex items-center gap-1.5 text-xs font-bold bg-pink-50 text-pink-700 border border-pink-200 px-3 py-1.5 rounded-full w-fit">
+          <span class="w-1.5 h-1.5 rounded-full bg-pink-600 animate-pulse"></span>
           Modul Multi-Fungsi
         </span>
       </div>
 
-      <!-- MAIN CARD WORKSPACE -->
-      <div class="bg-white/90 backdrop-blur-md rounded-3xl border border-slate-200/85 shadow-sm p-4 sm:p-7 space-y-5">
-
-        <!-- TAB NAVIGATION -->
-        <div class="grid grid-cols-2 gap-1.5 bg-slate-100 p-1.5 rounded-2xl text-xs font-bold">
-          <button id="tabDup" onclick="switchTab('duplicate')"
-            class="py-2.5 rounded-xl bg-white shadow-sm text-indigo-700 flex items-center justify-center gap-2 transition duration-200">
+      <div class="bg-white/95 backdrop-blur-md rounded-3xl border border-pink-200 shadow-sm p-4 sm:p-7 space-y-5">
+        <!-- Sub Tab (Duplicate vs Batch) -->
+        <div class="grid grid-cols-2 gap-1.5 bg-pink-50 p-1.5 rounded-2xl text-xs font-bold border border-pink-200">
+          <button id="subTabDup" onclick="switchSubTab('duplicate')"
+            class="py-2.5 rounded-xl bg-pink-600 shadow-sm text-white flex items-center justify-center gap-2 transition duration-200 cursor-pointer">
             <iconify-icon icon="heroicons:document-duplicate-solid" class="text-base"></iconify-icon>
             <span>Duplicate File</span>
           </button>
-          <button id="tabBatch" onclick="switchTab('batch')"
-            class="py-2.5 rounded-xl text-slate-500 hover:text-slate-800 flex items-center justify-center gap-2 transition duration-200">
+          <button id="subTabBatch" onclick="switchSubTab('batch')"
+            class="py-2.5 rounded-xl text-slate-600 hover:text-pink-700 flex items-center justify-center gap-2 transition duration-200 cursor-pointer">
             <iconify-icon icon="heroicons:folder-plus-solid" class="text-base"></iconify-icon>
             <span>Upload Massal</span>
           </button>
         </div>
 
-        <!-- ================= SECTION 1: DUPLICATE FILE ================= -->
-        <div id="sectionDuplicate" class="space-y-4">
+        <!-- Sub Section 1: Duplicate File -->
+        <div id="sectionSubDuplicate" class="space-y-4">
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1.5">Pilih 1 File Utama:</label>
             <input type="file" id="file" class="hidden" onchange="handleSingleFileSelect(this)" />
-
             <div id="dropZoneSingle" onclick="document.getElementById('file').click()"
-              class="border-2 border-dashed border-slate-200 hover:border-indigo-500 bg-slate-50/85 hover:bg-indigo-50/20 rounded-2xl p-6 text-center cursor-pointer transition-all duration-300 group flex flex-col items-center justify-center space-y-1.5">
-              <div
-                class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 border border-indigo-100 flex items-center justify-center text-xl group-hover:scale-110 transition-transform shadow-sm">
+              class="border-2 border-dashed border-pink-200 hover:border-pink-500 bg-pink-50/20 hover:bg-pink-50/40 rounded-2xl p-6 text-center cursor-pointer transition-all duration-300 group flex flex-col items-center justify-center space-y-1.5">
+              <div class="w-12 h-12 rounded-2xl bg-pink-100 text-pink-600 border border-pink-200 flex items-center justify-center text-xl group-hover:scale-110 transition-transform shadow-sm">
                 <iconify-icon icon="heroicons:arrow-up-tray-solid"></iconify-icon>
               </div>
               <div id="filePromptText" class="space-y-0.5">
                 <p class="text-xs font-bold text-slate-800">Klik untuk memilih berkas utama</p>
                 <p class="text-[11px] text-slate-400 font-medium">Mendukung gambar, video, zip, dan dokumen kerja</p>
               </div>
-              <div id="fileInfoBox"
-                class="hidden w-full max-w-sm bg-white p-3 rounded-2xl border border-slate-200 flex items-center justify-between shadow-sm mt-2">
+              <div id="fileInfoBox" class="hidden w-full max-w-sm bg-white p-3 rounded-2xl border border-pink-200 flex items-center justify-between shadow-sm mt-2">
                 <div class="flex items-center gap-2.5 overflow-hidden pr-2">
-                  <iconify-icon icon="heroicons:document-solid" class="text-indigo-600 text-lg shrink-0"></iconify-icon>
+                  <iconify-icon icon="heroicons:document-solid" class="text-pink-600 text-lg shrink-0"></iconify-icon>
                   <div class="text-left truncate">
                     <p id="fileNameText" class="text-xs font-bold text-slate-800 truncate">filename.ext</p>
                     <p id="fileSizeText" class="text-[10px] text-slate-400 font-medium">0 KB</p>
                   </div>
                 </div>
-                <button type="button" onclick="event.stopPropagation(); removeSingleFile()"
-                  class="text-xs text-rose-500 hover:bg-rose-50 p-1.5 rounded-xl font-bold transition">✕</button>
+                <button type="button" onclick="event.stopPropagation(); removeSingleFile()" class="text-xs text-rose-500 hover:bg-rose-50 p-1.5 rounded-xl font-bold transition cursor-pointer">✕</button>
               </div>
             </div>
           </div>
 
           <div>
             <label for="jumlah" class="block text-xs font-bold text-slate-700 mb-1">Jumlah Duplikasi:</label>
-            <input type="number" id="jumlah" placeholder="Contoh: 10" min="1"
-              class="w-full p-3.5 text-xs border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent bg-slate-50/85 text-slate-800 font-semibold placeholder-slate-400" />
+            <input type="number" id="jumlah" placeholder="Contoh: 10" min="1" class="w-full p-3.5 text-xs border border-pink-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-pink-600 bg-pink-50/20 text-slate-800 font-semibold placeholder-slate-400" />
           </div>
 
-          <button onclick="uploadAndDuplicateFile()" id="btnUploadDup"
-            class="w-full bg-slate-900 hover:bg-slate-800 active:scale-95 text-white text-xs py-3.5 rounded-2xl font-bold shadow-md shadow-slate-900/10 transition duration-200 flex items-center justify-center gap-2">
+          <button onclick="uploadAndDuplicateFile()" id="btnUploadDup" class="w-full bg-pink-600 hover:bg-pink-500 active:scale-95 text-white text-xs py-3.5 rounded-2xl font-bold shadow-md shadow-pink-600/20 transition duration-200 flex items-center justify-center gap-2 cursor-pointer">
             <iconify-icon icon="heroicons:rocket-launch-solid" class="text-base"></iconify-icon>
             <span>Upload & Gandakan Berkas</span>
           </button>
 
-          <!-- Result Duplicate (Dipersingkat & Compact) -->
-          <div id="resultDup" class="hidden p-4 bg-slate-50/85 border border-slate-200 rounded-2xl text-xs space-y-3">
-          </div>
+          <div id="resultDup" class="hidden p-4 bg-pink-50/40 border border-pink-200 rounded-2xl text-xs space-y-3"></div>
         </div>
 
-        <!-- ================= SECTION 2: BATCH UPLOAD KE FOLDER ================= -->
-        <div id="sectionBatch" class="space-y-4 hidden">
+        <!-- Sub Section 2: Batch Upload ke Folder -->
+        <div id="sectionSubBatch" class="space-y-4 hidden">
           <div>
             <label for="folderNameInput" class="block text-xs font-bold text-slate-700 mb-1">
               📁 Ketik Nama Folder Google Drive: <span class="text-rose-500">*</span>
             </label>
-            <input type="text" id="folderNameInput"
-              class="w-full p-3.5 text-xs border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent bg-slate-50/85 text-slate-800 font-semibold placeholder-slate-400"
-              placeholder="Contoh: Batch Order 25 September / Tugas Tim Kimi" />
+            <input type="text" id="folderNameInput" class="w-full p-3.5 text-xs border border-pink-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-pink-600 bg-pink-50/20 text-slate-800 font-semibold placeholder-slate-400" placeholder="Contoh: Batch Order 25 September / Tugas Tim Kimi" />
           </div>
 
-          <div class="space-y-4 pt-2 border-t border-slate-100">
+          <div class="space-y-4 pt-2 border-t border-pink-100">
             <div>
               <label class="block text-xs font-bold text-slate-700 mb-1.5">Pilih Berkas (60+ Berkas Sekaligus):</label>
               <input type="file" id="fileBatch" multiple class="hidden" onchange="handleBatchFilesSelect(this)" />
-
-              <!-- Drop Zone File -->
-              <div id="dropZoneBatch" onclick="document.getElementById('fileBatch').click()"
-                class="border-2 border-dashed border-slate-200 hover:border-indigo-500 bg-slate-50/85 hover:bg-indigo-50/20 rounded-2xl p-6 text-center cursor-pointer transition-all duration-300 group flex flex-col items-center justify-center space-y-1.5">
-                <div
-                  class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 border border-indigo-100 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform shadow-sm">
+              <div id="dropZoneBatch" onclick="document.getElementById('fileBatch').click()" class="border-2 border-dashed border-pink-200 hover:border-pink-500 bg-pink-50/20 hover:bg-pink-50/40 rounded-2xl p-6 text-center cursor-pointer transition-all duration-300 group flex flex-col items-center justify-center space-y-1.5">
+                <div class="w-12 h-12 rounded-2xl bg-pink-100 text-pink-600 border border-pink-200 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform shadow-sm">
                   <iconify-icon icon="heroicons:folder-plus-solid"></iconify-icon>
                 </div>
                 <div id="batchPromptText" class="space-y-0.5">
                   <p class="text-xs font-bold text-slate-800">Klik untuk memilih seluruh berkas</p>
-                  <p class="text-[11px] text-slate-400 font-medium">Tekan tahan di HP atau Ctrl+A di laptop untuk
-                    memilih banyak berkas</p>
+                  <p class="text-[11px] text-slate-400 font-medium">Tekan tahan di HP atau Ctrl+A di laptop untuk memilih banyak berkas</p>
                 </div>
-
-                <!-- Preview Status Berkas Terpilih -->
-                <div id="batchInfoBox"
-                  class="hidden w-full max-w-sm bg-white p-3 rounded-2xl border border-slate-200 flex items-center justify-between shadow-sm mt-2">
+                <div id="batchInfoBox" class="hidden w-full max-w-sm bg-white p-3 rounded-2xl border border-pink-200 flex items-center justify-between shadow-sm mt-2">
                   <div class="flex items-center gap-2.5 overflow-hidden pr-2">
-                    <iconify-icon icon="heroicons:document-duplicate-solid"
-                      class="text-indigo-600 text-lg shrink-0"></iconify-icon>
+                    <iconify-icon icon="heroicons:document-duplicate-solid" class="text-pink-600 text-lg shrink-0"></iconify-icon>
                     <div class="text-left truncate">
                       <p id="fileCountText" class="text-xs font-bold text-slate-800 truncate">0 File dipilih</p>
                       <p id="fileTotalSizeText" class="text-[10px] text-slate-400 font-medium">Total: 0 MB</p>
                     </div>
                   </div>
-                  <button type="button" onclick="event.stopPropagation(); removeBatchFiles()"
-                    class="text-xs text-rose-500 hover:bg-rose-50 px-2 py-1 rounded-xl font-bold transition">✕
-                    Reset</button>
+                  <button type="button" onclick="event.stopPropagation(); removeBatchFiles()" class="text-xs text-rose-500 hover:bg-rose-50 px-2 py-1 rounded-xl font-bold transition cursor-pointer">✕ Reset</button>
                 </div>
               </div>
             </div>
 
-            <!-- Progress Bar Upload -->
             <div id="progressContainer" class="hidden space-y-2 pt-2">
               <div class="flex justify-between text-xs font-semibold">
                 <span id="progressStatusText" class="text-slate-700">Menyiapkan folder...</span>
-                <span id="progressPercent" class="text-indigo-600">0%</span>
+                <span id="progressPercent" class="text-pink-600">0%</span>
               </div>
-              <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden border border-slate-200">
-                <div id="progressBar" class="bg-indigo-600 h-full w-0 transition-all duration-300"></div>
+              <div class="w-full bg-pink-50 h-2.5 rounded-full overflow-hidden border border-pink-200">
+                <div id="progressBar" class="bg-pink-600 h-full w-0 transition-all duration-300"></div>
               </div>
             </div>
 
-            <!-- Tombol Aksi Upload -->
-            <button onclick="startBatchFolderUpload()" id="btnUploadBatch"
-              class="w-full bg-slate-900 hover:bg-slate-800 active:scale-95 text-white text-xs py-3.5 rounded-2xl font-bold shadow-md shadow-slate-900/10 transition duration-200 flex items-center justify-center gap-2">
+            <button onclick="startBatchFolderUpload()" id="btnUploadBatch" class="w-full bg-pink-600 hover:bg-pink-500 active:scale-95 text-white text-xs py-3.5 rounded-2xl font-bold shadow-md shadow-pink-600/20 transition duration-200 flex items-center justify-center gap-2 cursor-pointer">
               <iconify-icon icon="heroicons:cloud-arrow-up-solid" class="text-lg"></iconify-icon>
               <span>Buat Folder & Unggah Semua File</span>
             </button>
           </div>
 
-          <!-- Box Hasil Rekap Batch (Dipersingkat & Compact) -->
-          <div id="resultBatchBox"
-            class="hidden p-4 bg-slate-50/85 border border-slate-200 rounded-2xl text-xs space-y-3">
-            <div class="p-3 bg-indigo-50 border border-indigo-100 rounded-2xl flex items-center justify-between gap-2">
+          <div id="resultBatchBox" class="hidden p-4 bg-pink-50/40 border border-pink-200 rounded-2xl text-xs space-y-3">
+            <div class="p-3 bg-pink-100/70 border border-pink-200 rounded-2xl flex items-center justify-between gap-2">
               <div class="truncate">
-                <span class="font-bold text-indigo-900 text-xs block truncate">📁 <span id="resFolderName">Nama
-                    Folder</span></span>
+                <span class="font-bold text-pink-900 text-xs block truncate">📁 <span id="resFolderName">Nama Folder</span></span>
                 <span class="text-[10px] text-slate-500 font-mono truncate block" id="resFolderLink">https://...</span>
               </div>
-              <div class="flex gap-1.5 shrink-0">
-                <button onclick="copyFolderUrl(this)"
-                  class="bg-indigo-600 hover:bg-indigo-700 text-white px-2.5 py-1.5 rounded-xl font-bold text-[11px] transition">
-                  📋 Link Folder
-                </button>
-              </div>
+              <button onclick="copyFolderUrl(this)" class="bg-pink-600 hover:bg-pink-500 text-white px-2.5 py-1.5 rounded-xl font-bold text-[11px] transition cursor-pointer">📋 Link Folder</button>
             </div>
-
             <div class="flex items-center justify-between pt-1">
               <span class="font-bold text-slate-700">Daftar File (<span id="fileCountBadge">0</span>) Urut A-Z:</span>
-              <button onclick="copyAllUploadedLinks(this)"
-                class="bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200 px-3 py-1.5 rounded-xl font-bold text-[11px] transition">
-                📋 Salin Semua Link
-              </button>
+              <button onclick="copyAllUploadedLinks(this)" class="bg-pink-50 text-pink-700 hover:bg-pink-100 border border-pink-200 px-3 py-1.5 rounded-xl font-bold text-[11px] transition cursor-pointer">📋 Salin Semua Link</button>
             </div>
-
-            <!-- List Ringkas (Compact List dengan tinggi terbatas agar tidak terlalu panjang) -->
             <div id="uploadedLinksList" class="max-h-48 overflow-y-auto space-y-1 pr-1"></div>
           </div>
         </div>
-
       </div>
+    </div>
 
-    </main>
+  </main>
 
-    <!-- FOOTER OTOMATIS -->
-    <div id="app-footer"></div>
-  </div>
+  <!-- FOOTER -->
+  <footer class="text-center py-5 text-xs text-slate-400 border-t border-pink-200 mt-auto bg-white/60 backdrop-blur-sm relative z-10">
+    Kedai Liliviè &copy; 2026 - Kimi Team Automation Suite
+  </footer>
 
+  <textarea id="hiddenClipboard" class="sr-only" aria-hidden="true"></textarea>
+
+
+  <!-- ================= UNIFIED JAVASCRIPT LOGIC ================= -->
   <script>
-    // URL Web App Duplicate File
-    const GAS_DUP_URL = "https://script.google.com/macros/s/AKfycbzAhn-GTpBXthmIMVsVHkGRQXBV6hqowI9k4lGug4O_pudkbu4qiSp9jlqeo5bwx4Lguw/exec";
+    /* --- TAB SWITCHING SYSTEM (MAIN TABS) --- */
+    function switchTab(tabId) {
+      document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('bg-pink-600', 'text-white', 'shadow-sm');
+        btn.classList.add('text-slate-600', 'hover:text-pink-600');
+      });
 
-    // URL Web App Batch Upload ke Folder
-    const GAS_BATCH_URL = "https://script.google.com/macros/s/AKfycbxns9ZqlN5NVS4o8LSsdG2qobEkMdNng4O9vyfRQDToHBOzl1lsb5ZDGgYuQDGwAtMhUQ/exec";
+      const targetView = document.getElementById(`view-${tabId}`);
+      if (targetView) targetView.classList.add('active');
 
-    // --- TAB SWITCHER ---
-    function switchTab(mode) {
-      const tabDup = document.getElementById("tabDup");
-      const tabBatch = document.getElementById("tabBatch");
-      const secDup = document.getElementById("sectionDuplicate");
-      const secBatch = document.getElementById("sectionBatch");
+      const navBtn = document.getElementById(`nav-${tabId}`);
+      if (navBtn) {
+        navBtn.classList.remove('text-slate-600', 'hover:text-pink-600');
+        navBtn.classList.add('bg-pink-600', 'text-white', 'shadow-sm');
+      }
+
+      const mobileSelect = document.getElementById('mobileMenuSelect');
+      if (mobileSelect) mobileSelect.value = tabId;
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      switchTab('dashboard');
+      renderNamesJob();
+    });
+
+    /* --- SUB TAB SWITCHING SYSTEM (DUPLICATE vs BATCH) --- */
+    function switchSubTab(mode) {
+      const tabDup = document.getElementById("subTabDup");
+      const tabBatch = document.getElementById("subTabBatch");
+      const secDup = document.getElementById("sectionSubDuplicate");
+      const secBatch = document.getElementById("sectionSubBatch");
 
       if (mode === 'duplicate') {
-        tabDup.className = "py-2.5 rounded-xl bg-white shadow-sm text-indigo-700 flex items-center justify-center gap-2 transition duration-200";
-        tabBatch.className = "py-2.5 rounded-xl text-slate-500 hover:text-slate-800 flex items-center justify-center gap-2 transition duration-200";
+        tabDup.className = "py-2.5 rounded-xl bg-pink-600 shadow-sm text-white flex items-center justify-center gap-2 transition duration-200 cursor-pointer";
+        tabBatch.className = "py-2.5 rounded-xl text-slate-600 hover:text-pink-700 flex items-center justify-center gap-2 transition duration-200 cursor-pointer";
         secDup.classList.remove("hidden");
         secBatch.classList.add("hidden");
       } else {
-        tabBatch.className = "py-2.5 rounded-xl bg-white shadow-sm text-indigo-700 flex items-center justify-center gap-2 transition duration-200";
-        tabDup.className = "py-2.5 rounded-xl text-slate-500 hover:text-slate-800 flex items-center justify-center gap-2 transition duration-200";
+        tabBatch.className = "py-2.5 rounded-xl bg-pink-600 shadow-sm text-white flex items-center justify-center gap-2 transition duration-200 cursor-pointer";
+        tabDup.className = "py-2.5 rounded-xl text-slate-600 hover:text-pink-700 flex items-center justify-center gap-2 transition duration-200 cursor-pointer";
         secBatch.classList.remove("hidden");
         secDup.classList.add("hidden");
       }
     }
 
-    // --- HELPER BASE64 & REQUEST ---
+    /* Helper Clipboard Universal */
+    fnCopyText = (text, msg) => {
+      if (!text || !text.trim()) return alert("Tidak ada data untuk disalin!");
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(() => alert(msg)).catch(() => fallbackCopyGlobal(text, msg));
+      } else {
+        fallbackCopyGlobal(text, msg);
+      }
+    };
+
+    function fallbackCopyGlobal(text, msg) {
+      const hiddenArea = document.getElementById('hiddenClipboard');
+      hiddenArea.value = text;
+      hiddenArea.select();
+      try {
+        document.execCommand('copy');
+        alert(msg);
+      } catch (err) {
+        alert('Gagal menyalin otomatis.');
+      }
+    }
+
+
+    /* --- 1. DASHBOARD EXTRACTOR LOGIC --- */
+    let filesDash = [];
+    const DEFAULT_API_KEY = "AIzaSyD71nWVbtMxWK4T05Ty4qMuIRTP4ij2i48";
+
+    const extractFolderIdHelper = (input) => {
+      const match = input.match(/[-\w]{25,}/);
+      return match ? match[0] : "";
+    };
+
+    async function fetchFilesDash() {
+      const folderInput = document.getElementById("folderInputDash").value.trim();
+      const apiKey = document.getElementById("userApiKey").value.trim() || DEFAULT_API_KEY;
+      const folderId = extractFolderIdHelper(folderInput);
+      const errEl = document.getElementById("driveErrorDash");
+      const resContainer = document.getElementById("driveResultContainerDash");
+      const btnFetch = document.getElementById("btnFetchDash");
+
+      if (!folderId) {
+        errEl.innerText = "Masukkan link Google Drive yang valid!";
+        errEl.classList.remove("hidden");
+        resContainer.classList.add("hidden");
+        return;
+      }
+
+      errEl.classList.add("hidden");
+      btnFetch.innerText = "Memproses...";
+      btnFetch.disabled = true;
+
+      try {
+        const query = encodeURIComponent(`'${folderId}' in parents`);
+        const url = `https://www.googleapis.com/drive/v3/files?q=${query}&fields=files(id,name)&key=${apiKey}`;
+        const res = await fetch(url);
+        const data = await res.json();
+
+        if (!res.ok || data.error) {
+          throw new Error(data?.error?.message || "Gagal mengambil data dari Google Drive.");
+        }
+
+        filesDash = (data.files || []).map((f) => ({
+          id: f.id,
+          name: f.name,
+          link: `https://drive.google.com/file/d/${f.id}/view?usp=sharing`,
+        })).sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: "base" }));
+
+        document.getElementById("driveTotalDash").innerText = filesDash.length;
+        const listEl = document.getElementById("driveFileListDash");
+        listEl.innerHTML = "";
+
+        filesDash.forEach((f, i) => {
+          listEl.innerHTML += `
+            <div class="p-2.5 bg-pink-50/40 hover:bg-pink-100 rounded-xl text-xs flex justify-between items-center border border-pink-200 transition gap-2">
+              <span class="font-semibold text-slate-800 truncate">#${i + 1} ${f.name}</span>
+              <a href="${f.link}" target="_blank" rel="noreferrer" class="text-pink-600 bg-white hover:bg-pink-600 hover:text-white border border-pink-200 px-2.5 py-1 rounded-lg text-[11px] font-bold transition shrink-0">Buka ↗</a>
+            </div>`;
+        });
+
+        resContainer.classList.remove("hidden");
+      } catch (err) {
+        errEl.innerText = err.message || "Terjadi kesalahan.";
+        errEl.classList.remove("hidden");
+        resContainer.classList.add("hidden");
+      } finally {
+        btnFetch.innerHTML = `<span>Ambil Berkas</span> <iconify-icon icon="heroicons:arrow-down-tray-20-solid"></iconify-icon>`;
+        btnFetch.disabled = false;
+      }
+    }
+
+    function copyNamesDash() { if (filesDash.length) fnCopyText(filesDash.map(f => f.name).join("\n"), "Daftar nama berhasil disalin!"); }
+    function copyLinksDash() { if (filesDash.length) fnCopyText(filesDash.map(f => f.link).join("\n"), "Daftar link berhasil disalin!"); }
+    function copyAllDash() { if (filesDash.length) fnCopyText(filesDash.map(f => `${f.name}\t${f.link}`).join("\n"), "Semua data berhasil disalin!"); }
+
+
+    /* --- 2. BAGI JOB LOGIC --- */
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbwEIsw1coXzdjL_LlQIn7hyVK4UDo1zmy7_kj72bJ-UixbjGdoZAand5NjVzWCtN6n-/exec";
+
+    let teamMembers = [
+      "Amelie", "Ana", "Novi", "Ann", "Ria", "Dastan", "Desi", "Difarani",
+      "Duwi", "Elmira", "Elok", "Endang", "Feni", "Fiafida", "Firanny", "Fdia", "Fitria", "Yani",
+      "Irma", "Istidary", "Khariza", "Kholif", "Kyla", "Leha", "Lies", "Linda", "Mahmudah",
+      "Mufida", "Ndang", "Novita", "Nurmina", "Puja", "Ratna", "Riri", "Sakucil", "Sanjen",
+      "Siros", "Tya", "Udin", "Kim", "Yahya", "Vina", "Zal", "Damis", "Risda", "Niar", "Bila","Yosep","Karin","Ayunita","Verrafeb","Vera","Septiadi"
+    ].map(name => ({ name }));
+
+    let selectedNames = [];
+
+    function renderNamesJob() {
+      const container = document.getElementById("nameContainer");
+      if (!container) return;
+      container.innerHTML = "";
+      const sorted = [...teamMembers].sort((a, b) => a.name.localeCompare(b.name, 'id', { sensitivity: 'base' }));
+
+      sorted.forEach(member => {
+        const isSelected = selectedNames.includes(member.name);
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = `px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1 border cursor-pointer ${
+          isSelected ? "bg-pink-600 text-white border-pink-600 shadow-xs" : "bg-white text-slate-700 border-pink-200 hover:border-pink-300"
+        }`;
+        btn.innerHTML = isSelected ? `<iconify-icon icon="heroicons:check-20-solid" class="text-xs"></iconify-icon> ${member.name}` : member.name;
+        btn.onclick = () => {
+          const idx = selectedNames.indexOf(member.name);
+          if (idx > -1) selectedNames.splice(idx, 1);
+          else selectedNames.push(member.name);
+          renderNamesJob();
+        };
+        container.appendChild(btn);
+      });
+      document.getElementById("totalSelectedNames").innerText = selectedNames.length;
+    }
+
+    function selectAllNames() { selectedNames = teamMembers.map(m => m.name); renderNamesJob(); }
+    function deselectAllNames() { selectedNames = []; renderNamesJob(); }
+    function addNewName() {
+      const input = document.getElementById("newNameInput");
+      const val = input.value.trim();
+      if (val && !teamMembers.some(m => m.name.toLowerCase() === val.toLowerCase())) {
+        teamMembers.push({ name: val });
+        selectedNames.push(val);
+        input.value = "";
+        renderNamesJob();
+      }
+    }
+    function clearJobForm() {
+      selectedNames = [];
+      document.getElementById("briefInput").value = "";
+      document.getElementById("outputResultJob").value = "";
+      renderNamesJob();
+    }
+
+    async function generateJob() {
+      const briefEl = document.getElementById("briefInput");
+      const folderEl = document.getElementById("folderLinkInput");
+      const outEl = document.getElementById("outputResultJob");
+      const modeRadio = document.querySelector('input[name="optionMode"]:checked');
+      const mode = modeRadio ? modeRadio.value : "1";
+      const btnGenText = document.getElementById("btnGenText");
+      const btnGenerate = document.getElementById("btnGenerateJob");
+
+      if (!briefEl.value.trim()) return alert("Silakan tempel format brief pesanan terlebih dahulu!");
+      if (selectedNames.length === 0) return alert("Pilih minimal satu anggota tim!");
+
+      let rawBlocks = briefEl.value.trim().split(/(?=ID\s*:\s*\d+)/i).map(b => b.trim()).filter(b => b.length > 0 && /ID\s*:/i.test(b));
+      if (rawBlocks.length === 0) rawBlocks = [briefEl.value.trim()];
+
+      let orderIds = [];
+      rawBlocks.forEach(block => {
+        const idMatch = block.match(/ID\s*:\s*([^\n\r]+)/i);
+        if (idMatch) orderIds.push(idMatch[1].trim());
+      });
+
+      btnGenText.innerText = "Membuat Folder di Google Drive...";
+      btnGenerate.disabled = true;
+
+      let parentFolderId = "";
+      const folderLink = folderEl ? folderEl.value.trim() : "";
+      const matchFolderId = folderLink.match(/\/folders\/([a-zA-Z0-9-_]+)/);
+      if (matchFolderId) parentFolderId = matchFolderId[1];
+      else parentFolderId = folderLink.trim();
+
+      let folderMap = {};
+      if (parentFolderId && orderIds.length > 0) {
+        try {
+          const targetUrl = `${GAS_URL}?parentFolderId=${encodeURIComponent(parentFolderId)}&ids=${encodeURIComponent(orderIds.join(","))}`;
+          const res = await fetch(targetUrl);
+          const result = await res.json();
+          if (result.status === "success" && result.folders) {
+            result.folders.forEach(f => { folderMap[f.id] = f.url; });
+          }
+        } catch (err) { console.error(err); }
+      }
+
+      btnGenText.innerText = "Generate Job & Buat Folder Drive";
+      btnGenerate.disabled = false;
+
+      let finalOutput = [];
+      if (mode === "1") {
+        rawBlocks.forEach((block) => {
+          const idMatch = block.match(/ID\s*:\s*([^\n\r]+)/i);
+          let orderId = idMatch ? idMatch[1].trim() : "Tanpa_ID";
+          let targetReport = folderMap[orderId] || (folderLink ? `${folderLink.replace(/\/$/, "")}/${orderId}` : "");
+          let processedBlock = block;
+
+          if (/Report\s*:/i.test(processedBlock)) {
+            if (targetReport) processedBlock = processedBlock.replace(/Report\s*:/i, `Report : ${targetReport}`);
+          } else if (targetReport) {
+            processedBlock += `\nReport : ${targetReport}`;
+          }
+
+          const jumlahMatch = processedBlock.match(/Jumlah\s*:\s*(\d+)/i);
+          let totalAmount = jumlahMatch ? parseInt(jumlahMatch[1], 10) : 0;
+          let blockResult = processedBlock + "\n\n";
+
+          if (totalAmount > 0) {
+            let baseCount = Math.floor(totalAmount / selectedNames.length);
+            let remainder = totalAmount % selectedNames.length;
+            selectedNames.forEach((name, i) => {
+              let assigned = baseCount + (i < remainder ? 1 : 0);
+              if (assigned > 0) blockResult += `${i + 1}. ${name} : ${assigned}\n`;
+            });
+          } else {
+            blockResult += `(Jumlah orderan tidak terdeteksi)\n`;
+          }
+          finalOutput.push(blockResult);
+        });
+      } else {
+        let grandTotal = 0;
+        rawBlocks.forEach((block) => {
+          const jumlahMatch = block.match(/Jumlah\s*:\s*(\d+)/i);
+          if (jumlahMatch) grandTotal += parseInt(jumlahMatch[1], 10);
+        });
+
+        if (grandTotal > 0) {
+          let basePerPerson = Math.floor(grandTotal / selectedNames.length);
+          let remainder = grandTotal % selectedNames.length;
+          let personQuota = {};
+          selectedNames.forEach((name, i) => {
+            personQuota[name] = basePerPerson + (i < remainder ? 1 : 0);
+          });
+
+          rawBlocks.forEach((block) => {
+            const idMatch = block.match(/ID\s*:\s*([^\n\r]+)/i);
+            let orderId = idMatch ? idMatch[1].trim() : "Tanpa_ID";
+            let targetReport = folderMap[orderId] || (folderLink ? `${folderLink.replace(/\/$/, "")}/${orderId}` : "");
+            let processedBlock = block;
+
+            if (/Report\s*:/i.test(processedBlock)) {
+              if (targetReport) processedBlock = processedBlock.replace(/Report\s*:/i, `Report : ${targetReport}`);
+            } else if (targetReport) {
+              processedBlock += `\nReport : ${targetReport}`;
+            }
+
+            const jumlahMatch = processedBlock.match(/Jumlah\s*:\s*(\d+)/i);
+            let blockAmount = jumlahMatch ? parseInt(jumlahMatch[1], 10) : 0;
+            let blockResult = processedBlock + "\n\n";
+
+            if (blockAmount > 0) {
+              let assignedCount = 1;
+              selectedNames.forEach((name) => {
+                if (personQuota[name] > 0) {
+                  let takeForThisID = Math.min(personQuota[name], blockAmount);
+                  if (takeForThisID > 0) {
+                    blockResult += `${assignedCount}. ${name} : ${takeForThisID}\n`;
+                    personQuota[name] -= takeForThisID;
+                    blockAmount -= takeForThisID;
+                    assignedCount++;
+                  }
+                }
+              });
+            } else {
+              blockResult += `(Jumlah orderan tidak terdeteksi)\n`;
+            }
+            finalOutput.push(blockResult);
+          });
+        }
+      }
+
+      outEl.value = finalOutput.join("\n𖦹 ﹌﹌﹌﹌﹌﹌﹌﹌﹌﹌𓂃🪶\n\n");
+    }
+
+    function copyJobResult() {
+      const output = document.getElementById("outputResultJob");
+      if (!output.value.trim()) return alert("Belum ada teks untuk disalin!");
+      fnCopyText(output.value, "Berhasil disalin ke clipboard!");
+    }
+
+
+    /* --- 3. BRIEF PARSER LOGIC --- */
+    let rawTextResultParser = '';
+
+    function detectPlatformParser(url) {
+      const u = url.toLowerCase();
+      if (u.includes('tiktok.com') || u.includes('vt.tiktok')) return 'TIKTOK';
+      if (u.includes('instagram.com') || u.includes('instagr.am')) return 'INSTAGRAM';
+      if (u.includes('threads.net')) return 'THREADS';
+      if (u.includes('facebook.com') || u.includes('fb.watch')) return 'FACEBOOK';
+      if (u.includes('youtube.com') || u.includes('youtu.be')) return 'YOUTUBE';
+      if (u.includes('shopee.co.id') || u.includes('shp.ee')) return 'SHOPEE';
+      if (u.includes('x.com') || u.includes('twitter.com')) return 'X';
+      return '';
+    }
+
+    function parseBriefData() {
+      const input = document.getElementById('inputBriefParser').value;
+      if (!input.trim()) return alert('Silakan masukkan text brief terlebih dahulu.');
+
+      const blocks = input.split(/(?=ID\s*:\s*\d+)/i);
+      let structuredGroups = [];
+
+      blocks.forEach(block => {
+        const idMatch = block.match(/ID\s*:\s*(\d+)/i);
+        if (!idMatch) return;
+        const id = idMatch[1];
+
+        const orderMatch = block.match(/Orderan\s*:\s*([^\n]+)/i);
+        let orderan = orderMatch ? orderMatch[1].trim() : '';
+
+        const targetMatch = block.match(/Target\s*[:]\s*([^\n]+)/i);
+        const targetUrl = targetMatch ? targetMatch[1].trim() : '';
+        const platform = detectPlatformParser(targetUrl);
+
+        let orderString = orderan.toUpperCase();
+        if (platform && !orderString.includes(platform)) orderString += ` ${platform}`;
+
+        const lineRegex = /^\s*\d+\.\s+([A-Za-z0-9_\s]+?)(?:\s+(\d+))?\s*$/gm;
+        let match;
+        let groupItems = [];
+
+        while ((match = lineRegex.exec(block)) !== null) {
+          groupItems.push({ name: match[1].trim(), count: match[2] ? match[2].trim() : '1', id: `ID : ${id}`, order: orderString });
+        }
+        if (groupItems.length > 0) structuredGroups.push(groupItems);
+      });
+
+      if (structuredGroups.length === 0) return alert('Format brief tidak terdeteksi.');
+
+      const tbody = document.getElementById('tableBodyParser');
+      tbody.innerHTML = '';
+      let rawLines = [];
+
+      structuredGroups.forEach((group, groupIndex) => {
+        if (groupIndex > 0) {
+          for (let i = 0; i < 4; i++) {
+            rawLines.push('');
+            const spacerTr = document.createElement('tr');
+            spacerTr.className = 'h-2 bg-pink-50/40';
+            spacerTr.innerHTML = `<td colspan="4"></td>`;
+            tbody.appendChild(spacerTr);
+          }
+        }
+        group.forEach(item => {
+          rawLines.push(`${item.name}\t${item.count}\t${item.id}\t${item.order}`);
+          const tr = document.createElement('tr');
+          tr.className = 'hover:bg-pink-50/30 transition bg-white';
+          tr.innerHTML = `
+            <td class="p-3 border-b border-pink-100 font-semibold text-slate-800">${item.name}</td>
+            <td class="p-3 border-b border-pink-100 font-bold text-pink-600 text-center">${item.count}</td>
+            <td class="p-3 border-b border-pink-100 text-slate-500 font-mono text-xs">${item.id}</td>
+            <td class="p-3 border-b border-pink-100 text-slate-600">${item.order}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      });
+
+      rawTextResultParser = rawLines.join('\n');
+    }
+
+    function copyBriefResult() {
+      if (!rawTextResultParser.trim()) return alert('Tidak ada data untuk disalin. Klik "Generate" terlebih dahulu.');
+      fnCopyText(rawTextResultParser, "Tabel rekap berhasil disalin!");
+    }
+
+    function clearBriefParser() {
+      document.getElementById('inputBriefParser').value = '';
+      document.getElementById('tableBodyParser').innerHTML = `<tr><td colspan="4" class="p-8 text-center text-slate-400 italic">Belum ada data. Tempel brief WhatsApp di atas lalu klik "Generate".</td></tr>`;
+      rawTextResultParser = '';
+    }
+
+
+    /* --- 4. CEK DRIVE & SUBFOLDER LOGIC --- */
+    const GOOGLE_API_KEY_CEK = 'AIzaSyC6qH2ELD6bpDuccwkffScYX_irPI1ZvAs';
+    let globalReportsCek = [];
+    let currentSortCek = { key: 'name', asc: true };
+    let parsedBriefDataCek = {};
+    let formattedDriveDateCek = '';
+
+    function parseBriefCek() {
+      const text = document.getElementById('briefInputCek').value;
+      if (!text.trim()) return;
+      parsedBriefDataCek = {};
+
+      const dateMatch = text.match(/\[(.*?)\]/);
+      if (dateMatch) parsedBriefDataCek.rawDate = dateMatch[1];
+
+      const idMatch = text.match(/ID\s*[:]\s*([0-9a-zA-Z_-]+)/i);
+      if (idMatch) parsedBriefDataCek.id = idMatch[1];
+
+      const targetMatch = text.match(/Target\s*[:]\s*(https?:\/\/[^\s]+)/i);
+      if (targetMatch) {
+        parsedBriefDataCek.targetLink = targetMatch[1];
+        parsedBriefDataCek.platform = detectPlatformCek(targetMatch[1]);
+      }
+
+      const countMatch = text.match(/Jumlah\s*[:]\s*(\d+)/i);
+      if (countMatch) parsedBriefDataCek.targetCount = countMatch[1];
+
+      const orderMatch = text.match(/Orderan\s*[:]\s*(.+)/i);
+      if (orderMatch) parsedBriefDataCek.orderType = orderMatch[1].trim();
+
+      const driveMatch = text.match(/(https?:\/\/(?:drive\.google\.com|docs\.google\.com)[^\s]+)/i);
+      if (driveMatch) document.getElementById('folderInputCek').value = driveMatch[1];
+    }
+
+    function detectPlatformCek(url) {
+      const lower = url.toLowerCase();
+      if (lower.includes('threads')) return 'Threads';
+      if (lower.includes('instagram')) return 'Instagram';
+      if (lower.includes('x.com') || lower.includes('twitter')) return 'X';
+      if (lower.includes('tiktok')) return 'TikTok';
+      if (lower.includes('facebook')) return 'Facebook';
+      if (lower.includes('youtube')) return 'YouTube';
+      if (lower.includes('shp')) return 'Shopee';
+      return 'Web / Lainnya';
+    }
+
+    function extractFolderIdCek(input) {
+      if (!input) return '';
+      const match = input.trim().match(/folders\/([a-zA-Z0-9_-]+)/);
+      return match ? match[1] : input.trim().split('?')[0];
+    }
+
+    function cleanFolderNameCek(name) {
+      if (!name) return name;
+      return name.replace(/\s*\d+$/, '').trim();
+    }
+
+    function formatBytesCek(bytes) {
+      if (!bytes || bytes === 0) return '0 B';
+      const k = 1024, sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    function isImageMimeCek(mime) {
+      if (!mime) return false;
+      return mime.startsWith('image/') || mime.includes('jpeg') || mime.includes('png') || mime.includes('webp') || mime.includes('gif');
+    }
+
+    async function fetchFolderContentsCek(folderId) {
+      let pageToken = null, items = [];
+      do {
+        const query = encodeURIComponent(`'${folderId}' in parents and trashed = false`);
+        let url = `https://www.googleapis.com/drive/v3/files?q=${query}&key=${GOOGLE_API_KEY_CEK}&pageSize=1000&fields=nextPageToken,files(id,name,mimeType,size,webViewLink,createdTime)`;
+        if (pageToken) url += `&pageToken=${pageToken}`;
+        const res = await fetch(url);
+        const data = await res.json();
+        if (data.error) throw new Error(data.error.message);
+        if (data.files) items.push(...data.files);
+        pageToken = data.nextPageToken;
+      } while (pageToken);
+      return items;
+    }
+
+    async function fetchFolderMetadataCek(folderId) {
+      try {
+        let url = `https://www.googleapis.com/drive/v3/files/${folderId}?key=${GOOGLE_API_KEY_CEK}&fields=createdTime`;
+        const res = await fetch(url);
+        const data = await res.json();
+        if (data.createdTime) {
+          const dateObj = new Date(data.createdTime);
+          const months = ["januari", "februari", "maret", "april", "mei", "juni", "juli", "agustus", "september", "oktober", "november", "desember"];
+          formattedDriveDateCek = `${dateObj.getDate()} ${months[dateObj.getMonth()]}`;
+          return dateObj.toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' }) + ' ' + dateObj.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+        }
+      } catch (e) {}
+      formattedDriveDateCek = '';
+      return '-';
+    }
+
+    async function startScanCek() {
+      const inputEl = document.getElementById('folderInputCek');
+      const statusEl = document.getElementById('statusCek');
+      const scanBtn = document.getElementById('scanBtnCek');
+      const rootFolderId = extractFolderIdCek(inputEl.value);
+
+      if (!rootFolderId) {
+        statusEl.innerText = '⚠️ Masukkan link atau ID folder dulu ya!';
+        return;
+      }
+
+      scanBtn.disabled = true;
+      statusEl.innerText = '⚡ Sedang memindai folder Google Drive...';
+      document.getElementById('resultsCek').style.display = 'none';
+
+      try {
+        const driveCreatedTime = await fetchFolderMetadataCek(rootFolderId);
+        const rootItems = await fetchFolderContentsCek(rootFolderId);
+        const subfolders = rootItems.filter(item => item.mimeType === 'application/vnd.google-apps.folder');
+        const rootImages = rootItems.filter(item => isImageMimeCek(item.mimeType));
+        const rootImgSize = rootImages.reduce((sum, item) => sum + (Number(item.size) || 0), 0);
+
+        globalReportsCek = [];
+        rootImages.forEach(file => {
+          globalReportsCek.push({ name: file.name, imageCount: 1, otherCount: 0, imageSize: Number(file.size) || 0, link: file.webViewLink });
+        });
+
+        let overallImages = rootImages.length, overallSize = rootImgSize;
+        for (let i = 0; i < subfolders.length; i++) {
+          const folder = subfolders[i];
+          statusEl.innerText = `🔍 Scan (${i + 1}/${subfolders.length}): ${folder.name}...`;
+          const contents = await fetchFolderContentsCek(folder.id);
+          let imgCount = 0, otherCount = 0, imgSize = 0;
+
+          contents.forEach(file => {
+            if (isImageMimeCek(file.mimeType)) { imgCount++; imgSize += (Number(file.size) || 0); }
+            else if (file.mimeType !== 'application/vnd.google-apps.folder') { otherCount++; }
+          });
+
+          overallImages += imgCount;
+          overallSize += imgSize;
+          globalReportsCek.push({ name: folder.name, imageCount: imgCount, otherCount: otherCount, imageSize: imgSize, link: folder.webViewLink || `https://drive.google.com/drive/folders/${folder.id}` });
+        }
+
+        currentSortCek = { key: 'name', asc: true };
+        sortDataCek();
+
+        document.getElementById('sumIdCek').innerText = parsedBriefDataCek.id || '-';
+        document.getElementById('sumPlatformCek').innerText = parsedBriefDataCek.platform || '-';
+        document.getElementById('sumOrderCek').innerText = parsedBriefDataCek.orderType || '-';
+        document.getElementById('sumTargetCek').innerText = parsedBriefDataCek.targetCount || '-';
+        document.getElementById('sumDateCek').innerText = parsedBriefDataCek.rawDate || '-';
+        document.getElementById('sumDriveCreatedCek').innerText = driveCreatedTime;
+        document.getElementById('briefSummaryCek').style.display = 'grid';
+
+        document.getElementById('totalFoldersCountCek').innerText = globalReportsCek.length.toLocaleString('id-ID');
+        document.getElementById('totalImagesCountCek').innerText = overallImages.toLocaleString('id-ID');
+        document.getElementById('totalSizeCountCek').innerText = formatBytesCek(overallSize);
+
+        renderTableCek(globalReportsCek);
+        statusEl.innerText = '✨ Pemindaian folder selesai!';
+        document.getElementById('resultsCek').style.display = 'block';
+      } catch (err) {
+        statusEl.innerText = '❌ Error: ' + err.message;
+      } finally {
+        scanBtn.disabled = false;
+      }
+    }
+
+    function sortDataCek() {
+      globalReportsCek.sort((a, b) => {
+        let result = currentSortCek.key === 'name' ? a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' }) : a[currentSortCek.key] - b[currentSortCek.key];
+        return currentSortCek.asc ? result : -result;
+      });
+      ['name', 'imageCount', 'otherCount', 'imageSize'].forEach(col => {
+        const el = document.getElementById(`sort-${col}-cek`);
+        if (el) el.innerText = (currentSortCek.key === col) ? (currentSortCek.asc ? ' ▲' : ' ▼') : '';
+      });
+    }
+
+    function changeSortCek(key) {
+      if (currentSortCek.key === key) currentSortCek.asc = !currentSortCek.asc;
+      else { currentSortCek.key = key; currentSortCek.asc = (key === 'name'); }
+      sortDataCek();
+      handleSearchCek();
+    }
+
+    function handleSearchCek() {
+      const q = document.getElementById('searchBoxCek').value.toLowerCase();
+      renderTableCek(globalReportsCek.filter(item => item.name.toLowerCase().includes(q)));
+    }
+
+    function renderTableCek(reports) {
+      const tbody = document.getElementById('folderTableBodyCek');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+      if (reports.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="text-center text-slate-400 p-6">🚫 Tidak ada item ditemukan.</td></tr>`;
+        return;
+      }
+
+      reports.forEach(item => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-pink-50/40 transition bg-white';
+        const badge = item.imageCount > 0 ? `<span class="bg-pink-100 text-pink-800 font-bold px-2.5 py-1 rounded-md">${item.imageCount.toLocaleString('id-ID')} Gambar</span>` : `<span class="bg-slate-100 text-slate-500 px-2 py-1 rounded-md">0 Gambar</span>`;
+        const cleanName = cleanFolderNameCek(item.name);
+        const briefIdStr = parsedBriefDataCek.id ? `ID : ${parsedBriefDataCek.id}` : 'ID : -';
+        const combinedSow = parsedBriefDataCek.platform ? `${parsedBriefDataCek.orderType || 'Orderan'} ${parsedBriefDataCek.platform}` : (parsedBriefDataCek.orderType || 'Orderan');
+
+        tr.innerHTML = `
+          <td class="p-3 font-bold text-slate-800">📁 ${item.name}</td>
+          <td class="p-3">${badge}</td>
+          <td class="p-3 text-slate-600">${item.otherCount} file</td>
+          <td class="p-3 font-mono text-slate-600">${formatBytesCek(item.imageSize)}</td>
+          <td class="p-3 flex gap-2 items-center">
+            <button onclick="copyRowCek('${cleanName.replace(/'/g, "\\'")}', '${item.imageCount}', '${briefIdStr}', '${combinedSow}', '${formattedDriveDateCek}')" class="bg-pink-100 text-pink-700 hover:bg-pink-600 hover:text-white border border-pink-200 px-2.5 py-1 rounded-lg text-xs font-bold transition cursor-pointer">Salin</button>
+            <a href="${item.link}" target="_blank" class="text-pink-600 font-bold hover:underline">Buka ↗</a>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function copyRowCek(name, count, idStr, sowStr, dateStr) {
+      fnCopyText(`${name}\t${count}\t${idStr}\t${sowStr}\t${dateStr}`, `Sukses disalin: ${name} | ${count} Gambar`);
+    }
+
+    function copyAllDataCek() {
+      const q = document.getElementById('searchBoxCek').value.toLowerCase();
+      const filtered = globalReportsCek.filter(item => item.name.toLowerCase().includes(q));
+      if (!filtered.length) return alert('Tidak ada data untuk disalin.');
+
+      const idStr = parsedBriefDataCek.id ? `ID : ${parsedBriefDataCek.id}` : 'ID : -';
+      const combinedSow = parsedBriefDataCek.platform ? `${parsedBriefDataCek.orderType || 'Orderan'} ${parsedBriefDataCek.platform}` : (parsedBriefDataCek.orderType || 'Orderan');
+      let text = '';
+
+      filtered.forEach(item => {
+        text += `${cleanFolderNameCek(item.name)}\t${item.imageCount}\t${idStr}\t${combinedSow}\t${formattedDriveDateCek}\n`;
+      });
+
+      fnCopyText(text, 'Semua data rekap berhasil disalin ke format Excel!');
+    }
+
+
+    /* --- 5. DUPLICATE & BATCH UPLOAD LOGIC --- */
+    const GAS_DUP_URL = "https://script.google.com/macros/s/AKfycbzAhn-GTpBXthmIMVsVHkGRQXBV6hqowI9k4lGug4O_pudkbu4qiSp9jlqeo5bwx4Lguw/exec";
+    const GAS_BATCH_URL = "https://script.google.com/macros/s/AKfycbxns9ZqlN5NVS4o8LSsdG2qobEkMdNng4O9vyfRQDToHBOzl1lsb5ZDGgYuQDGwAtMhUQ/exec";
+
     const fileToBase64 = file => new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
@@ -287,7 +1392,6 @@
         headers: { "Content-Type": "text/plain;charset=utf-8" },
         body: JSON.stringify(payload)
       });
-
       const rawText = await response.text();
       try {
         return JSON.parse(rawText);
@@ -296,50 +1400,6 @@
       }
     }
 
-    // --- HELPER UNIVERSAL COPY ---
-    function copyText(text, btnElement, successMsg = "Tersalin!") {
-      if (!text) return;
-
-      const onSuccess = () => {
-        if (btnElement) {
-          const originalText = btnElement.innerHTML;
-          btnElement.innerHTML = `✅ Tersalin!`;
-          btnElement.classList.add("bg-indigo-600", "text-white");
-          setTimeout(() => {
-            btnElement.innerHTML = originalText;
-            btnElement.classList.remove("bg-indigo-600", "text-white");
-          }, 1500);
-        } else {
-          alert(successMsg);
-        }
-      };
-
-      if (navigator.clipboard && window.isSecureContext) {
-        navigator.clipboard.writeText(text).then(onSuccess).catch(() => fallbackCopy(text, onSuccess));
-      } else {
-        fallbackCopy(text, onSuccess);
-      }
-    }
-
-    function fallbackCopy(text, callback) {
-      const ta = document.createElement("textarea");
-      ta.value = text;
-      ta.style.position = "fixed";
-      ta.style.top = "-9999px";
-      ta.style.left = "-9999px";
-      document.body.appendChild(ta);
-      ta.select();
-      ta.setSelectionRange(0, 99999);
-      try {
-        document.execCommand("copy");
-        callback();
-      } catch (err) {
-        alert("Gagal menyalin otomatis. Silakan salin manual.");
-      }
-      document.body.removeChild(ta);
-    }
-
-    // ================= LOGIKA TAB 1: DUPLICATE FILE =================
     let singleDriveLink = "";
     let duplicatedFiles = [];
 
@@ -381,7 +1441,7 @@
       btn.disabled = true;
       btn.innerHTML = `<iconify-icon icon="heroicons:arrow-path-20-solid" class="animate-spin text-base"></iconify-icon> <span>Memproses Duplikasi...</span>`;
       resultBox.classList.remove("hidden");
-      resultBox.innerHTML = "<p class='text-indigo-700 font-semibold animate-pulse text-center py-2'>⏳ Mengunggah & menduplikasi...</p>";
+      resultBox.innerHTML = "<p class='text-pink-600 font-semibold animate-pulse text-center py-2'>⏳ Mengunggah & menduplikasi...</p>";
 
       try {
         const base64 = await fileToBase64(file);
@@ -405,10 +1465,10 @@
 
           const hasFiles = duplicatedFiles.length > 0;
           const filesSectionHtml = hasFiles ? `
-            <div class="pt-3 border-t border-slate-200/80 space-y-2">
+            <div class="pt-3 border-t border-pink-200 space-y-2">
               <div class="flex items-center justify-between">
                 <span class="font-bold text-slate-700">List File Duplikat (${duplicatedFiles.length}):</span>
-                <button type="button" onclick="copyAllDuplicatedLinks(this)" class="bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200 px-2.5 py-1 rounded-xl font-bold text-[11px] transition">
+                <button type="button" onclick="copyAllDuplicatedLinks(this)" class="bg-pink-50 text-pink-700 hover:bg-pink-100 border border-pink-200 px-2.5 py-1 rounded-xl font-bold text-[11px] transition cursor-pointer">
                   📋 Salin Semua Link
                 </button>
               </div>
@@ -417,10 +1477,10 @@
             const name = typeof item === 'object' ? (item.name || `Duplikat #${idx + 1}`) : `Duplikat #${idx + 1}`;
             const link = typeof item === 'object' ? item.link : item;
             return `
-                    <div class="p-2 bg-white rounded-xl border border-slate-200 flex justify-between items-center text-xs shadow-xs hover:border-indigo-300 transition gap-2">
-                      <span class="truncate text-slate-700 font-medium"><strong class="text-slate-900">#${idx + 1}</strong>${name}</span>
+                    <div class="p-2 bg-white rounded-xl border border-pink-200 flex justify-between items-center text-xs shadow-xs hover:border-pink-300 transition gap-2">
+                      <span class="truncate text-slate-700 font-medium"><strong class="text-slate-900">#${idx + 1}</strong> ${name}</span>
                       <div class="flex items-center gap-1 shrink-0">
-                        <button type="button" onclick="copyText('${link}', this)" class="bg-slate-100 hover:bg-indigo-50 text-indigo-700 px-2 py-1 rounded-lg font-bold text-[11px] transition">Copy</button>
+                        <button type="button" onclick="fnCopyText('${link}', 'Link berhasil disalin!')" class="bg-pink-50 hover:bg-pink-100 text-pink-700 px-2 py-1 rounded-lg font-bold text-[11px] transition cursor-pointer">Copy</button>
                         <a href="${link}" target="_blank" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-1 rounded-lg font-semibold text-[11px] transition">Buka</a>
                       </div>
                     </div>
@@ -432,13 +1492,13 @@
 
           resultBox.innerHTML = `
             <div class="space-y-3">
-              <div class="p-3 bg-indigo-50 border border-indigo-100 rounded-2xl flex items-center justify-between gap-2">
+              <div class="p-3 bg-pink-100/70 border border-pink-200 rounded-2xl flex items-center justify-between gap-2">
                 <div class="truncate">
-                  <span class="font-bold text-indigo-900 text-xs block truncate">📁 Folder Hasil Duplikasi</span>
+                  <span class="font-bold text-pink-900 text-xs block truncate">📁 Folder Hasil Duplikasi</span>
                   <span class="text-[10px] text-slate-500 font-mono truncate block">${singleDriveLink}</span>
                 </div>
-                <button type="button" onclick="copyText('${singleDriveLink}', this, 'Link folder disalin!')" 
-                  class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-xl font-bold text-[11px] transition shrink-0">
+                <button type="button" onclick="fnCopyText('${singleDriveLink}', 'Link folder disalin!')" 
+                  class="bg-pink-600 hover:bg-pink-500 text-white px-3 py-1.5 rounded-xl font-bold text-[11px] transition shrink-0 cursor-pointer">
                   📋 Link Folder
                 </button>
               </div>
@@ -459,10 +1519,10 @@
     function copyAllDuplicatedLinks(btn) {
       if (!duplicatedFiles.length) return alert("Belum ada link file!");
       const text = duplicatedFiles.map(item => (typeof item === 'object' ? item.link : item)).join("\n");
-      copyText(text, btn, "Semua link file berhasil disalin!");
+      fnCopyText(text, "Semua link file berhasil disalin!");
     }
 
-    // ================= LOGIKA TAB 2: BATCH UPLOAD KE FOLDER =================
+    // Batch Upload Logic
     let selectedFiles = [];
     let uploadedResults = [];
     let createdFolderUrl = "";
@@ -472,7 +1532,6 @@
         selectedFiles = Array.from(input.files).sort((a, b) =>
           a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' })
         );
-
         let totalBytes = selectedFiles.reduce((acc, f) => acc + f.size, 0);
         let totalMB = (totalBytes / (1024 * 1024)).toFixed(2);
 
@@ -497,19 +1556,15 @@
     function renderSortedResults() {
       const linksContainer = document.getElementById("uploadedLinksList");
       linksContainer.innerHTML = "";
-
-      uploadedResults.sort((a, b) =>
-        a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' })
-      );
-
+      uploadedResults.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' }));
       document.getElementById("fileCountBadge").innerText = uploadedResults.length;
 
       uploadedResults.forEach((item, index) => {
         linksContainer.innerHTML += `
-          <div class="p-2 bg-white rounded-xl border border-slate-200 flex justify-between items-center text-xs shadow-xs hover:border-indigo-300 transition gap-2">
+          <div class="p-2 bg-white rounded-xl border border-pink-200 flex justify-between items-center text-xs shadow-xs hover:border-pink-300 transition gap-2">
             <span class="truncate text-slate-700 font-medium"><strong class="text-slate-900">#${index + 1}</strong> ${item.name}</span>
             <div class="flex items-center gap-1 shrink-0">
-              <button type="button" onclick="copyText('${item.link}', this)" class="bg-slate-100 hover:bg-indigo-50 text-indigo-700 px-2 py-1 rounded-lg font-bold text-[11px] transition">Copy</button>
+              <button type="button" onclick="fnCopyText('${item.link}', 'Link file disalin!')" class="bg-pink-50 hover:bg-pink-100 text-pink-700 px-2 py-1 rounded-lg font-bold text-[11px] transition cursor-pointer">Copy</button>
               <a href="${item.link}" target="_blank" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-1 rounded-lg font-semibold text-[11px] transition">Buka</a>
             </div>
           </div>
@@ -548,21 +1603,15 @@
 
       let folderId = "";
       try {
-        const folderRes = await sendRequest(GAS_BATCH_URL, {
-          action: "createFolder",
-          folderName: folderName
-        });
-
+        const folderRes = await sendRequest(GAS_BATCH_URL, { action: "createFolder", folderName: folderName });
         if (folderRes.status !== "success" || !folderRes.folderId) {
           throw new Error(folderRes.message || "Gagal membuat folder di Google Drive.");
         }
-
         folderId = folderRes.folderId;
         createdFolderUrl = folderRes.folderUrl || folderRes.link;
 
         document.getElementById("resFolderName").innerText = folderName;
         document.getElementById("resFolderLink").innerText = createdFolderUrl;
-
       } catch (err) {
         alert("Gagal membuat folder: " + err.message);
         btn.disabled = false;
@@ -571,16 +1620,13 @@
       }
 
       const totalFiles = selectedFiles.length;
-
       for (let i = 0; i < totalFiles; i++) {
         const file = selectedFiles[i];
         const currentNum = i + 1;
-
         progressStatus.innerText = `Mengunggah (${currentNum}/${totalFiles}): ${file.name}`;
 
         try {
           const base64Data = await fileToBase64(file);
-
           const res = await sendRequest(GAS_BATCH_URL, {
             action: "uploadToFolder",
             folderId: folderId,
@@ -590,11 +1636,8 @@
           });
 
           if (res.status === "success") {
-            const fileLink = res.link || res.fileUrl;
-            uploadedResults.push({ name: file.name, link: fileLink });
+            uploadedResults.push({ name: file.name, link: res.link || res.fileUrl });
             renderSortedResults();
-          } else {
-            console.error(`Gagal unggah ${file.name}:`, res.message);
           }
         } catch (err) {
           console.error(`Error file ${file.name}:`, err.message);
@@ -611,17 +1654,13 @@
 
     function copyFolderUrl(btn) {
       if (!createdFolderUrl) return;
-      copyText(createdFolderUrl, btn, "Link folder berhasil disalin!");
+      fnCopyText(createdFolderUrl, "Link folder berhasil disalin!");
     }
 
     function copyAllUploadedLinks(btn) {
       if (!uploadedResults.length) return alert("Belum ada file!");
       const text = uploadedResults.map(item => item.link).join("\n");
-      copyText(text, btn, "Semua link berhasil disalin!");
-    }
-
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./sw.js');
+      fnCopyText(text, "Semua link berhasil disalin!");
     }
   </script>
 </body>
