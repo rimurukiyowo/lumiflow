@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-  <title>Kimi Team Tools - Pink Fanta Edition</title>
+  <title>Kimi Team Tools - Pink Fanta Suite v3.0</title>
 
   <!-- Favicon & PWA Config -->
   <link rel="icon" type="image/png" href="./logo.png">
@@ -108,7 +108,7 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(244,114,182,0.15) 50%, rgba(255,255,255,0) 100%);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(244, 114, 182, 0.15) 50%, rgba(255, 255, 255, 0) 100%);
       background-size: 100% 200%;
       animation: waterfallFlow 4s linear infinite;
       pointer-events: none;
@@ -180,7 +180,7 @@
           </div>
           <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight text-white">Kimi Team Tools</h2>
           <p class="text-xs md:text-sm text-pink-100 leading-relaxed">
-            Pusat automasi kerja tim serba pink. Ekstraksi Google Drive, pembagian job, dan parser brief jadi lebih ceria dan cepat.
+            Pusat automasi kerja tim serba pink. Ekstraksi Google Drive, pembagian job, parser brief, hingga duplikasi berkas instan.
           </p>
           <div class="pt-2 flex flex-wrap justify-center md:justify-start gap-2.5">
             <button onclick="switchTab('bagijob')" class="inline-flex items-center gap-2 bg-pink-600 hover:bg-pink-500 active:scale-95 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition shadow-lg shadow-pink-600/30 cursor-pointer">
@@ -240,6 +240,144 @@
             <span>Total: <strong id="driveTotalDash" class="text-pink-600 font-bold">0</strong> File</span>
           </div>
           <div id="driveFileListDash" class="max-h-60 overflow-y-auto space-y-1.5 pr-1"></div>
+        </div>
+      </div>
+
+      <!-- WIDGET DUPLICATE & UPLOAD MASSAL (Diletakkan Tepat di Bawah Google Drive Link Extractor) -->
+      <div class="bg-white/95 backdrop-blur-md rounded-3xl border border-pink-200/80 shadow-sm p-4 sm:p-7 space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-pink-100">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-2xl bg-pink-50 border border-pink-200 text-pink-600 flex items-center justify-center text-xl shadow-xs shrink-0">
+              <iconify-icon icon="heroicons:document-duplicate-solid"></iconify-icon>
+            </div>
+            <div>
+              <h3 class="text-sm font-bold text-slate-900 tracking-tight">Manajemen & Upload Google Drive</h3>
+              <p class="text-[11px] text-slate-400 font-medium">Penggandaan berkas instan dan upload massal berurutan A-Z</p>
+            </div>
+          </div>
+          <span class="self-start sm:self-auto text-[11px] font-bold bg-pink-50 text-pink-700 border border-pink-200 px-3 py-1 rounded-full flex items-center gap-1">
+            🚀 Pro Tool
+          </span>
+        </div>
+
+        <!-- Sub Tab (Duplicate vs Batch) -->
+        <div class="grid grid-cols-2 gap-1.5 bg-pink-50 p-1.5 rounded-2xl text-xs font-bold border border-pink-200">
+          <button id="subTabDup" onclick="switchSubTab('duplicate')"
+            class="py-2.5 rounded-xl bg-pink-600 shadow-sm text-white flex items-center justify-center gap-2 transition duration-200 cursor-pointer">
+            <iconify-icon icon="heroicons:document-duplicate-solid" class="text-base"></iconify-icon>
+            <span>Duplicate File</span>
+          </button>
+          <button id="subTabBatch" onclick="switchSubTab('batch')"
+            class="py-2.5 rounded-xl text-slate-600 hover:text-pink-700 flex items-center justify-center gap-2 transition duration-200 cursor-pointer">
+            <iconify-icon icon="heroicons:folder-plus-solid" class="text-base"></iconify-icon>
+            <span>Upload Massal</span>
+          </button>
+        </div>
+
+        <!-- Sub Section 1: Duplicate File -->
+        <div id="sectionSubDuplicate" class="space-y-4 pt-2">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1.5">Pilih 1 File Utama:</label>
+            <input type="file" id="file" class="hidden" onchange="handleSingleFileSelect(this)" />
+            <div id="dropZoneSingle" onclick="document.getElementById('file').click()"
+              class="border-2 border-dashed border-pink-200 hover:border-pink-500 bg-pink-50/20 hover:bg-pink-50/40 rounded-2xl p-6 text-center cursor-pointer transition-all duration-300 group flex flex-col items-center justify-center space-y-1.5">
+              <div class="w-12 h-12 rounded-2xl bg-pink-100 text-pink-600 border border-pink-200 flex items-center justify-center text-xl group-hover:scale-110 transition-transform shadow-sm">
+                <iconify-icon icon="heroicons:arrow-up-tray-solid"></iconify-icon>
+              </div>
+              <div id="filePromptText" class="space-y-0.5">
+                <p class="text-xs font-bold text-slate-800">Klik untuk memilih berkas utama</p>
+                <p class="text-[11px] text-slate-400 font-medium">Mendukung gambar, video, zip, dan dokumen kerja</p>
+              </div>
+              <div id="fileInfoBox" class="hidden w-full max-w-sm bg-white p-3 rounded-2xl border border-pink-200 flex items-center justify-between shadow-sm mt-2">
+                <div class="flex items-center gap-2.5 overflow-hidden pr-2">
+                  <iconify-icon icon="heroicons:document-solid" class="text-pink-600 text-lg shrink-0"></iconify-icon>
+                  <div class="text-left truncate">
+                    <p id="fileNameText" class="text-xs font-bold text-slate-800 truncate">filename.ext</p>
+                    <p id="fileSizeText" class="text-[10px] text-slate-400 font-medium">0 KB</p>
+                  </div>
+                </div>
+                <button type="button" onclick="event.stopPropagation(); removeSingleFile()" class="text-xs text-rose-500 hover:bg-rose-50 p-1.5 rounded-xl font-bold transition cursor-pointer">✕</button>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label for="jumlah" class="block text-xs font-bold text-slate-700 mb-1">Jumlah Duplikasi:</label>
+            <input type="number" id="jumlah" placeholder="Contoh: 10" min="1" class="w-full p-3.5 text-xs border border-pink-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-pink-600 bg-pink-50/20 text-slate-800 font-semibold placeholder-slate-400" />
+          </div>
+
+          <button onclick="uploadAndDuplicateFile()" id="btnUploadDup" class="w-full bg-pink-600 hover:bg-pink-500 active:scale-95 text-white text-xs py-3.5 rounded-2xl font-bold shadow-md shadow-pink-600/20 transition duration-200 flex items-center justify-center gap-2 cursor-pointer">
+            <iconify-icon icon="heroicons:rocket-launch-solid" class="text-base"></iconify-icon>
+            <span>Upload & Gandakan Berkas</span>
+          </button>
+
+          <div id="resultDup" class="hidden p-4 bg-pink-50/40 border border-pink-200 rounded-2xl text-xs space-y-3"></div>
+        </div>
+
+        <!-- Sub Section 2: Batch Upload ke Folder -->
+        <div id="sectionSubBatch" class="space-y-4 pt-2 hidden">
+          <div>
+            <label for="folderNameInput" class="block text-xs font-bold text-slate-700 mb-1">
+              📁 Ketik Nama Folder Google Drive: <span class="text-rose-500">*</span>
+            </label>
+            <input type="text" id="folderNameInput" class="w-full p-3.5 text-xs border border-pink-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-pink-600 bg-pink-50/20 text-slate-800 font-semibold placeholder-slate-400" placeholder="Contoh: Batch Order 25 September / Tugas Tim Kimi" />
+          </div>
+
+          <div class="space-y-4 pt-2 border-t border-pink-100">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1.5">Pilih Berkas (60+ Berkas Sekaligus):</label>
+              <input type="file" id="fileBatch" multiple class="hidden" onchange="handleBatchFilesSelect(this)" />
+              <div id="dropZoneBatch" onclick="document.getElementById('fileBatch').click()" class="border-2 border-dashed border-pink-200 hover:border-pink-500 bg-pink-50/20 hover:bg-pink-50/40 rounded-2xl p-6 text-center cursor-pointer transition-all duration-300 group flex flex-col items-center justify-center space-y-1.5">
+                <div class="w-12 h-12 rounded-2xl bg-pink-100 text-pink-600 border border-pink-200 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform shadow-sm">
+                  <iconify-icon icon="heroicons:folder-plus-solid"></iconify-icon>
+                </div>
+                <div id="batchPromptText" class="space-y-0.5">
+                  <p class="text-xs font-bold text-slate-800">Klik untuk memilih seluruh berkas</p>
+                  <p class="text-[11px] text-slate-400 font-medium">Tekan tahan di HP atau Ctrl+A di laptop untuk memilih banyak berkas</p>
+                </div>
+                <div id="batchInfoBox" class="hidden w-full max-w-sm bg-white p-3 rounded-2xl border border-pink-200 flex items-center justify-between shadow-sm mt-2">
+                  <div class="flex items-center gap-2.5 overflow-hidden pr-2">
+                    <iconify-icon icon="heroicons:document-duplicate-solid" class="text-pink-600 text-lg shrink-0"></iconify-icon>
+                    <div class="text-left truncate">
+                      <p id="fileCountText" class="text-xs font-bold text-slate-800 truncate">0 File dipilih</p>
+                      <p id="fileTotalSizeText" class="text-[10px] text-slate-400 font-medium">Total: 0 MB</p>
+                    </div>
+                  </div>
+                  <button type="button" onclick="event.stopPropagation(); removeBatchFiles()" class="text-xs text-rose-500 hover:bg-rose-50 px-2 py-1 rounded-xl font-bold transition cursor-pointer">✕ Reset</button>
+                </div>
+              </div>
+            </div>
+
+            <div id="progressContainer" class="hidden space-y-2 pt-2">
+              <div class="flex justify-between text-xs font-semibold">
+                <span id="progressStatusText" class="text-slate-700">Menyiapkan folder...</span>
+                <span id="progressPercent" class="text-pink-600">0%</span>
+              </div>
+              <div class="w-full bg-pink-50 h-2.5 rounded-full overflow-hidden border border-pink-200">
+                <div id="progressBar" class="bg-pink-600 h-full w-0 transition-all duration-300"></div>
+              </div>
+            </div>
+
+            <button onclick="startBatchFolderUpload()" id="btnUploadBatch" class="w-full bg-pink-600 hover:bg-pink-500 active:scale-95 text-white text-xs py-3.5 rounded-2xl font-bold shadow-md shadow-pink-600/20 transition duration-200 flex items-center justify-center gap-2 cursor-pointer">
+              <iconify-icon icon="heroicons:cloud-arrow-up-solid" class="text-lg"></iconify-icon>
+              <span>Buat Folder & Unggah Semua File</span>
+            </button>
+          </div>
+
+          <div id="resultBatchBox" class="hidden p-4 bg-pink-50/40 border border-pink-200 rounded-2xl text-xs space-y-3">
+            <div class="p-3 bg-pink-100/70 border border-pink-200 rounded-2xl flex items-center justify-between gap-2">
+              <div class="truncate">
+                <span class="font-bold text-pink-900 text-xs block truncate">📁 <span id="resFolderName">Nama Folder</span></span>
+                <span class="text-[10px] text-slate-500 font-mono truncate block" id="resFolderLink">https://...</span>
+              </div>
+              <button onclick="copyFolderUrl(this)" class="bg-pink-600 hover:bg-pink-500 text-white px-2.5 py-1.5 rounded-xl font-bold text-[11px] transition cursor-pointer">📋 Link Folder</button>
+            </div>
+            <div class="flex items-center justify-between pt-1">
+              <span class="font-bold text-slate-700">Daftar File (<span id="fileCountBadge">0</span>) Urut A-Z:</span>
+              <button onclick="copyAllUploadedLinks(this)" class="bg-pink-50 text-pink-700 hover:bg-pink-100 border border-pink-200 px-3 py-1.5 rounded-xl font-bold text-[11px] transition cursor-pointer">📋 Salin Semua Link</button>
+            </div>
+            <div id="uploadedLinksList" class="max-h-48 overflow-y-auto space-y-1 pr-1"></div>
+          </div>
         </div>
       </div>
 
@@ -303,7 +441,6 @@
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <!-- Input Kolom (7 Col) -->
         <div class="lg:col-span-7 space-y-5">
           <div class="bg-white p-4 rounded-2xl border border-pink-200/80 shadow-xs space-y-2">
             <div class="flex items-center justify-between">
@@ -378,7 +515,6 @@
           </div>
         </div>
 
-        <!-- Output Kolom (5 Col) -->
         <div class="lg:col-span-5 flex flex-col">
           <div class="bg-white p-4 rounded-2xl border border-pink-200/80 shadow-xs flex-1 flex flex-col space-y-3">
             <div class="flex items-center justify-between">
@@ -491,7 +627,6 @@
       </div>
 
       <div id="resultsCek" class="bg-white rounded-3xl border border-pink-200 p-5 sm:p-6 shadow-sm space-y-6" style="display: none;">
-        <!-- Ringkasan Brief Box -->
         <div id="briefSummaryCek" class="bg-pink-50/50 border border-pink-200 rounded-2xl p-4 text-xs grid grid-cols-2 sm:grid-cols-3 gap-3 font-medium">
           <div>📌 ID Brief: <span id="sumIdCek" class="font-bold text-pink-600">-</span></div>
           <div>🌐 Platform: <span id="sumPlatformCek" class="font-bold text-pink-600">-</span></div>
@@ -545,14 +680,23 @@
     Kedai Liliviè &copy; 2026 - Kimi Team Automation Suite
   </footer>
 
-  <!-- Global Hidden Clipboard Area -->
   <textarea id="hiddenClipboard" class="sr-only" aria-hidden="true"></textarea>
 
 
   <!-- ================= UNIFIED JAVASCRIPT LOGIC ================= -->
   <script>
-    /* --- TAB SWITCHING SYSTEM --- */
+    /* --- TAB SWITCHING SYSTEM (MAIN TABS) --- */
     function switchTab(tabId) {
+      if (tabId === 'duplicate') {
+        // Scroll langsung ke widget Duplicate & Upload di Dashboard
+        switchTab('dashboard');
+        const dupWidget = document.getElementById('subTabDup');
+        if (dupWidget) {
+          dupWidget.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        return;
+      }
+
       document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
       document.querySelectorAll('.nav-btn').forEach(btn => {
         btn.classList.remove('bg-pink-600', 'text-white', 'shadow-sm');
@@ -578,6 +722,26 @@
       switchTab('dashboard');
       renderNamesJob();
     });
+
+    /* --- SUB TAB SWITCHING SYSTEM (DUPLICATE vs BATCH) --- */
+    function switchSubTab(mode) {
+      const tabDup = document.getElementById("subTabDup");
+      const tabBatch = document.getElementById("subTabBatch");
+      const secDup = document.getElementById("sectionSubDuplicate");
+      const secBatch = document.getElementById("sectionSubBatch");
+
+      if (mode === 'duplicate') {
+        tabDup.className = "py-2.5 rounded-xl bg-pink-600 shadow-sm text-white flex items-center justify-center gap-2 transition duration-200 cursor-pointer";
+        tabBatch.className = "py-2.5 rounded-xl text-slate-600 hover:text-pink-700 flex items-center justify-center gap-2 transition duration-200 cursor-pointer";
+        secDup.classList.remove("hidden");
+        secBatch.classList.add("hidden");
+      } else {
+        tabBatch.className = "py-2.5 rounded-xl bg-pink-600 shadow-sm text-white flex items-center justify-center gap-2 transition duration-200 cursor-pointer";
+        tabDup.className = "py-2.5 rounded-xl text-slate-600 hover:text-pink-700 flex items-center justify-center gap-2 transition duration-200 cursor-pointer";
+        secBatch.classList.remove("hidden");
+        secDup.classList.add("hidden");
+      }
+    }
 
     /* Helper Clipboard Universal */
     fnCopyText = (text, msg) => {
@@ -1201,6 +1365,297 @@
       });
 
       fnCopyText(text, 'Semua data rekap berhasil disalin ke format Excel!');
+    }
+
+
+    /* --- 5. DUPLICATE & BATCH UPLOAD LOGIC --- */
+    const GAS_DUP_URL = "https://script.google.com/macros/s/AKfycbzAhn-GTpBXthmIMVsVHkGRQXBV6hqowI9k4lGug4O_pudkbu4qiSp9jlqeo5bwx4Lguw/exec";
+    const GAS_BATCH_URL = "https://script.google.com/macros/s/AKfycbxns9ZqlN5NVS4o8LSsdG2qobEkMdNng4O9vyfRQDToHBOzl1lsb5ZDGgYuQDGwAtMhUQ/exec";
+
+    const fileToBase64 = file => new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        const res = reader.result;
+        resolve(res.indexOf(',') !== -1 ? res.split(',')[1] : res);
+      };
+      reader.onerror = error => reject(error);
+    });
+
+    async function sendRequest(url, payload) {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(payload)
+      });
+      const rawText = await response.text();
+      try {
+        return JSON.parse(rawText);
+      } catch (e) {
+        throw new Error("Respons server bukan JSON: " + rawText.substring(0, 100));
+      }
+    }
+
+    let singleDriveLink = "";
+    let duplicatedFiles = [];
+
+    function handleSingleFileSelect(input) {
+      const filePrompt = document.getElementById("filePromptText");
+      const fileInfoBox = document.getElementById("fileInfoBox");
+      const fileNameText = document.getElementById("fileNameText");
+      const fileSizeText = document.getElementById("fileSizeText");
+
+      if (input.files && input.files[0]) {
+        const file = input.files[0];
+        fileNameText.innerText = file.name;
+        const sizeInKB = (file.size / 1024).toFixed(1);
+        const sizeInMB = (file.size / (1024 * 1024)).toFixed(2);
+        fileSizeText.innerText = file.size > 1024 * 1024 ? `${sizeInMB} MB` : `${sizeInKB} KB`;
+
+        filePrompt.classList.add("hidden");
+        fileInfoBox.classList.remove("hidden");
+      }
+    }
+
+    function removeSingleFile() {
+      const fileInput = document.getElementById("file");
+      fileInput.value = "";
+      document.getElementById("filePromptText").classList.remove("hidden");
+      document.getElementById("fileInfoBox").classList.add("hidden");
+    }
+
+    async function uploadAndDuplicateFile() {
+      const fileInput = document.getElementById("file");
+      const file = fileInput.files[0];
+      const jumlah = document.getElementById("jumlah").value;
+      const resultBox = document.getElementById("resultDup");
+      const btn = document.getElementById("btnUploadDup");
+
+      if (!file) return alert("Pilih file utama terlebih dahulu!");
+      if (!jumlah || jumlah <= 0) return alert("Isi jumlah duplikasi minimal 1!");
+
+      btn.disabled = true;
+      btn.innerHTML = `<iconify-icon icon="heroicons:arrow-path-20-solid" class="animate-spin text-base"></iconify-icon> <span>Memproses Duplikasi...</span>`;
+      resultBox.classList.remove("hidden");
+      resultBox.innerHTML = "<p class='text-pink-600 font-semibold animate-pulse text-center py-2'>⏳ Mengunggah & menduplikasi...</p>";
+
+      try {
+        const base64 = await fileToBase64(file);
+        const res = await sendRequest(GAS_DUP_URL, {
+          action: "uploadAndDuplicate",
+          base64: base64,
+          fileName: file.name,
+          mimeType: file.type || "application/octet-stream",
+          jumlah: parseInt(jumlah, 10)
+        });
+
+        if (res.status === "success") {
+          singleDriveLink = res.link || res.folderUrl;
+          duplicatedFiles = res.files || res.fileUrls || [];
+
+          duplicatedFiles.sort((a, b) => {
+            const nameA = typeof a === 'object' ? a.name : a;
+            const nameB = typeof b === 'object' ? b.name : b;
+            return nameA.localeCompare(nameB, undefined, { numeric: true, sensitivity: 'base' });
+          });
+
+          const hasFiles = duplicatedFiles.length > 0;
+          const filesSectionHtml = hasFiles ? `
+            <div class="pt-3 border-t border-pink-200 space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-slate-700">List File Duplikat (${duplicatedFiles.length}):</span>
+                <button type="button" onclick="copyAllDuplicatedLinks(this)" class="bg-pink-50 text-pink-700 hover:bg-pink-100 border border-pink-200 px-2.5 py-1 rounded-xl font-bold text-[11px] transition cursor-pointer">
+                  📋 Salin Semua Link
+                </button>
+              </div>
+              <div class="max-h-48 overflow-y-auto space-y-1 pr-1">
+                ${duplicatedFiles.map((item, idx) => {
+                  const name = typeof item === 'object' ? (item.name || `Duplikat #${idx + 1}`) : `Duplikat #${idx + 1}`;
+                  const link = typeof item === 'object' ? item.link : item;
+                  return `
+                    <div class="p-2 bg-white rounded-xl border border-pink-200 flex justify-between items-center text-xs shadow-xs hover:border-pink-300 transition gap-2">
+                      <span class="truncate text-slate-700 font-medium"><strong class="text-slate-900">#${idx + 1}</strong> ${name}</span>
+                      <div class="flex items-center gap-1 shrink-0">
+                        <button type="button" onclick="fnCopyText('${link}', 'Link berhasil disalin!')" class="bg-pink-50 hover:bg-pink-100 text-pink-700 px-2 py-1 rounded-lg font-bold text-[11px] transition cursor-pointer">Copy</button>
+                        <a href="${link}" target="_blank" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-1 rounded-lg font-semibold text-[11px] transition">Buka</a>
+                      </div>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+          ` : '';
+
+          resultBox.innerHTML = `
+            <div class="space-y-3">
+              <div class="p-3 bg-pink-100/70 border border-pink-200 rounded-2xl flex items-center justify-between gap-2">
+                <div class="truncate">
+                  <span class="font-bold text-pink-900 text-xs block truncate">📁 Folder Hasil Duplikasi</span>
+                  <span class="text-[10px] text-slate-500 font-mono truncate block">${singleDriveLink}</span>
+                </div>
+                <button type="button" onclick="fnCopyText('${singleDriveLink}', 'Link folder disalin!')" 
+                  class="bg-pink-600 hover:bg-pink-500 text-white px-3 py-1.5 rounded-xl font-bold text-[11px] transition shrink-0 cursor-pointer">
+                  📋 Link Folder
+                </button>
+              </div>
+              ${filesSectionHtml}
+            </div>
+          `;
+        } else {
+          resultBox.innerHTML = "<p class='font-bold text-rose-600 text-center'>❌ " + (res.message || "Gagal memproses") + "</p>";
+        }
+      } catch (err) {
+        resultBox.innerHTML = "<p class='font-bold text-rose-600 text-center'>❌ Gagal terhubung: " + err.message + "</p>";
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<iconify-icon icon="heroicons:rocket-launch-solid" class="text-base"></iconify-icon> <span>Upload & Gandakan Berkas</span>`;
+      }
+    }
+
+    function copyAllDuplicatedLinks(btn) {
+      if (!duplicatedFiles.length) return alert("Belum ada link file!");
+      const text = duplicatedFiles.map(item => (typeof item === 'object' ? item.link : item)).join("\n");
+      fnCopyText(text, "Semua link file berhasil disalin!");
+    }
+
+    let selectedFiles = [];
+    let uploadedResults = [];
+    let createdFolderUrl = "";
+
+    function handleBatchFilesSelect(input) {
+      if (input.files && input.files.length > 0) {
+        selectedFiles = Array.from(input.files).sort((a, b) =>
+          a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' })
+        );
+        let totalBytes = selectedFiles.reduce((acc, f) => acc + f.size, 0);
+        let totalMB = (totalBytes / (1024 * 1024)).toFixed(2);
+
+        document.getElementById("fileCountText").innerText = `${selectedFiles.length} Berkas Dipilih (Urut A-Z)`;
+        document.getElementById("fileTotalSizeText").innerText = `Total Ukuran: ${totalMB} MB`;
+
+        document.getElementById("batchPromptText").classList.add("hidden");
+        document.getElementById("batchInfoBox").classList.remove("hidden");
+      }
+    }
+
+    function removeBatchFiles() {
+      const input = document.getElementById("fileBatch");
+      input.value = "";
+      selectedFiles = [];
+      document.getElementById("batchPromptText").classList.remove("hidden");
+      document.getElementById("batchInfoBox").classList.add("hidden");
+      document.getElementById("progressContainer").classList.add("hidden");
+      document.getElementById("resultBatchBox").classList.add("hidden");
+    }
+
+    function renderSortedResults() {
+      const linksContainer = document.getElementById("uploadedLinksList");
+      linksContainer.innerHTML = "";
+      uploadedResults.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' }));
+      document.getElementById("fileCountBadge").innerText = uploadedResults.length;
+
+      uploadedResults.forEach((item, index) => {
+        linksContainer.innerHTML += `
+          <div class="p-2 bg-white rounded-xl border border-pink-200 flex justify-between items-center text-xs shadow-xs hover:border-pink-300 transition gap-2">
+            <span class="truncate text-slate-700 font-medium"><strong class="text-slate-900">#${index + 1}</strong> ${item.name}</span>
+            <div class="flex items-center gap-1 shrink-0">
+              <button type="button" onclick="fnCopyText('${item.link}', 'Link file disalin!')" class="bg-pink-50 hover:bg-pink-100 text-pink-700 px-2 py-1 rounded-lg font-bold text-[11px] transition cursor-pointer">Copy</button>
+              <a href="${item.link}" target="_blank" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-1 rounded-lg font-semibold text-[11px] transition">Buka</a>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    async function startBatchFolderUpload() {
+      const folderName = document.getElementById("folderNameInput").value.trim();
+      if (!folderName) {
+        alert("Wajib mengetik nama folder terlebih dahulu!");
+        document.getElementById("folderNameInput").focus();
+        return;
+      }
+      if (!selectedFiles.length) {
+        alert("Pilih minimal satu berkas terlebih dahulu!");
+        return;
+      }
+
+      const btn = document.getElementById("btnUploadBatch");
+      const progressContainer = document.getElementById("progressContainer");
+      const progressBar = document.getElementById("progressBar");
+      const progressPercent = document.getElementById("progressPercent");
+      const progressStatus = document.getElementById("progressStatusText");
+      const resultBox = document.getElementById("resultBatchBox");
+
+      btn.disabled = true;
+      progressContainer.classList.remove("hidden");
+      resultBox.classList.remove("hidden");
+      document.getElementById("uploadedLinksList").innerHTML = "";
+      uploadedResults = [];
+
+      progressStatus.innerText = `Membuat folder "${folderName}" di Drive...`;
+      progressBar.style.width = `5%`;
+      progressPercent.innerText = `5%`;
+
+      let folderId = "";
+      try {
+        const folderRes = await sendRequest(GAS_BATCH_URL, { action: "createFolder", folderName: folderName });
+        if (folderRes.status !== "success" || !folderRes.folderId) {
+          throw new Error(folderRes.message || "Gagal membuat folder di Google Drive.");
+        }
+        folderId = folderRes.folderId;
+        createdFolderUrl = folderRes.folderUrl || folderRes.link;
+
+        document.getElementById("resFolderName").innerText = folderName;
+        document.getElementById("resFolderLink").innerText = createdFolderUrl;
+      } catch (err) {
+        alert("Gagal membuat folder: " + err.message);
+        btn.disabled = false;
+        progressContainer.classList.add("hidden");
+        return;
+      }
+
+      const totalFiles = selectedFiles.length;
+      for (let i = 0; i < totalFiles; i++) {
+        const file = selectedFiles[i];
+        const currentNum = i + 1;
+        progressStatus.innerText = `Mengunggah (${currentNum}/${totalFiles}): ${file.name}`;
+
+        try {
+          const base64Data = await fileToBase64(file);
+          const res = await sendRequest(GAS_BATCH_URL, {
+            action: "uploadToFolder",
+            folderId: folderId,
+            base64: base64Data,
+            fileName: file.name,
+            mimeType: file.type || "application/octet-stream"
+          });
+
+          if (res.status === "success") {
+            uploadedResults.push({ name: file.name, link: res.link || res.fileUrl });
+            renderSortedResults();
+          }
+        } catch (err) {
+          console.error(`Error file ${file.name}:`, err.message);
+        }
+
+        const percent = Math.round(((currentNum) / totalFiles) * 95) + 5;
+        progressBar.style.width = `${percent}`;
+        progressPercent.innerText = `${percent}%`;
+      }
+
+      progressStatus.innerText = `Selesai! Seluruh berkas berhasil diunggah dan diurutkan A-Z.`;
+      btn.disabled = false;
+    }
+
+    function copyFolderUrl(btn) {
+      if (!createdFolderUrl) return;
+      fnCopyText(createdFolderUrl, "Link folder berhasil disalin!");
+    }
+
+    function copyAllUploadedLinks(btn) {
+      if (!uploadedResults.length) return alert("Belum ada file!");
+      const text = uploadedResults.map(item => item.link).join("\n");
+      fnCopyText(text, "Semua link berhasil disalin!");
     }
   </script>
 </body>
